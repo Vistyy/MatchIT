@@ -1,0 +1,10 @@
+{
+    "emmet.excludeLanguages": [
+
+        "markdown"
+    ],
+    "[typescriptreact]": {
+        "editor.acceptSuggestionOnEnter": "off"
+    },
+    "emmet.showExpandedAbbreviation": "never"
+}
