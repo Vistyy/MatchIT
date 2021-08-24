@@ -16,12 +16,17 @@ import ConfirmEmail from "../../features/users/ConfirmEmail";
 import NotFound from "../../features/errors/NotFound";
 import ExpertDashboard from "../../features/experts/dashboard/ExpertDashboard";
 import ProfilePage from "../../features/profiles/ProfilePage";
+import HomePage from "../../features/home/HomePage";
 
 function App() {
   const { commonStore, userStore } = useStore();
 
   useEffect(() => {
-    userStore.getUser().finally(() => commonStore.setAppLoaded());
+    if (commonStore.token) {
+      userStore.getUser().finally(() => commonStore.setAppLoaded());
+    } else {
+      commonStore.setAppLoaded();
+    }
   }, [commonStore, userStore]);
 
   if (!commonStore.appLoaded)
@@ -31,14 +36,15 @@ function App() {
     <>
       <ToastContainer position="bottom-left" hideProgressBar />
       <ModalContainer />
-      <NavBar />
-      <Route exact path="/" component={ExpertDashboard} />
+      <Route exact path="/" component={HomePage} />
       <Route
         path={"/(.+)"}
         render={() => (
           <>
+            <NavBar />
             <Container style={{ marginTop: "7em" }}>
               <Switch>
+                <Route exact path="/dashboard" component={ExpertDashboard} />
                 <PrivateRoute
                   path="/profiles/:username"
                   component={ProfilePage}

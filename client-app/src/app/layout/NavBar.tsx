@@ -15,7 +15,7 @@ export default observer(function NavBar() {
     <Menu inverted fixed="top">
       <Container>
         <Menu.Item as={NavLink} exact to="/" header>
-          <img src="logo192.png" alt="logo" />
+          <img src="logo.svg" alt="logo" />
           MatchIT
         </Menu.Item>
         <>

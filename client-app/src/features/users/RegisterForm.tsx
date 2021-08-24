@@ -1,15 +1,14 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { Button, Header } from "semantic-ui-react";
 import { useStore } from "../../app/stores/store";
 import * as Yup from "yup";
-import { Button, Header } from "semantic-ui-react";
-import ValidatedTextInput from "../../app/common/form/ValidatedTextInput";
 import ValidationErrors from "../errors/ValidationErrors";
+import ValidatedTextInput from "../../app/common/form/ValidatedTextInput";
 
 export default observer(function RegisterForm() {
   const { userStore } = useStore();
-
   return (
     <Formik
       initialValues={{
@@ -44,7 +43,11 @@ export default observer(function RegisterForm() {
           <ValidatedTextInput name="displayName" placeholder="Display Name" />
           <ValidatedTextInput name="username" placeholder="Username" />
           <ValidatedTextInput name="email" placeholder="Email" />
-          <ValidatedTextInput name="password" placeholder="Password" />
+          <ValidatedTextInput
+            name="password"
+            placeholder="Password"
+            type="password"
+          />
           <ErrorMessage
             name="error"
             render={() => <ValidationErrors errors={errors.error} />}
