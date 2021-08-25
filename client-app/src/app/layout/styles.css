@@ -1,19 +1,24 @@
 body {
-  background-color: #EAEAEA !important;
+  background-color: #eaeaea !important;
 }
 
 .ui.inverted.top.fixed.menu {
-  background-image: linear-gradient(135deg, rgb(24,42,115) 0%, rgb(33, 138, 174) 69%, rgb(32,167,172) 89%) !important;
+  background-image: linear-gradient(
+    135deg,
+    rgb(24, 42, 115) 0%,
+    rgb(33, 138, 174) 69%,
+    rgb(32, 167, 172) 89%
+  ) !important;
 }
 
 .masthead {
   display: flex;
   align-items: center;
   background-image: linear-gradient(
-          135deg,
-          rgb(24, 42, 115) 0%,
-          rgb(33, 138, 174) 69%,
-          rgb(32, 167, 172) 89%
+    135deg,
+    rgb(24, 42, 115) 0%,
+    rgb(33, 138, 174) 69%,
+    rgb(32, 167, 172) 89%
   ) !important;
   height: 100vh;
 }
@@ -31,4 +36,22 @@ body {
 .masthead h2 {
   font-size: 1.7em;
   font-weight: normal;
+}
+
+.profile-image--icon.ui.button {
+  position: absolute !important;
+  top: 0%;
+  right: 0%;
+  font-size: 0.9em;
+  background-color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  border-radius: 0;
+  border-bottom-left-radius: 15%;
+}
+
+.modal .close.icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  filter: invert(100%);
 }

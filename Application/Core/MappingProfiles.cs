@@ -8,7 +8,7 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<AppUser, Profiles.Profile>()
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain).Url));
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photo));
         }
     }
 }

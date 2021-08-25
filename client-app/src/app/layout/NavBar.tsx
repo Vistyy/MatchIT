@@ -15,7 +15,7 @@ export default observer(function NavBar() {
     <Menu inverted fixed="top">
       <Container>
         <Menu.Item as={NavLink} exact to="/" header>
-          <img src="logo.svg" alt="logo" />
+          <img src="/assets/logo.svg" alt="logo" />
           MatchIT
         </Menu.Item>
         <>
@@ -23,7 +23,11 @@ export default observer(function NavBar() {
           <Menu.Item as={NavLink} to="/" name="Second link" />
           {isLoggedIn ? (
             <Menu.Item position="right">
-              <Image src="logo192.png" avatar spaced="right" />
+              <Image
+                src={user?.image?.url || "/assets/user.png"}
+                avatar
+                spaced="right"
+              />
               <Dropdown pointing="top left" text={user?.displayName}>
                 <Dropdown.Menu>
                   <Dropdown.Item
