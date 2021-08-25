@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { history } from "../..";
 import agent from "../api/agent";
+import { Photo } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "./store";
 
@@ -56,7 +57,7 @@ export default class UserStore {
     }
   };
 
-  setImage = (image: string) => {
+  setImage = (image: Photo) => {
     if (this.user) this.user.image = image;
   };
 
@@ -84,6 +85,6 @@ export default class UserStore {
   }
 
   private stopRefreshTokenTimer() {
-      clearTimeout(this.refreshTokenTimeout);
+    clearTimeout(this.refreshTokenTimeout);
   }
 }

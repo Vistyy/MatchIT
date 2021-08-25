@@ -46,7 +46,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+            var user = await _userManager.Users.Include(p => p.Photo).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user == null) return Unauthorized("Invalid email");
 
@@ -112,9 +112,9 @@ namespace API.Controllers
             var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
             var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
-            
-            if(!result.Succeeded) return BadRequest("Could not verify email address");
-            
+
+            if (!result.Succeeded) return BadRequest("Could not verify email address");
+
             return Ok("Email confirmed - you can now login");
         }
 
@@ -123,18 +123,18 @@ namespace API.Controllers
         public async Task<IActionResult> ResendEmailConfirmationLink(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            
+
             if (user == null) return Unauthorized();
 
             var origin = Request.Headers["origin"];
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-            
+
             var verifyUrl = $"{origin}/account/verifyEmail?token={token}&email={user.Email}";
             var message = $"<p>Please click the below link to verify your email address:</p><p><a href='{verifyUrl}'>Click to verify email</a></p>";
 
             await _emailSender.SendEmailAsync(user.Email, "Please verify email", message);
-            
+
             return Ok("Email verification link resent");
         }
 
@@ -142,8 +142,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await _userManager.Users.Include(p => p.Photos)
-            .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            var user = await _userManager.Users.Include(p => p.Photo).FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
             await SetRefreshToken(user);
             return CreateUserObject(user);
         }
@@ -187,7 +186,7 @@ namespace API.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                Image = user.Photo,
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName
             };
