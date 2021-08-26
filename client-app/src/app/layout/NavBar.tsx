@@ -1,4 +1,5 @@
 import { observer } from "mobx-react-lite";
+import { render } from "react-dom";
 import { Link, NavLink } from "react-router-dom";
 import { Button, Container, Dropdown, Image, Menu } from "semantic-ui-react";
 import LoginForm from "../../features/users/LoginForm";
@@ -22,14 +23,26 @@ export default observer(function NavBar() {
           <Menu.Item as={NavLink} to="/" name="First link" />
           <Menu.Item as={NavLink} to="/" name="Second link" />
           {isLoggedIn ? (
-            <Menu.Item position="right">
+            <Menu.Item
+              position="right"
+              style={{
+                position: "relative",
+                minWidth: "8em",
+                width: "max-content",
+              }}
+            >
               <Image
                 src={user?.image?.url || "/assets/user.png"}
                 avatar
                 spaced="right"
               />
-              <Dropdown pointing="top left" text={user?.displayName}>
-                <Dropdown.Menu>
+              <Dropdown
+                item
+                pointing="top right"
+                text={user?.displayName}
+                className="navbar-profile--dropdown"
+              >
+                <Dropdown.Menu style={{ marginTop: "0.35em" }}>
                   <Dropdown.Item
                     as={Link}
                     to={`/profiles/${user?.username}`}

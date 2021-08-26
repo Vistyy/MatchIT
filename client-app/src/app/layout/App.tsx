@@ -36,15 +36,15 @@ function App() {
     <>
       <ToastContainer position="bottom-left" hideProgressBar />
       <ModalContainer />
-      <Route exact path="/" component={HomePage} />
+      {/* <Route exact path="/" component={HomePage} /> */}
       <Route
-        path={"/(.+)"}
+        path={"/"}
         render={() => (
           <>
             <NavBar />
             <Container style={{ marginTop: "7em" }}>
               <Switch>
-                <Route exact path="/dashboard" component={ExpertDashboard} />
+                <Route exact path="/" component={ExpertDashboard} />
                 <PrivateRoute
                   path="/profiles/:username"
                   component={ProfilePage}
