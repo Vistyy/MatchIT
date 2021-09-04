@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Cropper } from "react-cropper";
-import { Button, Grid, Header, Icon } from "semantic-ui-react";
+import { Button, Grid, Header } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
 import PhotoWidgetCropper from "./PhotoWidgetCropper";
 import PhotoWidgetDropzone from "./PhotoWidgetDropzone";
@@ -14,7 +14,6 @@ interface Props {
 export default observer(function PhotoUploadWidget({ uploadPhoto }: Props) {
   const {
     profileStore: { loading, uploading },
-    modalStore,
   } = useStore();
   const [files, setFiles] = useState<any>([]);
   const [cropper, setCropper] = useState<Cropper>();
@@ -61,7 +60,6 @@ export default observer(function PhotoUploadWidget({ uploadPhoto }: Props) {
               className="img-preview"
               style={{ minHeight: 200, overflow: "hidden" }}
             />
-            {/* <Button.Group widths={2}> */}
             <Button
               loading={loader}
               onClick={onCrop}
@@ -70,12 +68,6 @@ export default observer(function PhotoUploadWidget({ uploadPhoto }: Props) {
               style={{ width: "200px" }}
               attached="bottom"
             />
-            {/* <Button
-                disabled={loader}
-                onClick={() => setFiles([])}
-                icon="close"
-              />
-            </Button.Group> */}
           </>
         )}
       </Grid.Column>

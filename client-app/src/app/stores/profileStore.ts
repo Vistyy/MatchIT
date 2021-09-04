@@ -20,6 +20,10 @@ export default class ProfileStore {
     return false;
   }
 
+  get isExpert() {
+    return store.profileStore.profile!.skills.length > 0
+  }
+
   loadProfile = async (username: string) => {
     this.loadingProfile = true;
     try {

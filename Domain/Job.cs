@@ -5,7 +5,7 @@ namespace Domain
 {
     public class Job
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string EmployerId { get; set; }
         public AppUser Employer { get; set; }
         public ICollection<Skill> RequiredSkills { get; set; }

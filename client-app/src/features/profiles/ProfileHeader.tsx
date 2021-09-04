@@ -1,10 +1,8 @@
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Grid,
-  Header,
-  Icon,
   Item,
   Segment,
   Transition,
@@ -21,7 +19,7 @@ interface Props {
 export default observer(function ProfileHeader({ profile }: Props) {
   const {
     modalStore,
-    profileStore: { uploadPhoto, deletePhoto },
+    profileStore: { uploadPhoto, deletePhoto, isCurrentUser },
   } = useStore();
   const [visible, setVisible] = useState(false);
 
@@ -48,11 +46,7 @@ export default observer(function ProfileHeader({ profile }: Props) {
       <Grid>
         <Grid.Column width="12">
           <Item.Group>
-            <Item
-              style={{ position: "relative" }}
-              onMouseEnter={handleShow}
-              onMouseLeave={handleHide}
-            >
+            <Item onMouseEnter={handleShow} onMouseLeave={handleHide}>
               <Item.Image size="small">
                 <Image
                   src={profile.image?.url || "/assets/user.png"}
@@ -60,21 +54,32 @@ export default observer(function ProfileHeader({ profile }: Props) {
                     border: "1px solid #eaeaea",
                   }}
                 />
-                <Transition visible={visible}>
-                  <Button
-                    className="profile-image--icon"
-                    icon="edit"
-                    onClick={() => {
-                      modalStore.openModal(
-                        <PhotoUploadWidget uploadPhoto={handlePhotoChange} />,
-                        "large"
-                      );
-                    }}
-                  />
-                </Transition>
+                {isCurrentUser && (
+                  <Transition visible={visible}>
+                    <Button
+                      className="profile-image--icon"
+                      icon="edit"
+                      onClick={() => {
+                        modalStore.openModal(
+                          <PhotoUploadWidget uploadPhoto={handlePhotoChange} />,
+                          "large"
+                        );
+                      }}
+                    />
+                  </Transition>
+                )}
               </Item.Image>
-              <Item.Content verticalAlign="middle">
-                <Header as="h1" content={profile.displayName} />
+              <Item.Content>
+                <Item.Header as="h1" content={profile.displayName} />
+                <Item.Extra>
+                  {profile.skills.map((skill) => (
+                    <Button
+                      src={`/experts`}
+                      key={skill.id}
+                      content={skill.name}
+                    ></Button>
+                  ))}
+                </Item.Extra>
               </Item.Content>
             </Item>
           </Item.Group>

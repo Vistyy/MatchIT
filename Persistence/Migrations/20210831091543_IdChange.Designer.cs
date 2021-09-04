@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210831091543_IdChange")]
+    partial class IdChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +141,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CertificateId");
 
-                    b.ToTable("Certifications");
+                    b.ToTable("Certifiations");
                 });
 
             modelBuilder.Entity("Domain.Description", b =>
@@ -183,7 +185,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("StudyingFrom")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StudyingTo")
+                    b.Property<DateTime?>("StudyingTo")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

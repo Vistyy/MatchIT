@@ -11,7 +11,7 @@ namespace Persistence
         }
 
         public DbSet<Photo> Photos { get; set; }
-        public DbSet<Certification> Certifiations { get; set; }
+        public DbSet<Certification> Certifications { get; set; }
         public DbSet<Description> Descriptions { get; set; }
         public DbSet<EducationItem> EducationItems { get; set; }
         public DbSet<EmploymentItem> EmploymentItems { get; set; }
