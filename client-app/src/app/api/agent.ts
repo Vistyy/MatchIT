@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResult } from "../models/pagination";
-import { Photo, Profile } from "../models/profile";
+import { Photo, Profile, Skill } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -113,9 +113,24 @@ const Profiles = {
     requests.put(`/profiles`, profile),
 };
 
+const Experts = {
+  get: (username: string) => requests.get<Profile>(`/experts/${username}`),
+  list: (params: URLSearchParams) =>
+    axios
+      .get<PaginatedResult<Profile[]>>("/experts", { params })
+      .then(responseBody),
+};
+
+const Skills = {
+  list: (params: URLSearchParams) =>
+    axios.get<Skill[]>("/skills", { params }).then(responseBody),
+};
+
 const agent = {
   Account,
   Profiles,
+  Experts,
+  Skills,
 };
 
 export default agent;

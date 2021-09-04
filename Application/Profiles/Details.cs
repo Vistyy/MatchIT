@@ -31,8 +31,12 @@ namespace Application.Profiles
             public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                    .ProjectTo<Profile>(_mapper.ConfigurationProvider)
-                    .SingleOrDefaultAsync(x => x.Username == request.Username);
+                .Include(u => u.Certifications).ThenInclude(c => c.Certificate)
+                .Include(u => u.Education)
+                .Include(u => u.Employment).ThenInclude(e => e.Description)
+                .Include(u => u.Experience).ThenInclude(e => e.Description)
+                .ProjectTo<Profile>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(x => x.Username == request.Username);
 
                 return Result<Profile>.Success(user);
             }

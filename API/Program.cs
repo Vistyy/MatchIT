@@ -18,7 +18,7 @@ namespace API
             var host = CreateHostBuilder(args).Build();
 
             using var scope = host.Services.CreateScope();
-            
+
             var services = scope.ServiceProvider;
 
             try
@@ -29,10 +29,10 @@ namespace API
                 await Seed.SeedData(context, userManager);
                 // TODO - add seed data
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError("An error occured during migration.");
+                logger.LogError(ex.ToString());
             }
 
             await host.RunAsync();

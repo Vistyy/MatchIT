@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, Header, Icon, Segment } from "semantic-ui-react";
+import { history } from "../..";
 import agent from "../../app/api/agent";
 import useQuery from "../../app/common/util/hooks";
 import { useStore } from "../../app/stores/store";
 import LoginForm from "./LoginForm";
 
 export default function ConfirmEmail() {
-  const { modalStore } = useStore();
+  const {
+    userStore: { isLoggedIn },
+    modalStore,
+  } = useStore();
   const email = useQuery().get("email") as string;
   const token = useQuery().get("token") as string;
 
@@ -37,6 +41,12 @@ export default function ConfirmEmail() {
       });
   }, [Status.Failed, Status.Success, token, email]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      history.push("/");
+    }, 3000);
+  }, []);
+
   function getBody() {
     switch (status) {
       case Status.Verifying:
@@ -57,16 +67,25 @@ export default function ConfirmEmail() {
           </div>
         );
       case Status.Success:
-        return (
-          <div>
-            <p>Email has been verified - you can now login</p>
-            <Button
-              primary
-              onClick={() => modalStore.openModal(<LoginForm />)}
-              size="huge"
-            />
-          </div>
-        );
+        if (isLoggedIn) {
+          return (
+            <div>
+              <p>Email has been verified - redirecting...</p>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <p>Email has been verified - you can now login</p>
+              <Button
+                primary
+                onClick={() => modalStore.openModal(<LoginForm />)}
+                size="huge"
+                content="Login"
+              />
+            </div>
+          );
+        }
     }
   }
 

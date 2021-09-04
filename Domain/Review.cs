@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Review
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string ReviewerId { get; set; }
         public AppUser Reviewer { get; set; }
         public string RevieweeId { get; set; }
