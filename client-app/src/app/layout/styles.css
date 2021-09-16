@@ -66,3 +66,29 @@ body {
   padding-left: 4em;
   width: max-content;
 }
+
+.navbar--menu.ui.menu .item:before {
+  width: 0;
+}
+
+.ui.buttons .expertList--filterButton.disabled {
+  opacity: 1 !important;
+  background-color: rgb(33, 138, 174);
+}
+
+.ui.search > .results.transition {
+  overflow-y: auto;
+  max-height: 500px !important;
+}
+
+.becomeExpert--skillLabel__hover.ui.label:hover {
+  cursor: pointer;
+  animation: deleteColor 0.25s forwards;
+}
+
+@keyframes deleteColor {
+  100% {
+    color: white;
+    background-color: rgba(219, 40, 40, 0.9);
+  }
+}

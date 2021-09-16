@@ -10,11 +10,11 @@ import ProfilePortfolio from "./ProfilePortfolio";
 
 export default observer(function ProfileContent() {
   const { profileStore } = useStore();
-  const { profile, isExpert } = profileStore;
+  const { profile } = profileStore;
   return (
     <Grid>
       <Grid.Column width="16">
-        {profile && isExpert && (
+        {profile && profile.isExpert && (
           <Segment.Group>
             <Segment>
               <ProfileEmployment employment={profile.employment} />

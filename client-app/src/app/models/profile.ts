@@ -33,6 +33,12 @@ export interface Photo {
   url: string;
 }
 
+export interface UserFile {
+  id: string;
+  url: string;
+  resourceType: string;
+}
+
 export interface Job {
   id: string;
   employer: string;
@@ -70,6 +76,7 @@ export interface Description {
 
 export interface PortfolioItem {
   id: number;
+  url: string;
   description: Description;
 }
 

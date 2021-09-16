@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -20,16 +21,22 @@ export default observer(function ProfileHeader({ profile }: Props) {
   const {
     modalStore,
     profileStore: { uploadPhoto, deletePhoto, isCurrentUser },
+    userStore: { isLoggedIn },
+    expertStore: { setSkillPredicate, clearFilter },
   } = useStore();
   const [visible, setVisible] = useState(false);
 
   function handlePhotoChange(file: Blob) {
-    if (profile.image) {
-      deletePhoto(profile.image)
-        .then(() => uploadPhoto(file))
-        .then(() => modalStore.closeModal());
+    if (isLoggedIn()) {
+      if (profile.image) {
+        deletePhoto(profile.image)
+          .then(() => uploadPhoto(file))
+          .then(() => modalStore.closeModal());
+      } else {
+        uploadPhoto(file).then(() => modalStore.closeModal());
+      }
     } else {
-      uploadPhoto(file).then(() => modalStore.closeModal());
+      modalStore.closeModal();
     }
   }
 
@@ -74,10 +81,15 @@ export default observer(function ProfileHeader({ profile }: Props) {
                 <Item.Extra>
                   {profile.skills.map((skill) => (
                     <Button
-                      src={`/experts`}
+                      as={Link}
+                      to={`/`}
                       key={skill.id}
                       content={skill.name}
-                    ></Button>
+                      onClick={() => {
+                        clearFilter();
+                        setSkillPredicate(skill.name);
+                      }}
+                    />
                   ))}
                 </Item.Extra>
               </Item.Content>

@@ -183,7 +183,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("StudyingFrom")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StudyingTo")
+                    b.Property<DateTime?>("StudyingTo")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -312,9 +312,6 @@ namespace Persistence.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Url")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
@@ -395,11 +392,16 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.UserFile", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("JobId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PortfolioItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ResourceType")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
@@ -408,6 +410,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("JobId");
+
+                    b.HasIndex("PortfolioItemId");
 
                     b.ToTable("UserFile");
                 });
@@ -691,8 +695,12 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.UserFile", b =>
                 {
                     b.HasOne("Domain.Job", null)
-                        .WithMany("AdditionalAttachments")
+                        .WithMany("Attachments")
                         .HasForeignKey("JobId");
+
+                    b.HasOne("Domain.PortfolioItem", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("PortfolioItemId");
                 });
 
             modelBuilder.Entity("JobSkill", b =>
@@ -786,9 +794,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Job", b =>
                 {
-                    b.Navigation("AdditionalAttachments");
+                    b.Navigation("Attachments");
 
                     b.Navigation("JobBids");
+                });
+
+            modelBuilder.Entity("Domain.PortfolioItem", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,6 +2,7 @@ import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Profile, Skill } from "../models/profile";
+import { SkillSearchItem } from "../models/search";
 
 export default class ExpertStore {
   expertRegistry = new Map<string, Profile>();
@@ -13,6 +14,7 @@ export default class ExpertStore {
   skillPredicate = new Map().set("skill", "all");
   skillFilter: string[] = [];
   filterDelay: any;
+  skillNames: SkillSearchItem[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -84,18 +86,31 @@ export default class ExpertStore {
 
   loadSkills = async () => {
     this.loading = true;
+    this.skillPredicate.set("skill", "all");
     try {
       const result = await agent.Skills.list(this.axiosParams);
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
+      runInAction(() => (this.loading = false));
     } catch (error) {
       console.log(error);
-      this.loading = false;
+      runInAction(() => (this.loading = false));
     }
   };
 
   private setSkill = (skill: Skill) => {
     this.skillRegistry.set(skill.id, skill);
+  };
+
+  clearFilter = () => {
+    this.skillFilter.length = 0;
+    this.skillPredicate.set("skill", "all");
+  };
+
+  getSkillNames = () => {
+    const skills = Array.from(this.skillRegistry.values());
+    skills.forEach((skill) => this.skillNames.push({ title: skill.name }));
+    return this.skillNames;
   };
 }

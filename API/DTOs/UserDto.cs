@@ -8,6 +8,7 @@ namespace API.DTOs
         public string Token { get; set; }
         public string Username { get; set; }
         public Photo Image { get; set; }
+        public bool IsExpert { get; set; }
 
     }
 }

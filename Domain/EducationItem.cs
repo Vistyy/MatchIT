@@ -9,7 +9,7 @@ namespace Domain
         public string FacilityLocation { get; set; }
         public string FieldOfStudy { get; set; }
         public DateTime StudyingFrom { get; set; }
-        public DateTime StudyingTo { get; set; }
+        public DateTime? StudyingTo { get; set; }
 
     }
 }

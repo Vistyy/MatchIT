@@ -16,6 +16,7 @@ import ConfirmEmail from "../../features/users/ConfirmEmail";
 import NotFound from "../../features/errors/NotFound";
 import ExpertDashboard from "../../features/experts/dashboard/ExpertDashboard";
 import ProfilePage from "../../features/profiles/ProfilePage";
+import BecomeExpert from "../../features/profiles/becomeExpert/BecomeExpert";
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -44,10 +45,11 @@ function App() {
             <Container style={{ marginTop: "7em" }}>
               <Switch>
                 <Route exact path="/" component={ExpertDashboard} />
-                <PrivateRoute
+                <Route
                   path="/profiles/:username"
                   component={ProfilePage}
                 />
+                <PrivateRoute path="/becomeExpert" component={BecomeExpert} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
                 <Route
