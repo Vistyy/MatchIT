@@ -82,7 +82,6 @@ body {
 }
 
 .becomeExpert--skillLabel__hover.ui.label:hover {
-  cursor: pointer;
   animation: deleteColor 0.25s forwards;
 }
 
@@ -91,4 +90,13 @@ body {
     color: white;
     background-color: rgba(219, 40, 40, 0.9);
   }
+}
+
+.ui.segment.becomeExpert--addPlaceholder__hover:hover {
+  background-color: #f9fafb;
+  transition: background-color 0.12s linear;
+}
+
+.asAButton:hover {
+  cursor: pointer;
 }

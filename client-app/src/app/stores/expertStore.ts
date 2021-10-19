@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Profile, Skill } from "../models/profile";
 import { SkillSearchItem } from "../models/search";
+import { store } from "./store";
 
 export default class ExpertStore {
   expertRegistry = new Map<string, Profile>();
@@ -86,7 +87,6 @@ export default class ExpertStore {
 
   loadSkills = async () => {
     this.loading = true;
-    this.skillPredicate.set("skill", "all");
     try {
       const result = await agent.Skills.list(this.axiosParams);
       if (this.skillRegistry.size > 0)
@@ -109,8 +109,25 @@ export default class ExpertStore {
   };
 
   getSkillNames = () => {
+    this.skillNames.length = 0;
     const skills = Array.from(this.skillRegistry.values());
-    skills.forEach((skill) => this.skillNames.push({ title: skill.name }));
+    skills.forEach((skill) => {
+      if (
+        store.profileStore.profile &&
+        !store.profileStore.profile.skills.some(
+          (profileSkill) => skill.name === profileSkill.name
+        )
+      )
+        this.skillNames.push({ title: skill.name });
+    });
     return this.skillNames;
+  };
+
+  resetState = () => {
+    this.expertRegistry.clear();
+    this.skillRegistry.clear();
+    this.skillPredicate.set("skill", "all");
+    this.skillFilter.length = 0;
+    this.skillNames.length = 0;
   };
 }

@@ -33,12 +33,6 @@ export interface Photo {
   url: string;
 }
 
-export interface UserFile {
-  id: string;
-  url: string;
-  resourceType: string;
-}
-
 export interface Job {
   id: string;
   employer: string;
@@ -50,7 +44,7 @@ export interface Job {
 }
 
 export interface Review {
-  id: number;
+  id: string;
   rating: number;
   description: string;
   creationDate: Date;
@@ -63,37 +57,37 @@ export interface Skill {
 }
 
 export interface JobBid {
-  id: number;
+  id: string;
   bidder: string;
 }
 
 export interface Description {
-  id: number;
+  id: string;
   title: string;
   summary: string;
   formattedText: string;
 }
 
 export interface PortfolioItem {
-  id: number;
+  id: string;
   url: string;
-  description: Description;
+  description?: Description;
 }
 
 export interface EmploymentItem {
-  id: number;
+  id: string;
   employedFrom: Date;
   employedTo?: Date;
   description: Description;
 }
 
 export interface ExperienceItem {
-  id: number;
+  id: string;
   description: Description;
 }
 
 export interface EducationItem {
-  id: number;
+  id: string;
   facilityName: string;
   facilityLocation: string;
   fieldOfStudy: string;
@@ -102,7 +96,7 @@ export interface EducationItem {
 }
 
 export interface Certification {
-  id: number;
+  id: string;
   name: string;
   dateAcquired: Date;
   certificate: Photo;

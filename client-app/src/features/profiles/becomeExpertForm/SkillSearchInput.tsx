@@ -5,6 +5,7 @@ import { Search, SearchResultData } from "semantic-ui-react";
 import { SkillSearchItem, State } from "../../../app/models/search";
 import { searchReducer } from "../../../app/common/util/hooks";
 import { useStore } from "../../../app/stores/store";
+import { runInAction } from "mobx";
 
 interface Props {
   source: SkillSearchItem[];
@@ -68,10 +69,10 @@ export default observer(function SkillSearchInput({
     if (profile && selectedSkill)
       if (profile.skills.includes(selectedSkill)) {
         removeSkill(selectedSkill);
-        source.push(data.result);
+        runInAction(() => source.push(data.result));
       } else {
         addSkill(selectedSkill);
-        source.splice(source.indexOf(data.result), 1);
+        runInAction(() => source.splice(source.indexOf(data.result), 1));
       }
 
     searchDispatch({

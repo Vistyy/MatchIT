@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResult } from "../models/pagination";
-import { Photo, Profile, Skill, UserFile } from "../models/profile";
+import { Photo, Profile, Skill } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -109,11 +109,6 @@ const Profiles = {
     });
   },
   deletePhoto: (id: string) => requests.del(`/photos/${id}`),
-  uploadFile: (file: Blob) => {
-    let formData = new FormData();
-    formData.append("File", file);
-    return axios.post<UserFile>("files", formData, { headers: {"Content-type": "multipart/form-data"}})
-  },
   updateProfile: (profile: Partial<Profile>) =>
     requests.put(`/profiles`, profile),
   becomeExpert: (profile: Partial<Profile>) =>

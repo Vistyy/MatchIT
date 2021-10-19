@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
-import CertificationForm from "./CertificationForm";
-import EducationForm from "./EducationForm";
-import EmploymentForm from "./EmploymentForm";
-import ExperienceForm from "./ExperienceForm";
-import PortfolioForm from "./PortfolioForm";
-import SkillsForm from "./SkillsForm";
+import CertificationForm from "./CertificationSegment";
+import EducationForm from "./EducationSegment";
+import EmploymentForm from "./EmploymentSegment";
+import ExperienceForm from "./ExperienceSegment";
+import PortfolioForm from "./PortfolioSegment";
+import SkillsForm from "./SkillsSegment";
 
 export default observer(function BecomeExpert() {
   const {
@@ -28,7 +28,9 @@ export default observer(function BecomeExpert() {
 
   const [formRow, setFormRow] = useState(forms.slice(0, 1));
   const [activeStep, setActiveStep] = useState(1);
-  const [buttonState, setButtonState] = useState(true);
+  const [buttonState, setButtonState] = useState(false);
+
+  const skillsArrayLength = profile?.skills.length;
 
   function handleNext() {
     setFormRow((prev) => {
@@ -37,22 +39,22 @@ export default observer(function BecomeExpert() {
     setActiveStep(formRow.length + 1);
   }
 
-  function handleNextButton() {
-    if (profile) {
-      switch (activeStep) {
-        case 1:
-          setButtonState(profile.skills.length > 0);
-      }
-    }
-  }
-
   useEffect(() => {
     if (user) loadProfile(user.username);
   }, [user, loadProfile]);
 
   useEffect(() => {
-    handleNextButton();
-  });
+    if (profile) {
+      switch (activeStep) {
+        case 1:
+          setButtonState(false);
+          setButtonState(profile.skills.length > 0);
+          break;
+        case 2:
+          setButtonState(false);
+      }
+    }
+  }, [activeStep, profile, skillsArrayLength]);
 
   return (
     <Grid>

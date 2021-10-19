@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Grid, Header, Item } from "semantic-ui-react";
 import { ExperienceItem } from "../../app/models/profile";
+import ExperienceItemElement from "./profileItemElements/ExperienceItemElement";
 
 interface Props {
   experience: ExperienceItem[];
@@ -14,19 +15,7 @@ export default observer(function ProfileExperience({ experience }: Props) {
       {experience && (
         <Item.Group>
           {experience.map((experienceItem) => (
-            <Item key={experienceItem.id}>
-              <Item.Content>
-                <Item.Header as="h2">
-                  {experienceItem.description.title}
-                </Item.Header>
-                <Item.Extra as="h4" style={{ color: "rgba(0,0,0,0.7)" }}>
-                  {experienceItem.description.summary}
-                </Item.Extra>
-                <Item.Description>
-                  <pre>{`${experienceItem.description.formattedText}`}</pre>
-                </Item.Description>
-              </Item.Content>
-            </Item>
+            <ExperienceItemElement key={experienceItem.id} experienceItem={experienceItem} />
           ))}
         </Item.Group>
       )}

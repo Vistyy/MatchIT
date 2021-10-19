@@ -16,7 +16,7 @@ import ConfirmEmail from "../../features/users/ConfirmEmail";
 import NotFound from "../../features/errors/NotFound";
 import ExpertDashboard from "../../features/experts/dashboard/ExpertDashboard";
 import ProfilePage from "../../features/profiles/ProfilePage";
-import BecomeExpert from "../../features/profiles/becomeExpert/BecomeExpert";
+import BecomeExpert from "../../features/profiles/becomeExpertForm/BecomeExpert";
 
 function App() {
   const { commonStore, userStore } = useStore();
