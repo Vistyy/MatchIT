@@ -100,3 +100,8 @@ body {
 .asAButton:hover {
   cursor: pointer;
 }
+
+.react-pdf__Document {
+  display: inline-block;
+  margin-right: 30px;
+}

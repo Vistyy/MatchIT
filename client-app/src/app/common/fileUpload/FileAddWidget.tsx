@@ -4,6 +4,7 @@ import { Grid, Header, Image } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
 import FileWidgetDropzone from "./FileWidgetDropzone";
 import { Document, Page } from "react-pdf/dist/umd/entry.webpack";
+import { v4 as uuid } from "uuid";
 
 interface Props {
   addFile: (file: Blob) => void;
@@ -11,7 +12,7 @@ interface Props {
 
 export default observer(function FileAddWidget({ addFile }: Props) {
   const {
-    profileStore: { loading, uploading },
+    profileStore: { loading, uploading, temporaryFiles },
   } = useStore();
   const [files, setFiles] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -33,24 +34,36 @@ export default observer(function FileAddWidget({ addFile }: Props) {
     setLoader(loading || uploading);
   }, [loading, uploading]);
 
+  useEffect(() => {
+    files.forEach((file) => {
+      temporaryFiles.set(uuid(), file);
+      console.log(file);
+    });
+  }, [files, temporaryFiles]);
+
   return (
     <Grid>
-      <Grid.Column width={4}>
-        <Header sub color="teal" content="Step 1 - Add File" />
-        <FileWidgetDropzone setFiles={setFiles} />
-      </Grid.Column>
-      <Grid.Column width={1} />
-      {files && files.length > 0 && (
+      <Grid.Row>
         <Grid.Column width={4}>
-          {files.map((file: any) => {
+          <FileWidgetDropzone setFiles={setFiles} />
+        </Grid.Column>
+      </Grid.Row>
+      {temporaryFiles && temporaryFiles.size > 0 && (
+        <Grid.Column width={16}>
+          {Array.from(temporaryFiles.values()).map((file: any) => {
             return file.type.startsWith("image") ? (
-              <Image src={URL.createObjectURL(file)} />
+              <Image
+                src={URL.createObjectURL(file)}
+                size={"small"}
+                style={{ display: "inline-block" }}
+              />
             ) : (
               <Document
-                file={URL.createObjectURL(files[0])}
+                file={file.preview}
                 onLoadSuccess={onDocumentLoadSuccess}
+                renderMode="svg"
               >
-                <Page pageNumber={pageNumber} />
+                <Page pageNumber={1} scale={0.2} />
               </Document>
             );
           })}
