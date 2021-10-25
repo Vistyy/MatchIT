@@ -1,23 +1,14 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import {
-  Description,
-  Photo,
-  PortfolioItem,
-  Profile,
-  Skill,
-} from "../models/profile";
+import { Photo, PortfolioItem, Profile, Skill } from "../models/profile";
 import { SkillSearchItem } from "../models/search";
 import { store } from "./store";
-import { v4 as uuid } from "uuid";
 
 export default class ProfileStore {
   profile: Profile | null = null;
   loadingProfile = false;
   uploading = false;
   loading = false;
-  temporaryFiles = new Map<string, Blob>();
-  currentPortfolioItemId: string | undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -44,11 +35,7 @@ export default class ProfileStore {
     }
   };
 
-  addFile = (file: Blob) => {
-    this.currentPortfolioItemId = uuid();
-    this.temporaryFiles.set(this.currentPortfolioItemId, file);
-    console.log(this.currentPortfolioItemId);
-  };
+
 
   uploadPhoto = async (file: Blob) => {
     this.uploading = true;

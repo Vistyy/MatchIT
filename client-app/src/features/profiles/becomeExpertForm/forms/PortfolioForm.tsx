@@ -7,29 +7,9 @@ import PhotoUploadWidget from "../../../../app/common/imageUpload/PhotoUploadWid
 import { useStore } from "../../../../app/stores/store";
 
 export default observer(function PortfolioForm() {
-  const {
-    profileStore: {
-      profile,
-      addFile,
-      addPortfolioItem,
-      currentPortfolioItemId,
-      temporaryFiles,
-    },
-  } = useStore();
-
   return (
     <>
-      <FileAddWidget addFile={addFile} />
-      {currentPortfolioItemId &&
-        Array.from(temporaryFiles).map(([id, file]) => (
-          // <>
-          //   <Formik
-          //     initialValues={{ title: "", summary: "", formattedText: "" }}
-          //     onSubmit={(values) => {}}
-          //   ></Formik>
-          // </>
-          <Image key={id} src={URL.createObjectURL(file)} size="medium" />
-        ))}
+      <FileAddWidget />
     </>
   );
 });

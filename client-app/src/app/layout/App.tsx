@@ -17,6 +17,7 @@ import NotFound from "../../features/errors/NotFound";
 import ExpertDashboard from "../../features/experts/dashboard/ExpertDashboard";
 import ProfilePage from "../../features/profiles/ProfilePage";
 import BecomeExpert from "../../features/profiles/becomeExpertForm/BecomeExpert";
+import FilePreviewModal from "../common/fileUpload/FilePreviewModal";
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -36,6 +37,7 @@ function App() {
     <>
       <ToastContainer position="bottom-left" hideProgressBar />
       <ModalContainer />
+      <FilePreviewModal />
       {/* <Route exact path="/" component={HomePage} /> */}
       <Route
         path={"/"}

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import CertificationForm from "./CertificationSegment";
@@ -15,7 +15,7 @@ export default observer(function BecomeExpert() {
     userStore: { user },
   } = useStore();
 
-  const { becomeExpert, profile, loadProfile } = profileStore;
+  const { profile, loadProfile } = profileStore;
 
   const forms = [
     <SkillsForm />,

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-interface Modal {
+export interface Modal {
   open: boolean;
   body: JSX.Element | null;
   size?: "mini" | "tiny" | "small" | "large" | "fullscreen" | undefined;

@@ -101,7 +101,36 @@ body {
   cursor: pointer;
 }
 
-.react-pdf__Document {
+.file-thumbnail-container {
   display: inline-block;
   margin-right: 30px;
+  max-width: 150px;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+
+.file-thumbnail-card {
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: 0.3s ease;
+  background-color: rgba(80, 80, 80, 0.6);
+}
+
+.file-thumbnail-card:hover .overlay {
+  opacity: 1;
+}
+
+.modal.modal-file-preview {
+  width: auto;
+}
+.modal.modal-file-preview .content {
+  padding: 0;
 }
