@@ -1,29 +1,33 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
-import { Card, Grid, Image } from "semantic-ui-react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import { Card, Checkbox, Grid, Icon, Image } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
 import FileWidgetDropzone from "./FileWidgetDropzone";
 import { Document, Page } from "react-pdf/dist/umd/entry.webpack";
+import "react-pdf/dist/umd/Page/AnnotationLayer.css";
 
 export default observer(function FileAddWidget() {
   const {
     profileStore: { loading, uploading },
-    fileStore: { temporaryFiles, addFiles: addFile, openFilePreviewModal },
+    fileStore: { temporaryFiles, addFiles, openFilePreviewModal },
     modalStore: { openModal },
   } = useStore();
   const [loader, setLoader] = useState(false);
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [deleteMode, setDeleteMode] = useState(0);
 
   function onDocumentLoadSuccess({ numPages }: any) {
     setNumPages(numPages);
   }
 
-  // useEffect(() => {
-  //   return () => {
-  //     temporaryFiles.forEach((file: any) => URL.revokeObjectURL(file.preview));
-  //   };
-  // }, [temporaryFiles]);
+  function handleDeleteMode(e: SyntheticEvent, { checked }: any) {
+    if (checked) {
+      setDeleteMode((prevState) => prevState + 1);
+    } else {
+      setDeleteMode((prevState) => prevState - 1);
+    }
+  }
 
   useEffect(() => {
     setLoader(loading || uploading);
@@ -33,7 +37,17 @@ export default observer(function FileAddWidget() {
     <Grid>
       <Grid.Row>
         <Grid.Column width={4}>
-          <FileWidgetDropzone addFiles={addFile} />
+          <FileWidgetDropzone addFiles={addFiles} />
+        </Grid.Column>
+        <Grid.Column width={3}>
+          {temporaryFiles && temporaryFiles.size > 0 && deleteMode > 0 && (
+            <Icon
+              size={"huge"}
+              className="asAButton"
+              name={"trash alternate"}
+              onClick={handleDeleteMode}
+            />
+          )}
         </Grid.Column>
       </Grid.Row>
       <Grid.Column width={16}>
@@ -47,10 +61,23 @@ export default observer(function FileAddWidget() {
                 >
                   <Card
                     centered
-                    style={{ maxWidth: "150px", marginBottom: "6px" }}
+                    style={{
+                      maxWidth: "150px",
+                      marginBottom: "6px",
+                      maxHeight: "212px",
+                      overflow: "hidden",
+                    }}
                     className="file-thumbnail-card"
-                    onClick={() => openFilePreviewModal(file)}
                   >
+                    <Checkbox
+                      style={{
+                        zIndex: "1",
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                      }}
+                      onChange={handleDeleteMode}
+                    />
                     {file.type.startsWith("image") ? (
                       <Image
                         src={file.preview}
@@ -61,12 +88,14 @@ export default observer(function FileAddWidget() {
                       <Document
                         file={file.preview}
                         onLoadSuccess={onDocumentLoadSuccess}
-                        renderMode="svg"
                       >
                         <Page pageNumber={1} width={150} />
                       </Document>
                     )}
-                    <div className="overlay"></div>
+                    <div
+                      className="overlay"
+                      onClick={() => openFilePreviewModal(file)}
+                    ></div>
                   </Card>
                   <p>{file.name}</p>
                 </div>
