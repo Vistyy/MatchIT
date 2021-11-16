@@ -1,8 +1,15 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Photo, PortfolioItem, Profile, Skill } from "../models/profile";
+import {
+  Photo,
+  PortfolioItem,
+  Profile,
+  Skill,
+  UserFile,
+} from "../models/profile";
 import { SkillSearchItem } from "../models/search";
 import { store } from "./store";
+import { v4 as uuid } from "uuid";
 
 export default class ProfileStore {
   profile: Profile | null = null;
@@ -34,8 +41,6 @@ export default class ProfileStore {
       runInAction(() => (this.loadingProfile = false));
     }
   };
-
-
 
   uploadPhoto = async (file: Blob) => {
     this.uploading = true;
@@ -115,7 +120,14 @@ export default class ProfileStore {
     store.expertStore.skillNames.push({ title: skill.name } as SkillSearchItem);
   };
 
-  addPortfolioItem = (portfolioItem: PortfolioItem) => {
+  addPortfolioItem = (files: Map<string, any>, description: string) => {
+    const portfolioFiles: UserFile[] = [];
+    files.forEach((file) => portfolioFiles.push(file));
+    const portfolioItem: PortfolioItem = {
+      id: uuid(),
+      files: portfolioFiles,
+      description: description,
+    };
     this.profile?.portfolio.push({ ...portfolioItem });
   };
 }

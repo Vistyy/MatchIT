@@ -70,8 +70,8 @@ export interface Description {
 
 export interface PortfolioItem {
   id: string;
-  url: string;
-  description?: Description;
+  files: UserFile[];
+  description: string;
 }
 
 export interface EmploymentItem {
@@ -100,4 +100,10 @@ export interface Certification {
   name: string;
   dateAcquired: Date;
   certificate: Photo;
+}
+
+export interface UserFile {
+  id: string;
+  url: string;
+  fileType: string;
 }

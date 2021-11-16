@@ -1,9 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { v4 as uuid } from "uuid";
+import { UserFile } from "../models/profile";
 import { Modal } from "./modalStore";
 
 interface FileModal extends Modal {
-  file: any;
+  file: UserFile | undefined;
 }
 
 export default class FileStore {
@@ -13,15 +14,23 @@ export default class FileStore {
     size: undefined,
     file: undefined,
   };
-  temporaryFiles = new Map<string, any>();
+  temporaryFiles = new Map<string, UserFile>();
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  addFiles = (files: Blob[]) => {
+  addFiles = (files: any[]) => {
     files.forEach((file) => {
-      this.temporaryFiles.set(uuid(), file);
+      const fileId = uuid();
+      this.temporaryFiles.set(fileId, {id: fileId, url: file.preview, fileType: file.type});
+    });
+  };
+
+  deleteFiles = (filesToDelete: string[]) => {
+    filesToDelete.forEach((fileToDeleteId) => {
+      URL.revokeObjectURL(this.temporaryFiles.get(fileToDeleteId)!.url);
+      this.temporaryFiles.delete(fileToDeleteId);
     });
   };
 

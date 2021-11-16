@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Button, Header, Menu } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 
@@ -30,7 +30,14 @@ export default observer(function ExpertFilters() {
 
   return (
     <>
-      <Menu vertical size="large" style={{ width: "100%", marginTop: 25 }}>
+      <Menu
+        vertical
+        size="large"
+        style={{
+          width: "100%",
+          marginTop: 25,
+        }}
+      >
         <Header
           icon="filter"
           attached

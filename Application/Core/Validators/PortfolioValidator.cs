@@ -8,9 +8,7 @@ namespace Application.Core.Validators
     {
         public PortfolioValidator()
         {
-            RuleFor(p => p.Description.Title).NotEmpty();
-            RuleFor(p => p.Description.Summary).NotEmpty();
-            RuleFor(p => p.Description.FormattedText).NotEmpty();
+            // TODO
         }
     }
 }

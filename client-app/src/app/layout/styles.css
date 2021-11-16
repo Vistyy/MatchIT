@@ -2,6 +2,11 @@ body {
   background-color: #eaeaea !important;
 }
 
+.positive--custom {
+  color: white !important;
+  background-color: rgb(49, 132, 196) !important;
+}
+
 .ui.inverted.top.fixed.menu {
   background-image: linear-gradient(
     135deg,
@@ -71,7 +76,7 @@ body {
   width: 0;
 }
 
-.ui.buttons .expertList--filterButton.disabled {
+.ui .expertList--filterButton.disabled {
   opacity: 1 !important;
   background-color: rgb(33, 138, 174);
 }
@@ -106,7 +111,6 @@ body {
   margin-right: 30px;
   max-width: 150px;
   word-wrap: break-word;
-  cursor: pointer;
 }
 
 .file-thumbnail-card {
@@ -133,4 +137,24 @@ body {
 }
 .modal.modal-file-preview .content {
   padding: 0;
+}
+
+.ui.buttons.pdfNavigation-buttons {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity ease-in-out 0.2s;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.ui.buttons.pdfNavigation-buttons .ui.button,
+.ui.buttons.pdfNavigation-buttons .ui.label {
+  background-color: white;
+}
+
+.react-pdf__Document:hover .pdfNavigation-buttons {
+  opacity: 1;
 }

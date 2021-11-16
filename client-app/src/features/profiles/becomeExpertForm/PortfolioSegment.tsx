@@ -16,7 +16,7 @@ export default observer(function PortfolioSegment() {
     <>
       <Header>Portfolio</Header>
       {editMode ? (
-        <PortfolioForm />
+        <PortfolioForm setEditMode={setEditMode} />
       ) : (
         <AddNewButton
           segmentName="Portfolio Item"

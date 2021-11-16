@@ -7,6 +7,6 @@ namespace Domain
     {
         public Guid Id { get; set; }
         public ICollection<UserFile> Attachments { get; set; }
-        public Description Description { get; set; }
+        public string Description { get; set; }
     }
 }

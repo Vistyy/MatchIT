@@ -40,20 +40,15 @@ export default observer(function ProfileHeader({ profile }: Props) {
     }
   }
 
-  function handleShow() {
-    setVisible(true);
-  }
-
-  function handleHide() {
-    setVisible(false);
-  }
-
   return (
     <Segment>
       <Grid>
         <Grid.Column width="12">
           <Item.Group>
-            <Item onMouseEnter={handleShow} onMouseLeave={handleHide}>
+            <Item
+              onMouseEnter={() => setVisible(true)}
+              onMouseLeave={() => setVisible(false)}
+            >
               <Item.Image size="small">
                 <Image
                   src={profile.image?.url || "/assets/user.png"}

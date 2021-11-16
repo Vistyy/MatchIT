@@ -30,23 +30,21 @@ export default function ExpertListItem({ expert }: Props) {
         </Item.Group>
       </Segment>
       <Segment>
-        <Button.Group>
-          {expert.skills.map((skill) => (
-            <Button
-              className="expertList--filterButton"
-              as={Link}
-              to={`/`}
-              key={skill.id}
-              content={skill.name}
-              disabled={Array.from(skillPredicate.values())[0]
-                .split(",")
-                .includes(skill.name)}
-              onClick={() => {
-                setSkillPredicate(skill.name);
-              }}
-            />
-          ))}
-        </Button.Group>
+        {expert.skills.map((skill) => (
+          <Button
+            className="expertList--filterButton"
+            as={Link}
+            to={`/`}
+            key={skill.id}
+            content={skill.name}
+            disabled={Array.from(skillPredicate.values())[0]
+              .split(",")
+              .includes(skill.name)}
+            onClick={() => {
+              setSkillPredicate(skill.name);
+            }}
+          />
+        ))}
       </Segment>
     </Segment.Group>
   );
