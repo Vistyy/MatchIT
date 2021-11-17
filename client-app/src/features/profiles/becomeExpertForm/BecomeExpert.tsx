@@ -30,8 +30,6 @@ export default observer(function BecomeExpert() {
   const [activeStep, setActiveStep] = useState(1);
   const [buttonState, setButtonState] = useState(false);
 
-  const skillsArrayLength = profile?.skills.length;
-
   function handleNext() {
     setFormRow((prev) => {
       return forms.slice(0, prev.length + 1);
@@ -44,17 +42,30 @@ export default observer(function BecomeExpert() {
   }, [user, loadProfile]);
 
   useEffect(() => {
+    setButtonState(false);
     if (profile) {
       switch (activeStep) {
         case 1:
-          setButtonState(false);
           setButtonState(profile.skills.length > 0);
           break;
         case 2:
-          setButtonState(false);
+          setButtonState(profile.portfolio.length > 0);
+          break;
+        case 3:
+          setButtonState(profile.employment.length > 0);
+          break;
+        case 4:
+          setButtonState(profile.experience.length > 0);
+          break;
+        case 5:
+          setButtonState(profile.education.length > 0);
+          break;
+        case 6:
+          setButtonState(profile.certifications.length > 0);
+          break;
       }
     }
-  }, [activeStep, profile, skillsArrayLength]);
+  }, [activeStep, profile, profile?.skills.length, profile?.portfolio.length, profile?.employment.length, profile?.experience.length, profile?.education.length, profile?.certifications.length]);
 
   return (
     <Grid>

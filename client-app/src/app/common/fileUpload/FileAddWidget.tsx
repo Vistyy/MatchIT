@@ -1,15 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Checkbox,
-  Form,
-  Grid,
-  Icon,
-  Image,
-  Input,
-} from "semantic-ui-react";
+import { Card, Checkbox, Grid, Icon, Image } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
 import FileWidgetDropzone from "./FileWidgetDropzone";
 import { Document, Page } from "react-pdf/dist/umd/entry.webpack";
@@ -81,16 +72,7 @@ export default observer(function FileAddWidget() {
               {Array.from(temporaryFiles.entries()).map(([fileId, file]) => {
                 return (
                   <div key={fileId} className="file-thumbnail-container">
-                    <Card
-                      centered
-                      style={{
-                        maxWidth: "150px",
-                        marginBottom: "6px",
-                        maxHeight: "212px",
-                        overflow: "hidden",
-                      }}
-                      className="file-thumbnail-card"
-                    >
+                    <Card centered className="file-thumbnail-card">
                       <Checkbox
                         style={{
                           zIndex: "1",

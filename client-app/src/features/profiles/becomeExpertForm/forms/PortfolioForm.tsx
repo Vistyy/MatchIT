@@ -1,10 +1,8 @@
-import { Formik } from "formik";
 import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { Button, Grid, Image, Input } from "semantic-ui-react";
+import { Button, Grid, Input } from "semantic-ui-react";
 import FileAddWidget from "../../../../app/common/fileUpload/FileAddWidget";
-import PhotoUploadWidget from "../../../../app/common/imageUpload/PhotoUploadWidget";
 import { useStore } from "../../../../app/stores/store";
 
 interface Props {

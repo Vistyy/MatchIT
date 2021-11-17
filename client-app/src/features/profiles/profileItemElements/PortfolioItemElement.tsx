@@ -1,25 +1,35 @@
-import React, { Fragment } from "react";
-import { Image, Item } from "semantic-ui-react";
+import React from "react";
+import { Card, Image } from "semantic-ui-react";
 import { PortfolioItem } from "../../../app/models/profile";
 import { Document, Page } from "react-pdf/dist/umd/entry.webpack";
 import "react-pdf/dist/umd/Page/AnnotationLayer.css";
 import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   portfolioItem: PortfolioItem;
 }
 
-export default function PortfolioItemElement({ portfolioItem }: Props) {
+export default observer(function PortfolioItemElement({
+  portfolioItem,
+}: Props) {
   const {
     fileStore: { openFilePreviewModal },
   } = useStore();
 
   return (
-    <Item>
-      <Item.Content className="file-thumbnail-container">
+    <Card style={{ width: "100%" }} raised>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+          padding: "10px",
+        }}
+      >
         {portfolioItem.files.map((file) => (
-          <Fragment key={file.id}>
-            <div className="file-thumbnail-card">
+          <div key={file.id} className="file-thumbnail-container">
+            <Card className="file-thumbnail-card">
               {file.fileType.startsWith("image") ? (
                 <Image
                   src={file.url}
@@ -35,23 +45,14 @@ export default function PortfolioItemElement({ portfolioItem }: Props) {
                 className="overlay asAButton"
                 onClick={() => openFilePreviewModal(file)}
               ></div>
-            </div>
-          </Fragment>
+            </Card>
+          </div>
         ))}
-      </Item.Content>
+      </div>
       {/* <Item.Image src={portfolioItem.url} /> */}
-      <Item.Header>{portfolioItem.description}</Item.Header>
-    </Item>
+      <Card.Header className="portfolioItem-nameHeader" style={{}}>
+        {portfolioItem.description}
+      </Card.Header>
+    </Card>
   );
-}
-// {file.type.startsWith("image") ? (
-//   <Image
-//     src={file.preview}
-//     size={"small"}
-//     style={{ display: "inline-block" }}
-//   />
-// ) : (
-//   <Document file={file.preview}>
-//     <Page pageNumber={1} width={150} />
-//   </Document>
-// )}
+});

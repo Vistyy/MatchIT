@@ -107,14 +107,25 @@ body {
 }
 
 .file-thumbnail-container {
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
   margin-right: 30px;
+  margin-bottom: 10px;
   max-width: 150px;
+  max-height: 212px;
+  height: auto;
   word-wrap: break-word;
+  overflow: hidden;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 0 0.28571429rem 0.28571429rem;
 }
 
 .file-thumbnail-card {
   display: block;
+  max-width: 150px;
+  max-height: 212px;
+  margin-bottom: 6px;
+  overflow: hidden;
 }
 
 .overlay {
@@ -130,6 +141,12 @@ body {
 
 .file-thumbnail-card:hover .overlay {
   opacity: 1;
+}
+
+.portfolioItem-nameHeader {
+  font-size: 2em;
+  padding: 15px 10px;
+  box-shadow: 0px -2px 3px -2px #888;
 }
 
 .modal.modal-file-preview {
