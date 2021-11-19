@@ -16,9 +16,6 @@ export default function CertificationElement({ certificate }: Props) {
           new Date(certificate.dateAcquired),
           "yyyy-MM-dd"
         )}`}</Item.Meta>
-        {certificate.certificate && (
-          <Item.Image>{certificate.certificate}</Item.Image>
-        )}
       </Item.Content>
     </Item>
   );

@@ -31,7 +31,7 @@ namespace Application.Profiles
             public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                .Include(u => u.Certifications).ThenInclude(c => c.Certificate)
+                .Include(u => u.Certifications)
                 .Include(u => u.Education)
                 .Include(u => u.Employment).ThenInclude(e => e.Description)
                 .Include(u => u.Experience).ThenInclude(e => e.Description)

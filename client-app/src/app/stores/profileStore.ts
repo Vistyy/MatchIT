@@ -1,6 +1,15 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import {
+  Certification,
+  CertificationFormValues,
+  Description,
+  EducationFormValues,
+  EducationItem,
+  EmploymentFormValues,
+  EmploymentItem,
+  ExperienceFormValues,
+  ExperienceItem,
   Photo,
   PortfolioItem,
   Profile,
@@ -129,5 +138,68 @@ export default class ProfileStore {
       description: description,
     };
     this.profile?.portfolio.push({ ...portfolioItem });
+  };
+
+  addEmploymentItem = ({
+    employedFrom,
+    employedTo,
+    companyName,
+    companyPosition,
+    jobDescription,
+  }: EmploymentFormValues) => {
+    const employmentItem: EmploymentItem = {
+      id: uuid(),
+      employedFrom,
+      employedTo,
+      description: {
+        id: uuid(),
+        title: companyName,
+        summary: companyPosition,
+        formattedText: jobDescription,
+      },
+    };
+    this.profile?.employment.push(employmentItem);
+  };
+
+  addExperienceItem = ({
+    title,
+    summary,
+    formattedText,
+  }: ExperienceFormValues) => {
+    const experienceItem: ExperienceItem = {
+      id: uuid(),
+      description: { id: uuid(), title, summary, formattedText },
+    };
+    this.profile?.experience.push(experienceItem);
+  };
+
+  addEducationItem = ({
+    facilityName,
+    facilityLocation,
+    fieldOfStudy,
+    studyingFrom,
+    studyingTo,
+  }: EducationFormValues) => {
+    const educationItem: EducationItem = {
+      id: uuid(),
+      facilityName,
+      facilityLocation,
+      fieldOfStudy,
+      studyingFrom,
+      studyingTo,
+    };
+    this.profile?.education.push(educationItem);
+  };
+
+  addCertification = ({
+    certificateName,
+    dateAcquired,
+  }: CertificationFormValues) => {
+    const certification: Certification = {
+      id: uuid(),
+      name: certificateName,
+      dateAcquired,
+    };
+    this.profile?.certifications.push(certification);
   };
 }

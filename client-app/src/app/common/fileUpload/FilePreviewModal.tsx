@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Image, Label, Modal } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
 import { Document, Page } from "react-pdf/dist/umd/entry.webpack";

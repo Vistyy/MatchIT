@@ -175,3 +175,34 @@ body {
 .react-pdf__Document:hover .pdfNavigation-buttons {
   opacity: 1;
 }
+
+.react-date-picker,
+.react-date-picker__wrapper {
+  background-color: white;
+  font-size: 1em;
+  border-radius: 0.28571429rem;
+  /* overflow: hidden; */
+}
+.react-date-picker__wrapper {
+  padding: 0.5em 0.8em;
+  border-radius: 0.28571429rem;
+  border: 1px solid rgba(34, 36, 38, 0.15) !important;
+  color: rgba(0, 0, 0, 0.87);
+  vertical-align: revert !important;
+  transition: color 0.1s ease, border-color 0.1s ease;
+}
+
+.react-date-picker__wrapper:focus-within {
+  border: 1px solid rgb(133, 183, 217) !important;
+}
+
+.react-date-picker input {
+  margin: 0 1px 5px 1px !important;
+  padding: 0px !important;
+  border: none !important;
+  /* overflow: hidden !important; */
+  vertical-align: revert !important;
+}
+
+.react-date-picker span {
+}

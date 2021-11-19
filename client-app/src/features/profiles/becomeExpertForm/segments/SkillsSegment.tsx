@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
-import SearchInput from "./SkillSearchInput";
-import { useStore } from "../../../app/stores/store";
 import { runInAction } from "mobx";
+import { useStore } from "../../../../app/stores/store";
+import SkillSearchInput from "../SkillSearchInput";
 
 export default observer(function SkillsSegment() {
   const {
@@ -47,7 +47,7 @@ export default observer(function SkillsSegment() {
             </Label>
           ))}
       </Segment>
-      <SearchInput source={skillNames} loadingSkills={loading} />
+      <SkillSearchInput source={skillNames} loadingSkills={loading} />
     </>
   );
 });

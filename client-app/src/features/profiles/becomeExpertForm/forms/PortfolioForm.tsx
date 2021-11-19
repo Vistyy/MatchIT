@@ -45,9 +45,8 @@ export default observer(function PortfolioForm({ setEditMode }: Props) {
         <Button
           content="Add"
           size="big"
-          className={`positive--custom becomeExpert-addButton ${
-            temporaryFiles.size > 0 ? "" : "disabled"
-          }`}
+          disabled={temporaryFiles.size < 1}
+          className='positive--custom becomeExpert-addButton'
           style={{ fontSize: "1.35em" }}
           onClick={handleAddPortfolioItem}
         />

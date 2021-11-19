@@ -18,8 +18,7 @@ export default function ValidatedTextInput(props: Props) {
       <input {...field} {...props} />
       {meta.touched && meta.error ? (
         <Label basic color="red">
-          {" "}
-          {meta.error}
+          {`${props.placeholder} is a required field`}
         </Label>
       ) : null}
     </Form.Field>

@@ -81,9 +81,23 @@ export interface EmploymentItem {
   description: Description;
 }
 
+export interface EmploymentFormValues {
+  employedFrom: Date;
+  employedTo?: Date;
+  companyName: string;
+  companyPosition: string;
+  jobDescription: string;
+}
+
 export interface ExperienceItem {
   id: string;
   description: Description;
+}
+
+export interface ExperienceFormValues {
+  title: string;
+  summary: string;
+  formattedText: string;
 }
 
 export interface EducationItem {
@@ -95,11 +109,23 @@ export interface EducationItem {
   studyingTo?: Date;
 }
 
+export interface EducationFormValues {
+  facilityName: string;
+  facilityLocation: string;
+  fieldOfStudy: string;
+  studyingFrom: Date;
+  studyingTo?: Date;
+}
+
 export interface Certification {
   id: string;
   name: string;
   dateAcquired: Date;
-  certificate: Photo;
+}
+
+export interface CertificationFormValues {
+  certificateName: string;
+  dateAcquired: Date;
 }
 
 export interface UserFile {

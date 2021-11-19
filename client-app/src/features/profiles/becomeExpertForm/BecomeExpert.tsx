@@ -2,12 +2,12 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
-import CertificationForm from "./CertificationSegment";
-import EducationForm from "./EducationSegment";
-import EmploymentForm from "./EmploymentSegment";
-import ExperienceForm from "./ExperienceSegment";
-import PortfolioForm from "./PortfolioSegment";
-import SkillsForm from "./SkillsSegment";
+import CertificationSegment from "./segments/CertificationSegment";
+import EducationSegment from "./segments/EducationSegment";
+import EmploymentSegment from "./segments/EmploymentSegment";
+import ExperienceSegment from "./segments/ExperienceSegment";
+import PortfolioSegment from "./segments/PortfolioSegment";
+import SkillsSegment from "./segments/SkillsSegment";
 
 export default observer(function BecomeExpert() {
   const {
@@ -18,12 +18,12 @@ export default observer(function BecomeExpert() {
   const { profile, loadProfile } = profileStore;
 
   const forms = [
-    <SkillsForm />,
-    <PortfolioForm />,
-    <EmploymentForm />,
-    <ExperienceForm />,
-    <EducationForm />,
-    <CertificationForm />,
+    <SkillsSegment />,
+    <PortfolioSegment />,
+    <EmploymentSegment />,
+    <ExperienceSegment />,
+    <EducationSegment />,
+    <CertificationSegment />,
   ];
 
   const [formRow, setFormRow] = useState(forms.slice(0, 1));
@@ -46,22 +46,28 @@ export default observer(function BecomeExpert() {
     if (profile) {
       switch (activeStep) {
         case 1:
-          setButtonState(profile.skills.length > 0);
+          // setButtonState(profile.skills.length > 0);
+          setButtonState(true);
           break;
         case 2:
-          setButtonState(profile.portfolio.length > 0);
+          // setButtonState(profile.portfolio.length > 0);
+          setButtonState(true);
           break;
         case 3:
-          setButtonState(profile.employment.length > 0);
+          // setButtonState(profile.employment.length > 0);
+          setButtonState(true);
           break;
         case 4:
-          setButtonState(profile.experience.length > 0);
+          // setButtonState(profile.experience.length > 0);
+          setButtonState(true);
           break;
         case 5:
-          setButtonState(profile.education.length > 0);
+          // setButtonState(profile.education.length > 0);
+          setButtonState(true);
           break;
         case 6:
-          setButtonState(profile.certifications.length > 0);
+          // setButtonState(profile.certifications.length > 0);
+          setButtonState(true);
           break;
       }
     }
