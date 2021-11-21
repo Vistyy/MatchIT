@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import CertificationSegment from "./segments/CertificationSegment";
@@ -15,8 +15,22 @@ export default observer(function BecomeExpert() {
     userStore: { user },
   } = useStore();
 
-  const { profile, loadProfile } = profileStore;
+  const { profile, loadProfile, becomeExpert, skillCount } = profileStore;
+  const skillsRef = useRef<HTMLDivElement>(null);
+  const portfolioRef = useRef<HTMLDivElement>(null);
+  const employmentRef = useRef<HTMLDivElement>(null);
+  const experienceRef = useRef<HTMLDivElement>(null);
+  const educationRef = useRef<HTMLDivElement>(null);
+  const certificationRef = useRef<HTMLDivElement>(null);
 
+  const refs = [
+    skillsRef,
+    portfolioRef,
+    employmentRef,
+    experienceRef,
+    educationRef,
+    certificationRef,
+  ];
   const forms = [
     <SkillsSegment />,
     <PortfolioSegment />,
@@ -35,6 +49,13 @@ export default observer(function BecomeExpert() {
       return forms.slice(0, prev.length + 1);
     });
     setActiveStep(formRow.length + 1);
+    setTimeout(() => {
+      refs[activeStep].current!.scrollIntoView({ behavior: "smooth" });
+    }, 10);
+  }
+
+  function handleSaveChanges() {
+    becomeExpert(profile!);
   }
 
   useEffect(() => {
@@ -76,7 +97,7 @@ export default observer(function BecomeExpert() {
   return (
     <Grid>
       <Grid.Column width="2">
-        <Step.Group vertical>
+        <Step.Group vertical style={{ position: "fixed" }}>
           <Step active={activeStep === 1}>
             <Step.Content>Skills</Step.Content>
           </Step>
@@ -101,23 +122,43 @@ export default observer(function BecomeExpert() {
       <Grid.Column width="10">
         <Transition.Group
           as={Grid}
-          duration={1000}
           divided
           size="huge"
           verticalAlign="middle"
+          style={{ marginBottom: "2em" }}
         >
           {formRow.map((item, index) => (
-            <Grid.Row key={index}>{item}</Grid.Row>
+            <Grid.Row key={index}>
+              <div ref={refs[index]}>{item}</div>
+            </Grid.Row>
           ))}
         </Transition.Group>
-        <Button.Group floated="right">
-          <Button
-            onClick={handleNext}
-            style={{ marginTop: "50px" }}
-            content="Next Step"
-            size="large"
-            disabled={!buttonState}
-          />
+        <Button.Group style={{ float: "right" }}>
+          {forms.length > activeStep ? (
+            <Button
+              onClick={handleNext}
+              className="becomeExpert-progressButton"
+              content="Next Step"
+              size="large"
+              disabled={!buttonState}
+            />
+          ) : (
+            <div
+              className="becomeExpert-progressButton"
+              onClick={() => {
+                if (skillCount === 0)
+                  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              }}
+            >
+              <Button
+                content="Save Changes"
+                className="positive--custom"
+                size="large"
+                onClick={handleSaveChanges}
+                disabled={skillCount === 0}
+              />
+            </div>
+          )}
         </Button.Group>
       </Grid.Column>
     </Grid>

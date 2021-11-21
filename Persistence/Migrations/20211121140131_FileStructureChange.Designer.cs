@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211121140131_FileStructureChange")]
+    partial class FileStructureChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -388,10 +390,10 @@ namespace Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("JobId")
+                    b.Property<Guid>("JobId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("PortfolioItemId")
+                    b.Property<Guid>("PortfolioItemId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ResourceType")
@@ -675,13 +677,21 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.UserFile", b =>
                 {
-                    b.HasOne("Domain.Job", null)
+                    b.HasOne("Domain.Job", "Job")
                         .WithMany("Attachments")
-                        .HasForeignKey("JobId");
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Domain.PortfolioItem", null)
+                    b.HasOne("Domain.PortfolioItem", "PortfolioItem")
                         .WithMany("Attachments")
-                        .HasForeignKey("PortfolioItemId");
+                        .HasForeignKey("PortfolioItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+
+                    b.Navigation("PortfolioItem");
                 });
 
             modelBuilder.Entity("JobSkill", b =>

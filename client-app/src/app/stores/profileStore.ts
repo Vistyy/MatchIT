@@ -3,7 +3,6 @@ import agent from "../api/agent";
 import {
   Certification,
   CertificationFormValues,
-  Description,
   EducationFormValues,
   EducationItem,
   EmploymentFormValues,
@@ -25,6 +24,7 @@ export default class ProfileStore {
   loadingProfile = false;
   uploading = false;
   loading = false;
+  skillCount: number | undefined = undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -35,6 +35,11 @@ export default class ProfileStore {
       return store.userStore.user?.username === this.profile?.username;
     }
     return false;
+  }
+
+  resetState = () => {
+    this.profile = null;
+    this.skillCount = undefined;
   }
 
   loadProfile = async (username: string) => {
@@ -85,6 +90,42 @@ export default class ProfileStore {
     }
   };
 
+  uploadFile = async (file: UserFile) => {
+    this.uploading = true;
+    try {
+      const blob = await fetch(file.url).then((r) => r.blob());
+      const response = await agent.Profiles.uploadFile(blob);
+      const uploadedFile = response.data;
+      runInAction(() => (this.uploading = false));
+      return uploadedFile;
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  uploadTempPortfolioFiles = async (portfolioItems: PortfolioItem[]) => {
+    this.loading = true;
+    try {
+      await Promise.all(
+        portfolioItems.map(async (item, itemIndex) => {
+          await Promise.all(
+            item.attachments.map(async (attachment, attachmentIndex) => {
+              if (attachment.url.startsWith("blob:")) {
+                const response = await this.uploadFile(attachment);
+                runInAction(() => (attachment.url = response!.url));
+              }
+            })
+          );
+        })
+      );
+      return portfolioItems;
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
   updateProfile = async (profile: Partial<Profile>) => {
     this.loading = true;
     try {
@@ -108,6 +149,9 @@ export default class ProfileStore {
   becomeExpert = async (profile: Partial<Profile>) => {
     this.loading = true;
     try {
+      profile.portfolio = await this.uploadTempPortfolioFiles(
+        profile.portfolio!
+      );
       await agent.Profiles.becomeExpert(profile);
       runInAction(() => {
         this.profile = { ...this.profile, ...(profile as Profile) };
@@ -120,21 +164,27 @@ export default class ProfileStore {
   };
 
   addSkill = (skill: Skill) => {
-    if (this.profile) this.profile.skills.push(skill);
+    if (this.profile) {
+      this.profile.skills.push(skill);
+      this.skillCount = this.profile.skills.length;
+    }
   };
 
   removeSkill = (skill: Skill) => {
-    if (this.profile)
+    if (this.profile) {
       this.profile.skills = this.profile.skills.filter((s) => s !== skill);
-    store.expertStore.skillNames.push({ title: skill.name } as SkillSearchItem);
+      this.skillCount = this.profile.skills.length;
+    }
+    store.expertStore.skillNames.push({
+      title: skill.name,
+    } as SkillSearchItem);
   };
-
   addPortfolioItem = (files: Map<string, any>, description: string) => {
     const portfolioFiles: UserFile[] = [];
     files.forEach((file) => portfolioFiles.push(file));
     const portfolioItem: PortfolioItem = {
       id: uuid(),
-      files: portfolioFiles,
+      attachments: portfolioFiles,
       description: description,
     };
     this.profile?.portfolio.push({ ...portfolioItem });

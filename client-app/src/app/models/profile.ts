@@ -70,7 +70,7 @@ export interface Description {
 
 export interface PortfolioItem {
   id: string;
-  files: UserFile[];
+  attachments: UserFile[];
   description: string;
 }
 
@@ -131,5 +131,5 @@ export interface CertificationFormValues {
 export interface UserFile {
   id: string;
   url: string;
-  fileType: string;
+  resourceType: string;
 }

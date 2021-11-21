@@ -13,7 +13,7 @@ using Persistence;
 
 namespace Application.Skills
 {
-    public class List
+    public class ListUsed
     {
         public class Query : IRequest<Result<List<SkillDto>>>
         {

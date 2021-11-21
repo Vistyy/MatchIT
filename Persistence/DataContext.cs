@@ -20,6 +20,7 @@ namespace Persistence
         public DbSet<PortfolioItem> PortfolioItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<UserFile> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -35,8 +36,6 @@ namespace Persistence
                 .WithMany(u => u.ReviewsReceived)
                 .HasForeignKey(r => r.RevieweeId);
            });
-
-
 
             builder.Entity<Job>()
             .HasOne(j => j.Employer)

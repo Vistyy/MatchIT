@@ -55,7 +55,7 @@ namespace API.Controllers
             if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
+            
             if (result.Succeeded)
             {
                 await SetRefreshToken(user);

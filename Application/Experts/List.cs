@@ -43,6 +43,7 @@ namespace Application.Experts
                         query = query.Where(u => u.Skills.Any(s => s.Name == skill));
                     }
                 }
+
                 return Result<PagedList<ExpertListItemDto>>.Success(
                     await PagedList<ExpertListItemDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
                 );

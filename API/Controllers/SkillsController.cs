@@ -11,7 +11,13 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetSkills([FromQuery] SkillParams param)
         {
-            return HandleResult(await Mediator.Send(new List.Query { Params = param }));
+            return HandleResult(await Mediator.Send(new ListUsed.Query { Params = param }));
+        }
+        [HttpGet("all")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllSkills()
+        {
+            return HandleResult(await Mediator.Send(new ListAll.Query { }));
         }
     }
 }

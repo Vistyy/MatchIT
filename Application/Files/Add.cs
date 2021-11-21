@@ -33,13 +33,11 @@ namespace Application.Files
             public async Task<Result<UserFile>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                .Include(u => u.PostedJobs).ThenInclude(j => j.Attachments)
-                .Include(u => u.Portfolio).ThenInclude(p => p.Attachments)
                 .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
-                if(user == null) return null;
+                if (user == null) return null;
                 var fileUploadResult = await _fileAccessor.AddFile(request.File);
-                
+
                 var file = new UserFile
                 {
                     Id = fileUploadResult.PublicId,

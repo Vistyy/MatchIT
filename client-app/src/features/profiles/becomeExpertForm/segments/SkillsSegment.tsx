@@ -1,33 +1,32 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { RefObject, useEffect } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
 import { runInAction } from "mobx";
 import { useStore } from "../../../../app/stores/store";
 import SkillSearchInput from "../SkillSearchInput";
 
 export default observer(function SkillsSegment() {
-  const {
-    expertStore,
-    profileStore: { profile, removeSkill },
-  } = useStore();
+  const { expertStore, profileStore } = useStore();
 
-  const { loadSkills, skillNames, skillRegistry, getSkillNames, loading } =
+  const { loadAllSkills, skillNames, skillRegistry, getSkillNames, loading } =
     expertStore;
 
+  const { profile, removeSkill, skillCount } = profileStore;
+
   useEffect(() => {
-    if (skillRegistry.size < 1 && profile) {
-      loadSkills().then(getSkillNames);
-    } else if (skillRegistry.size > 0 && skillNames.length < 1 && profile) {
-      getSkillNames();
-    }
-  }, [skillRegistry.size, loadSkills, getSkillNames, skillNames.length, profile]);
+    loadAllSkills().then(getSkillNames);
+  }, [getSkillNames, loadAllSkills]);
+
+  useEffect(() => {
+    if (skillRegistry.size < 1 || skillNames.length < 1) loadAllSkills().then(getSkillNames);
+  }, [getSkillNames, loadAllSkills, skillNames.length, skillRegistry.size]);
 
   useEffect(() => {
     runInAction(() =>
       skillNames.sort((s1, s2) => {
-        if (s1.title > s2.title) return 1;
-        if (s2.title > s1.title) return -1;
-        return 0;
+        return s1.title >= s2.title ? 1 : -1;
+        // if (s2.title > s1.title) return -1;
+        // return 0;
       })
     );
   }, [skillNames, skillNames.length]);
@@ -35,7 +34,12 @@ export default observer(function SkillsSegment() {
   return (
     <>
       <Header>Skills</Header>
-      <Segment>
+      <Segment
+        style={{ marginBottom: "3.5em", minHeight: "6em" }}
+        className={
+          skillCount === 0 ? "becomeExpert-skillsSegment__noSkills" : ""
+        }
+      >
         {profile &&
           profile.skills.map((skill) => (
             <Label
@@ -46,6 +50,14 @@ export default observer(function SkillsSegment() {
               {skill.name}
             </Label>
           ))}
+        {skillCount === 0 && (
+          <Label
+            style={{ position: "absolute", zIndex: 2, top: "110%", left: "0" }}
+            content="You must select at least one skill"
+            basic
+            color="red"
+          />
+        )}
       </Segment>
       <SkillSearchInput source={skillNames} loadingSkills={loading} />
     </>

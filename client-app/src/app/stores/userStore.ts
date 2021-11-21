@@ -40,6 +40,8 @@ export default class UserStore {
     store.profileStore.profile = null;
     history.push("/");
     store.expertStore.resetState();
+    store.profileStore.resetState();
+    store.fileStore.resetState();
   };
 
   getUser = async () => {

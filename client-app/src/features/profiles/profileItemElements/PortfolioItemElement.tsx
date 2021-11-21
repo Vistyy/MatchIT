@@ -27,10 +27,10 @@ export default observer(function PortfolioItemElement({
           padding: "10px",
         }}
       >
-        {portfolioItem.files.map((file) => (
+        {portfolioItem.attachments.map((file) => (
           <div key={file.id} className="file-thumbnail-container">
             <Card className="file-thumbnail-card">
-              {file.fileType.startsWith("image") ? (
+              {file.resourceType.startsWith("image") ? (
                 <Image
                   src={file.url}
                   size={"small"}

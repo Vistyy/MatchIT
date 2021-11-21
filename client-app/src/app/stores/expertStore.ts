@@ -27,7 +27,7 @@ export default class ExpertStore {
           this.pagingParams = new PagingParams();
           runInAction(() => this.expertRegistry.clear());
           this.loadExperts();
-          this.loadSkills();
+          this.loadUsedSkills();
         }, 500);
       }
     );
@@ -85,10 +85,24 @@ export default class ExpertStore {
     this.loadingInitial = state;
   };
 
-  loadSkills = async () => {
+  loadAllSkills = async () => {
     this.loading = true;
     try {
-      const result = await agent.Skills.list(this.axiosParams);
+      const result = await agent.Skills.listAll();
+      if (this.skillRegistry.size > 0)
+        runInAction(() => this.skillRegistry.clear());
+      result.forEach((skill) => this.setSkill(skill));
+      runInAction(() => (this.loading = false));
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  loadUsedSkills = async () => {
+    this.loading = true;
+    try {
+      const result = await agent.Skills.listUsed(this.axiosParams);
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
@@ -119,6 +133,9 @@ export default class ExpertStore {
         )
       )
         this.skillNames.push({ title: skill.name });
+    });
+    this.skillNames.sort((s1, s2) => {
+      return s1.title >= s2.title ? 1 : -1;
     });
     return this.skillNames;
   };

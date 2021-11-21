@@ -84,7 +84,7 @@ export default observer(function FileAddWidget() {
                           handleDeleteMode(e, props, fileId)
                         }
                       />
-                      {file.fileType.startsWith("image") ? (
+                      {file.resourceType.startsWith("image") ? (
                         <Image
                           src={file.url}
                           size={"small"}

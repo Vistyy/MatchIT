@@ -33,7 +33,7 @@ export default observer(function FilePreviewModal() {
     >
       <Modal.Content>
         {fileStore.modal.file ? (
-          fileStore.modal.file.fileType.startsWith("image") ? (
+          fileStore.modal.file.resourceType.startsWith("image") ? (
             <Image src={fileStore.modal.file.url} />
           ) : (
             <Document

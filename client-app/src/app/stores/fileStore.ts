@@ -20,10 +20,14 @@ export default class FileStore {
     makeAutoObservable(this);
   }
 
+  resetState = () => {
+    this.temporaryFiles.clear();
+  }
+
   addFiles = (files: any[]) => {
     files.forEach((file) => {
       const fileId = uuid();
-      this.temporaryFiles.set(fileId, {id: fileId, url: file.preview, fileType: file.type});
+      this.temporaryFiles.set(fileId, {id: fileId, url: file.preview, resourceType: file.type});
     });
   };
 

@@ -31,9 +31,10 @@ namespace Application.Profiles
             public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
+                .Include(u => u.Portfolio).ThenInclude(p => p.Attachments)
                 .Include(u => u.Certifications)
                 .Include(u => u.Education)
-                .Include(u => u.Employment).ThenInclude(e => e.Description)
+                .Include(u => u.Employment).ThenInclude(u => u.Description)
                 .Include(u => u.Experience).ThenInclude(e => e.Description)
                 .ProjectTo<Profile>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Username == request.Username);

@@ -19,7 +19,7 @@ export default observer(function NavBar() {
           MatchIT
         </Menu.Item>
         <>
-          <Menu.Item as={NavLink} to="/" name="First link" />
+          <Menu.Item as={NavLink} to="/becomeExpert" name="First link" />
           <Menu.Item as={NavLink} to="/" name="Second link" />
           {isLoggedIn() ? (
             <Menu.Menu fixed="top" position="right">

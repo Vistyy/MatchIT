@@ -22,7 +22,7 @@ export default observer(function SkillSearchInput({
   } = useStore();
 
   const initialState: State = {
-    loading: false,
+    loading: true,
     results: [],
     value: "",
   };
@@ -36,6 +36,10 @@ export default observer(function SkillSearchInput({
       clearTimeout(timeoutRef.current!);
     };
   }, []);
+
+  useEffect(() => {
+    searchDispatch({ type: "FINISH_SEARCH", results: source });
+  }, [source, source.length]);
 
   const handleSearchChange = useCallback(
     (e, data) => {
@@ -85,9 +89,9 @@ export default observer(function SkillSearchInput({
       loading={loading || loadingSkills}
       onResultSelect={(e, data) => handleResultSelect(e, data)}
       onSearchChange={handleSearchChange}
+      onMouseDown={handleSearchChange}
       results={results}
       value={value}
-      onMouseDown={handleSearchChange}
       minCharacters={0}
       selectFirstResult
     />
