@@ -46,7 +46,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.Users.Include(p => p.Photo).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+            var user = await _userManager.Users.Include(p => p.Photo).Include(u => u.Skills).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user == null) return Unauthorized("Invalid email");
 
@@ -55,7 +55,7 @@ namespace API.Controllers
             if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
+            
             if (result.Succeeded)
             {
                 await SetRefreshToken(user);
@@ -142,7 +142,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await _userManager.Users.Include(p => p.Photo).FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            var user = await _userManager.Users.Include(p => p.Photo).Include(u => u.Skills).FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
             await SetRefreshToken(user);
             return CreateUserObject(user);
         }
@@ -153,7 +153,7 @@ namespace API.Controllers
         {
             var refreshToken = Request.Cookies["refreshToken"];
             var user = await _userManager.Users
-            .Include(r => r.RefreshTokens)
+            .Include(r => r.RefreshTokens).Include(p => p.Photo).Include(u => u.Skills)
             .FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
 
             if (user == null) return Unauthorized();
@@ -188,7 +188,8 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Image = user.Photo,
                 Token = _tokenService.CreateToken(user),
-                Username = user.UserName
+                Username = user.UserName,
+                IsExpert = user.Skills.Count > 0
             };
         }
     }

@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";
 import { Photo } from "../models/profile";
@@ -13,9 +14,13 @@ export default class UserStore {
     makeAutoObservable(this);
   }
 
-  get isLoggedIn() {
-    return !!this.user;
-  }
+  isLoggedIn = () => {
+    if (store.commonStore.token && !store.commonStore.isTokenSaved()) {
+      this.logout();
+      toast.error("Session expired - please login again");
+    }
+    return !!store.commonStore.isTokenSaved();
+  };
 
   login = async (creds: UserFormValues) => {
     try {
@@ -31,9 +36,12 @@ export default class UserStore {
 
   logout = () => {
     store.commonStore.setToken(null);
-    window.localStorage.removeItem("jwt");
     this.user = null;
+    store.profileStore.profile = null;
     history.push("/");
+    store.expertStore.resetState();
+    store.profileStore.resetState();
+    store.fileStore.resetState();
   };
 
   getUser = async () => {

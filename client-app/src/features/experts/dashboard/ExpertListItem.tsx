@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
-import ScrollToTop from "../../../app/layout/ScrollToTop";
 import { Profile } from "../../../app/models/profile";
 import { useStore } from "../../../app/stores/store";
 
@@ -11,7 +10,7 @@ interface Props {
 
 export default function ExpertListItem({ expert }: Props) {
   const { expertStore } = useStore();
-  const { filterDelay, setSkillPredicate, skillPredicate } = expertStore;
+  const { setSkillPredicate, skillPredicate } = expertStore;
 
   return (
     <Segment.Group>
@@ -31,24 +30,21 @@ export default function ExpertListItem({ expert }: Props) {
         </Item.Group>
       </Segment>
       <Segment>
-        <Button.Group>
-          {expert.skills.map((skill) => (
-            <Button
-              as={Link}
-              to={"/experts"}
-              onClick={() => {
-                clearTimeout(filterDelay);
-                if (
-                  !Array.from(skillPredicate.values())[0].includes(skill.name)
-                )
-                  setSkillPredicate(skill.name);
-                return <ScrollToTop />;
-              }}
-              key={skill.id}
-              content={skill.name}
-            />
-          ))}
-        </Button.Group>
+        {expert.skills.map((skill) => (
+          <Button
+            className="expertList--filterButton"
+            as={Link}
+            to={`/`}
+            key={skill.id}
+            content={skill.name}
+            disabled={Array.from(skillPredicate.values())[0]
+              .split(",")
+              .includes(skill.name)}
+            onClick={() => {
+              setSkillPredicate(skill.name);
+            }}
+          />
+        ))}
       </Segment>
     </Segment.Group>
   );

@@ -44,7 +44,7 @@ export interface Job {
 }
 
 export interface Review {
-  id: number;
+  id: string;
   rating: number;
   description: string;
   creationDate: Date;
@@ -57,36 +57,59 @@ export interface Skill {
 }
 
 export interface JobBid {
-  id: number;
+  id: string;
   bidder: string;
 }
 
 export interface Description {
-  id: number;
+  id: string;
   title: string;
   summary: string;
   formattedText: string;
 }
 
 export interface PortfolioItem {
-  id: number;
-  description: Description;
+  id: string;
+  attachments: UserFile[];
+  description: string;
 }
 
 export interface EmploymentItem {
-  id: number;
+  id: string;
   employedFrom: Date;
   employedTo?: Date;
   description: Description;
 }
 
+export interface EmploymentFormValues {
+  employedFrom: Date;
+  employedTo?: Date;
+  companyName: string;
+  companyPosition: string;
+  jobDescription: string;
+}
+
 export interface ExperienceItem {
-  id: number;
+  id: string;
   description: Description;
 }
 
+export interface ExperienceFormValues {
+  title: string;
+  summary: string;
+  formattedText: string;
+}
+
 export interface EducationItem {
-  id: number;
+  id: string;
+  facilityName: string;
+  facilityLocation: string;
+  fieldOfStudy: string;
+  studyingFrom: Date;
+  studyingTo?: Date;
+}
+
+export interface EducationFormValues {
   facilityName: string;
   facilityLocation: string;
   fieldOfStudy: string;
@@ -95,8 +118,18 @@ export interface EducationItem {
 }
 
 export interface Certification {
-  id: number;
+  id: string;
   name: string;
   dateAcquired: Date;
-  certificate: Photo;
+}
+
+export interface CertificationFormValues {
+  certificateName: string;
+  dateAcquired: Date;
+}
+
+export interface UserFile {
+  id: string;
+  url: string;
+  resourceType: string;
 }

@@ -13,7 +13,7 @@ using Persistence;
 
 namespace Application.Skills
 {
-    public class List
+    public class ListUsed
     {
         public class Query : IRequest<Result<List<SkillDto>>>
         {
@@ -69,9 +69,17 @@ namespace Application.Skills
                         }
                         skill.ExpertCount = expertCount;
                     }
-                }
+                    skills = skills.OrderByDescending(s => s.ExpertCount).ToList();
 
-                skills = skills.OrderByDescending(s => s.ExpertCount).ToList();
+                    foreach (string paramSkill in paramSkills)
+                    {
+                        skills.Sort((x, y) =>
+                        {
+                            if (x.Name == paramSkill) return -1;
+                            return 1;
+                        });
+                    }
+                }
 
                 return Result<List<SkillDto>>.Success(skills);
             }

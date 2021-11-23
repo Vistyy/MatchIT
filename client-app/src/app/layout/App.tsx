@@ -15,7 +15,9 @@ import RegisterSuccess from "../../features/users/RegisterSuccess";
 import ConfirmEmail from "../../features/users/ConfirmEmail";
 import NotFound from "../../features/errors/NotFound";
 import ExpertDashboard from "../../features/experts/dashboard/ExpertDashboard";
-import ProfilePage from "../../features/profiles/ProfilePage";
+import ProfilePage from "../../features/profiles/profilePage/ProfilePage";
+import BecomeExpert from "../../features/profiles/becomeExpertForm/BecomeExpert";
+import FilePreviewModal from "../common/fileUpload/FilePreviewModal";
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -35,6 +37,7 @@ function App() {
     <>
       <ToastContainer position="bottom-left" hideProgressBar />
       <ModalContainer />
+      <FilePreviewModal />
       {/* <Route exact path="/" component={HomePage} /> */}
       <Route
         path={"/"}
@@ -44,10 +47,11 @@ function App() {
             <Container style={{ marginTop: "7em" }}>
               <Switch>
                 <Route exact path="/" component={ExpertDashboard} />
-                <PrivateRoute
+                <Route
                   path="/profiles/:username"
                   component={ProfilePage}
                 />
+                <PrivateRoute path="/becomeExpert" component={BecomeExpert} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
                 <Route

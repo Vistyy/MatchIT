@@ -1,13 +1,31 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Photo, Profile } from "../models/profile";
+import {
+  Certification,
+  CertificationFormValues,
+  EducationFormValues,
+  EducationItem,
+  EmploymentFormValues,
+  EmploymentItem,
+  ExperienceFormValues,
+  ExperienceItem,
+  Photo,
+  PortfolioItem,
+  Profile,
+  Skill,
+  UserFile,
+} from "../models/profile";
+import { SkillSearchItem } from "../models/search";
 import { store } from "./store";
+import { v4 as uuid } from "uuid";
+import { history } from "../..";
 
 export default class ProfileStore {
   profile: Profile | null = null;
   loadingProfile = false;
   uploading = false;
   loading = false;
+  skillCount: number | undefined = undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -20,9 +38,10 @@ export default class ProfileStore {
     return false;
   }
 
-  get isExpert() {
-    return store.profileStore.profile!.skills.length > 0
-  }
+  resetState = () => {
+    this.profile = null;
+    this.skillCount = undefined;
+  };
 
   loadProfile = async (username: string) => {
     this.loadingProfile = true;
@@ -72,6 +91,41 @@ export default class ProfileStore {
     }
   };
 
+  uploadFile = async (file: UserFile) => {
+    this.uploading = true;
+    try {
+      const blob = await fetch(file.url).then((r) => r.blob());
+      const response = await agent.Profiles.uploadFile(blob);
+      const uploadedFile = response.data;
+      return uploadedFile;
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  uploadTempPortfolioFiles = async (portfolioItems: PortfolioItem[]) => {
+    this.loading = true;
+    try {
+      await Promise.all(
+        portfolioItems.map(async (item, itemIndex) => {
+          await Promise.all(
+            item.attachments.map(async (attachment, attachmentIndex) => {
+              if (attachment.url.startsWith("blob:")) {
+                const response = await this.uploadFile(attachment);
+                attachment.url = response!.url;
+              }
+            })
+          );
+        })
+      );
+      return portfolioItems;
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
   updateProfile = async (profile: Partial<Profile>) => {
     this.loading = true;
     try {
@@ -90,5 +144,114 @@ export default class ProfileStore {
       console.log(error);
       runInAction(() => (this.loading = false));
     }
+  };
+
+  becomeExpert = async (profile: Partial<Profile>) => {
+    this.loading = true;
+    try {
+      const uploadedPortfolio = await this.uploadTempPortfolioFiles(
+        profile.portfolio!
+      );
+      runInAction(() => (profile.portfolio = uploadedPortfolio));
+      await agent.Profiles.becomeExpert(profile);
+      runInAction(() => {
+        this.profile = { ...this.profile, ...(profile as Profile) };
+        this.loading = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+    history.push(`/profiles/${profile.username}`);
+  };
+
+  addSkill = (skill: Skill) => {
+    if (this.profile) {
+      this.profile.skills.push(skill);
+      this.skillCount = this.profile.skills.length;
+    }
+  };
+
+  removeSkill = (skill: Skill) => {
+    if (this.profile) {
+      this.profile.skills = this.profile.skills.filter((s) => s !== skill);
+      this.skillCount = this.profile.skills.length;
+    }
+    store.expertStore.skillNames.push({
+      title: skill.name,
+    } as SkillSearchItem);
+  };
+  addPortfolioItem = (files: Map<string, any>, description: string) => {
+    const portfolioFiles: UserFile[] = [];
+    files.forEach((file) => portfolioFiles.push(file));
+    const portfolioItem: PortfolioItem = {
+      id: uuid(),
+      attachments: portfolioFiles,
+      description: description,
+    };
+    this.profile?.portfolio.push({ ...portfolioItem });
+  };
+
+  addEmploymentItem = ({
+    employedFrom,
+    employedTo,
+    companyName,
+    companyPosition,
+    jobDescription,
+  }: EmploymentFormValues) => {
+    const employmentItem: EmploymentItem = {
+      id: uuid(),
+      employedFrom,
+      employedTo,
+      description: {
+        id: uuid(),
+        title: companyName,
+        summary: companyPosition,
+        formattedText: jobDescription,
+      },
+    };
+    this.profile?.employment.push(employmentItem);
+  };
+
+  addExperienceItem = ({
+    title,
+    summary,
+    formattedText,
+  }: ExperienceFormValues) => {
+    const experienceItem: ExperienceItem = {
+      id: uuid(),
+      description: { id: uuid(), title, summary, formattedText },
+    };
+    this.profile?.experience.push(experienceItem);
+  };
+
+  addEducationItem = ({
+    facilityName,
+    facilityLocation,
+    fieldOfStudy,
+    studyingFrom,
+    studyingTo,
+  }: EducationFormValues) => {
+    const educationItem: EducationItem = {
+      id: uuid(),
+      facilityName,
+      facilityLocation,
+      fieldOfStudy,
+      studyingFrom,
+      studyingTo,
+    };
+    this.profile?.education.push(educationItem);
+  };
+
+  addCertification = ({
+    certificateName,
+    dateAcquired,
+  }: CertificationFormValues) => {
+    const certification: Certification = {
+      id: uuid(),
+      name: certificateName,
+      dateAcquired,
+    };
+    this.profile?.certifications.push(certification);
   };
 }

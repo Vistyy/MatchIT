@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -8,9 +9,9 @@ import {
   Transition,
   Image,
 } from "semantic-ui-react";
-import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
-import { Profile } from "../../app/models/profile";
-import { useStore } from "../../app/stores/store";
+import PhotoUploadWidget from "../../../app/common/imageUpload/PhotoUploadWidget";
+import { Profile } from "../../../app/models/profile";
+import { useStore } from "../../../app/stores/store";
 
 interface Props {
   profile: Profile;
@@ -20,25 +21,23 @@ export default observer(function ProfileHeader({ profile }: Props) {
   const {
     modalStore,
     profileStore: { uploadPhoto, deletePhoto, isCurrentUser },
+    userStore: { isLoggedIn },
+    expertStore: { setSkillPredicate, clearFilter },
   } = useStore();
   const [visible, setVisible] = useState(false);
 
   function handlePhotoChange(file: Blob) {
-    if (profile.image) {
-      deletePhoto(profile.image)
-        .then(() => uploadPhoto(file))
-        .then(() => modalStore.closeModal());
+    if (isLoggedIn()) {
+      if (profile.image) {
+        deletePhoto(profile.image)
+          .then(() => uploadPhoto(file))
+          .then(() => modalStore.closeModal());
+      } else {
+        uploadPhoto(file).then(() => modalStore.closeModal());
+      }
     } else {
-      uploadPhoto(file).then(() => modalStore.closeModal());
+      modalStore.closeModal();
     }
-  }
-
-  function handleShow() {
-    setVisible(true);
-  }
-
-  function handleHide() {
-    setVisible(false);
   }
 
   return (
@@ -46,7 +45,10 @@ export default observer(function ProfileHeader({ profile }: Props) {
       <Grid>
         <Grid.Column width="12">
           <Item.Group>
-            <Item onMouseEnter={handleShow} onMouseLeave={handleHide}>
+            <Item
+              onMouseEnter={() => setVisible(true)}
+              onMouseLeave={() => setVisible(false)}
+            >
               <Item.Image size="small">
                 <Image
                   src={profile.image?.url || "/assets/user.png"}
@@ -74,10 +76,15 @@ export default observer(function ProfileHeader({ profile }: Props) {
                 <Item.Extra>
                   {profile.skills.map((skill) => (
                     <Button
-                      src={`/experts`}
+                      as={Link}
+                      to={`/`}
                       key={skill.id}
                       content={skill.name}
-                    ></Button>
+                      onClick={() => {
+                        clearFilter();
+                        setSkillPredicate(skill.name);
+                      }}
+                    />
                   ))}
                 </Item.Extra>
               </Item.Content>

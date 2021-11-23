@@ -117,14 +117,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Certification", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CertificateId")
+                    b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateAcquired")
@@ -137,16 +134,14 @@ namespace Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("CertificateId");
-
                     b.ToTable("Certifications");
                 });
 
             modelBuilder.Entity("Domain.Description", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FormattedText")
                         .HasColumnType("TEXT");
@@ -164,9 +159,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.EducationItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
@@ -183,7 +178,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("StudyingFrom")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StudyingTo")
+                    b.Property<DateTime?>("StudyingTo")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -195,15 +190,15 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.EmploymentItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DescriptionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("DescriptionId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EmployedFrom")
                         .HasColumnType("TEXT");
@@ -222,15 +217,15 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.ExperienceItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DescriptionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("DescriptionId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -268,9 +263,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.JobBid", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("BidderId")
                         .HasColumnType("TEXT");
@@ -302,24 +297,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.PortfolioItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DescriptionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Url")
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("DescriptionId");
 
                     b.ToTable("PortfolioItems");
                 });
@@ -351,9 +341,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("TEXT");
@@ -395,11 +385,16 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.UserFile", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("JobId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PortfolioItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResourceType")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
@@ -409,7 +404,9 @@ namespace Persistence.Migrations
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("UserFile");
+                    b.HasIndex("PortfolioItemId");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("JobSkill", b =>
@@ -584,12 +581,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AppUser", null)
                         .WithMany("Certifications")
                         .HasForeignKey("AppUserId");
-
-                    b.HasOne("Domain.Photo", "Certificate")
-                        .WithMany()
-                        .HasForeignKey("CertificateId");
-
-                    b.Navigation("Certificate");
                 });
 
             modelBuilder.Entity("Domain.EducationItem", b =>
@@ -656,12 +647,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AppUser", null)
                         .WithMany("Portfolio")
                         .HasForeignKey("AppUserId");
-
-                    b.HasOne("Domain.Description", "Description")
-                        .WithMany()
-                        .HasForeignKey("DescriptionId");
-
-                    b.Navigation("Description");
                 });
 
             modelBuilder.Entity("Domain.RefreshToken", b =>
@@ -691,8 +676,12 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.UserFile", b =>
                 {
                     b.HasOne("Domain.Job", null)
-                        .WithMany("AdditionalAttachments")
+                        .WithMany("Attachments")
                         .HasForeignKey("JobId");
+
+                    b.HasOne("Domain.PortfolioItem", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("PortfolioItemId");
                 });
 
             modelBuilder.Entity("JobSkill", b =>
@@ -786,9 +775,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Job", b =>
                 {
-                    b.Navigation("AdditionalAttachments");
+                    b.Navigation("Attachments");
 
                     b.Navigation("JobBids");
+                });
+
+            modelBuilder.Entity("Domain.PortfolioItem", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 #pragma warning restore 612, 618
         }

@@ -67,7 +67,7 @@ export default function ConfirmEmail() {
           </div>
         );
       case Status.Success:
-        if (isLoggedIn) {
+        if (isLoggedIn()) {
           return (
             <div>
               <p>Email has been verified - redirecting...</p>

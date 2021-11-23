@@ -2,6 +2,8 @@ import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Profile, Skill } from "../models/profile";
+import { SkillSearchItem } from "../models/search";
+import { store } from "./store";
 
 export default class ExpertStore {
   expertRegistry = new Map<string, Profile>();
@@ -13,6 +15,7 @@ export default class ExpertStore {
   skillPredicate = new Map().set("skill", "all");
   skillFilter: string[] = [];
   filterDelay: any;
+  skillNames: SkillSearchItem[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -24,7 +27,7 @@ export default class ExpertStore {
           this.pagingParams = new PagingParams();
           runInAction(() => this.expertRegistry.clear());
           this.loadExperts();
-          this.loadSkills();
+          this.loadUsedSkills();
         }, 500);
       }
     );
@@ -82,20 +85,66 @@ export default class ExpertStore {
     this.loadingInitial = state;
   };
 
-  loadSkills = async () => {
+  loadAllSkills = async () => {
     this.loading = true;
     try {
-      const result = await agent.Skills.list(this.axiosParams);
+      const result = await agent.Skills.listAll();
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
+      runInAction(() => (this.loading = false));
     } catch (error) {
       console.log(error);
-      this.loading = false;
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  loadUsedSkills = async () => {
+    this.loading = true;
+    try {
+      const result = await agent.Skills.listUsed(this.axiosParams);
+      if (this.skillRegistry.size > 0)
+        runInAction(() => this.skillRegistry.clear());
+      result.forEach((skill) => this.setSkill(skill));
+      runInAction(() => (this.loading = false));
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
     }
   };
 
   private setSkill = (skill: Skill) => {
     this.skillRegistry.set(skill.id, skill);
+  };
+
+  clearFilter = () => {
+    this.skillFilter.length = 0;
+    this.skillPredicate.set("skill", "all");
+  };
+
+  getSkillNames = () => {
+    this.skillNames.length = 0;
+    const skills = Array.from(this.skillRegistry.values());
+    skills.forEach((skill) => {
+      if (
+        store.profileStore.profile &&
+        !store.profileStore.profile.skills.some(
+          (profileSkill) => skill.name === profileSkill.name
+        )
+      )
+        this.skillNames.push({ title: skill.name });
+    });
+    this.skillNames.sort((s1, s2) => {
+      return s1.title >= s2.title ? 1 : -1;
+    });
+    return this.skillNames;
+  };
+
+  resetState = () => {
+    this.expertRegistry.clear();
+    this.skillRegistry.clear();
+    this.skillPredicate.set("skill", "all");
+    this.skillFilter.length = 0;
+    this.skillNames.length = 0;
   };
 }

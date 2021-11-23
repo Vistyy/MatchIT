@@ -2,6 +2,11 @@ body {
   background-color: #eaeaea !important;
 }
 
+.positive--custom {
+  color: white !important;
+  background-color: rgb(49, 132, 196) !important;
+}
+
 .ui.inverted.top.fixed.menu {
   background-image: linear-gradient(
     135deg,
@@ -65,4 +70,170 @@ body {
   display: flex;
   padding-left: 4em;
   width: max-content;
+}
+
+.navbar--menu.ui.menu .item:before {
+  width: 0;
+}
+
+.ui .expertList--filterButton.disabled {
+  opacity: 1 !important;
+  background-color: rgb(33, 138, 174);
+}
+
+.ui.search > .results.transition {
+  overflow-y: auto;
+  max-height: 500px !important;
+}
+
+.becomeExpert--skillLabel__hover.ui.label:hover {
+  animation: deleteColor 0.25s forwards;
+}
+
+@keyframes deleteColor {
+  100% {
+    color: white;
+    background-color: rgba(219, 40, 40, 0.9);
+  }
+}
+
+.ui.segment.becomeExpert--addPlaceholder__hover:hover {
+  background-color: #f9fafb;
+  transition: background-color 0.12s linear;
+}
+
+.becomeExpert-skillsSegment__noSkills {
+  box-shadow: 0px 0px 6px 1px rgb(219, 40, 40) !important;
+  background-repeat: no-repeat;
+  background-color: white !important;
+  /* background-color: rgba(219, 40, 40, 0.02)!important; */
+}
+
+.asAButton:hover {
+  cursor: pointer;
+}
+
+.file-thumbnail-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 30px;
+  margin-bottom: 10px;
+  max-width: 150px;
+  max-height: 212px;
+  height: auto;
+  word-wrap: break-word;
+  overflow: hidden;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 0 0.28571429rem 0.28571429rem;
+}
+
+.file-thumbnail-card {
+  display: block;
+  max-width: 150px;
+  max-height: 212px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: 0.3s ease;
+  background-color: rgba(80, 80, 80, 0.6);
+}
+
+.file-thumbnail-card:hover .overlay {
+  opacity: 1;
+}
+
+.portfolioItem-nameHeader {
+  font-size: 2em;
+  padding: 15px 10px;
+  box-shadow: 0px -2px 3px -2px #888;
+}
+
+.modal.modal-file-preview {
+  width: auto;
+}
+.modal.modal-file-preview .content {
+  padding: 0;
+}
+
+.ui.buttons.pdfNavigation-buttons {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity ease-in-out 0.2s;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.ui.buttons.pdfNavigation-buttons .ui.button,
+.ui.buttons.pdfNavigation-buttons .ui.label {
+  background-color: white;
+}
+
+.react-pdf__Document:hover .pdfNavigation-buttons {
+  opacity: 1;
+}
+
+.react-date-picker,
+.react-date-picker__wrapper {
+  background-color: white;
+  font-size: 1em;
+  border-radius: 0.28571429rem;
+  /* overflow: hidden; */
+}
+.react-date-picker__wrapper {
+  padding: 0.5em 0.8em;
+  border-radius: 0.28571429rem;
+  border: 1px solid rgba(34, 36, 38, 0.15) !important;
+  color: rgba(0, 0, 0, 0.87);
+  vertical-align: revert !important;
+  transition: color 0.1s ease, border-color 0.1s ease;
+}
+
+.react-date-picker__wrapper:focus-within {
+  border: 1px solid rgb(133, 183, 217) !important;
+}
+
+.react-date-picker input {
+  margin: 0 1px 5px 1px !important;
+  padding: 0px !important;
+  border: none !important;
+  /* overflow: hidden !important; */
+  vertical-align: revert !important;
+}
+
+.becomeExpert-progressButton {
+  /* margin-top: 2em !important; */
+  margin-right: -1rem !important;
+}
+
+.container input {
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+.container.has-focus {
+  border: none;
+}
+
+.container__select {
+  border: none;
+}
+
+.container.has-focus .container__value input {
+  border: none;
+  border: 2px solid yellow;
+}
+
+.container.is-selected input {
+  border: none;
 }
