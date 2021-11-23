@@ -14,14 +14,14 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { Username = username }));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Edit(Edit.Command command)
-        {
-            return HandleResult(await Mediator.Send(command));
-        }
+        // [HttpPut]
+        // public async Task<IActionResult> Edit(Edit.Command command)
+        // {
+        //     return HandleResult(await Mediator.Send(command));
+        // }
 
-        [HttpPut("becomeExpert")]
-        public async Task<IActionResult> BecomeExpert(BecomeExpert.Command command)
+        [HttpPut]
+        public async Task<IActionResult> Edit(UpdateProfile.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }

@@ -14,7 +14,7 @@ using Persistence;
 
 namespace Application.Profiles
 {
-    public class BecomeExpert
+    public class UpdateProfile
     {
         public class Command : IRequest<Result<Unit>>
         {
