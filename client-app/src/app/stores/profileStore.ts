@@ -18,6 +18,7 @@ import {
 import { SkillSearchItem } from "../models/search";
 import { store } from "./store";
 import { v4 as uuid } from "uuid";
+import { history } from "../..";
 
 export default class ProfileStore {
   profile: Profile | null = null;
@@ -40,7 +41,7 @@ export default class ProfileStore {
   resetState = () => {
     this.profile = null;
     this.skillCount = undefined;
-  }
+  };
 
   loadProfile = async (username: string) => {
     this.loadingProfile = true;
@@ -96,7 +97,6 @@ export default class ProfileStore {
       const blob = await fetch(file.url).then((r) => r.blob());
       const response = await agent.Profiles.uploadFile(blob);
       const uploadedFile = response.data;
-      runInAction(() => (this.uploading = false));
       return uploadedFile;
     } catch (error) {
       console.log(error);
@@ -113,7 +113,7 @@ export default class ProfileStore {
             item.attachments.map(async (attachment, attachmentIndex) => {
               if (attachment.url.startsWith("blob:")) {
                 const response = await this.uploadFile(attachment);
-                runInAction(() => (attachment.url = response!.url));
+                attachment.url = response!.url;
               }
             })
           );
@@ -149,9 +149,10 @@ export default class ProfileStore {
   becomeExpert = async (profile: Partial<Profile>) => {
     this.loading = true;
     try {
-      profile.portfolio = await this.uploadTempPortfolioFiles(
+      const uploadedPortfolio = await this.uploadTempPortfolioFiles(
         profile.portfolio!
       );
+      runInAction(() => (profile.portfolio = uploadedPortfolio));
       await agent.Profiles.becomeExpert(profile);
       runInAction(() => {
         this.profile = { ...this.profile, ...(profile as Profile) };
@@ -161,6 +162,7 @@ export default class ProfileStore {
       console.log(error);
       runInAction(() => (this.loading = false));
     }
+    history.push(`/profiles/${profile.username}`);
   };
 
   addSkill = (skill: Skill) => {

@@ -21,6 +21,10 @@ export default observer(function ExpertDashboard() {
   }
 
   useEffect(() => {
+    loadExperts();
+  }, [loadExperts])
+
+  useEffect(() => {
     if (expertRegistry.size <= 1) loadExperts();
   }, [expertRegistry.size, loadExperts]);
 

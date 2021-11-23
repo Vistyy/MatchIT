@@ -49,7 +49,6 @@ export default observer(function PortfolioItemElement({
           </div>
         ))}
       </div>
-      {/* <Item.Image src={portfolioItem.url} /> */}
       <Card.Header className="portfolioItem-nameHeader" style={{}}>
         {portfolioItem.description}
       </Card.Header>

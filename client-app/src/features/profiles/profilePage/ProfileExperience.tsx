@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Grid, Header, Item } from "semantic-ui-react";
-import { ExperienceItem } from "../../app/models/profile";
-import ExperienceItemElement from "./profileItemElements/ExperienceItemElement";
+import { ExperienceItem } from "../../../app/models/profile";
+import ExperienceItemElement from "../profileItemElements/ExperienceItemElement";
 
 interface Props {
   experience: ExperienceItem[];

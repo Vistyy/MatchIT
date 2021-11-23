@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { RefObject, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
 import { runInAction } from "mobx";
 import { useStore } from "../../../../app/stores/store";
@@ -18,16 +18,13 @@ export default observer(function SkillsSegment() {
   }, [getSkillNames, loadAllSkills]);
 
   useEffect(() => {
-    if (skillRegistry.size < 1 || skillNames.length < 1) loadAllSkills().then(getSkillNames);
+    if (skillRegistry.size < 1 || skillNames.length < 1)
+      loadAllSkills().then(getSkillNames);
   }, [getSkillNames, loadAllSkills, skillNames.length, skillRegistry.size]);
 
   useEffect(() => {
     runInAction(() =>
-      skillNames.sort((s1, s2) => {
-        return s1.title >= s2.title ? 1 : -1;
-        // if (s2.title > s1.title) return -1;
-        // return 0;
-      })
+      skillNames.sort((s1, s2) => (s1.title >= s2.title ? 1 : -1))
     );
   }, [skillNames, skillNames.length]);
 

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Card, Checkbox, Grid, Icon, Image } from "semantic-ui-react";
 import { useStore } from "../../stores/store";
 import FileWidgetDropzone from "./FileWidgetDropzone";
@@ -8,10 +8,8 @@ import "react-pdf/dist/umd/Page/AnnotationLayer.css";
 
 export default observer(function FileAddWidget() {
   const {
-    profileStore: { loading, uploading },
     fileStore: { temporaryFiles, addFiles, deleteFiles, openFilePreviewModal },
   } = useStore();
-  const [loader, setLoader] = useState(false);
 
   const [deleteMode, setDeleteMode] = useState(0);
   const [filesToDelete, setFilesToDelete] = useState<string[]>([]);
@@ -35,10 +33,6 @@ export default observer(function FileAddWidget() {
     setDeleteMode(0);
     setFilesToDelete([]);
   }
-
-  useEffect(() => {
-    setLoader(loading || uploading);
-  }, [loading, uploading]);
 
   // useEffect(() => {
   //   return () => {

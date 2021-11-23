@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Grid, Header, Item } from "semantic-ui-react";
-import { EducationItem } from "../../app/models/profile";
-import { format } from "date-fns";
-import EducationItemElement from "./profileItemElements/EducationItemElement";
+import { EducationItem } from "../../../app/models/profile";
+import EducationItemElement from "../profileItemElements/EducationItemElement";
 
 interface Props {
   education: EducationItem[];

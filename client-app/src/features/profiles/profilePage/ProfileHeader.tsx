@@ -9,9 +9,9 @@ import {
   Transition,
   Image,
 } from "semantic-ui-react";
-import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
-import { Profile } from "../../app/models/profile";
-import { useStore } from "../../app/stores/store";
+import PhotoUploadWidget from "../../../app/common/imageUpload/PhotoUploadWidget";
+import { Profile } from "../../../app/models/profile";
+import { useStore } from "../../../app/stores/store";
 
 interface Props {
   profile: Profile;

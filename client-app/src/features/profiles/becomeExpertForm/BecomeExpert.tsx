@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import CertificationSegment from "./segments/CertificationSegment";
 import EducationSegment from "./segments/EducationSegment";
@@ -15,7 +16,16 @@ export default observer(function BecomeExpert() {
     userStore: { user },
   } = useStore();
 
-  const { profile, loadProfile, becomeExpert, skillCount } = profileStore;
+  const {
+    profile,
+    loadProfile,
+    becomeExpert,
+    skillCount,
+    loading,
+    uploading,
+    loadingProfile,
+  } = profileStore;
+
   const skillsRef = useRef<HTMLDivElement>(null);
   const portfolioRef = useRef<HTMLDivElement>(null);
   const employmentRef = useRef<HTMLDivElement>(null);
@@ -67,8 +77,8 @@ export default observer(function BecomeExpert() {
     if (profile) {
       switch (activeStep) {
         case 1:
-          // setButtonState(profile.skills.length > 0);
-          setButtonState(true);
+          setButtonState(profile.skills.length > 0);
+          // setButtonState(true);
           break;
         case 2:
           // setButtonState(profile.portfolio.length > 0);
@@ -94,6 +104,7 @@ export default observer(function BecomeExpert() {
     }
   }, [activeStep, profile, profile?.skills.length, profile?.portfolio.length, profile?.employment.length, profile?.experience.length, profile?.education.length, profile?.certifications.length]);
 
+  if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
   return (
     <Grid>
       <Grid.Column width="2">
@@ -156,6 +167,7 @@ export default observer(function BecomeExpert() {
                 size="large"
                 onClick={handleSaveChanges}
                 disabled={skillCount === 0}
+                loading={loading || uploading}
               />
             </div>
           )}
