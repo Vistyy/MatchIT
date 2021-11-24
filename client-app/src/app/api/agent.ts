@@ -116,10 +116,10 @@ const Profiles = {
       headers: { "Content-type": "multipart/form-data" },
     });
   },
+  // updateProfile: (profile: Partial<Profile>) =>
+  //   requests.put(`/profiles`, profile),
   updateProfile: (profile: Partial<Profile>) =>
     requests.put(`/profiles`, profile),
-  becomeExpert: (profile: Partial<Profile>) =>
-    requests.put(`/profiles/becomeExpert`, profile),
 };
 
 const Experts = {

@@ -15,13 +15,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Edit(Edit.Command command)
-        {
-            return HandleResult(await Mediator.Send(command));
-        }
-
-        [HttpPut("becomeExpert")]
-        public async Task<IActionResult> BecomeExpert(BecomeExpert.Command command)
+        public async Task<IActionResult> Edit(UpdateProfile.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }

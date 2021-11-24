@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
 import { runInAction } from "mobx";
 import { useStore } from "../../../../app/stores/store";
@@ -7,11 +7,12 @@ import SkillSearchInput from "../SkillSearchInput";
 
 export default observer(function SkillsSegment() {
   const { expertStore, profileStore } = useStore();
+  const [removedSkill, setRemovedSkill] = useState(false);
 
   const { loadAllSkills, skillNames, skillRegistry, getSkillNames, loading } =
     expertStore;
 
-  const { profile, removeSkill, skillCount } = profileStore;
+  const { profile, removeSkill } = profileStore;
 
   useEffect(() => {
     loadAllSkills().then(getSkillNames);
@@ -34,20 +35,25 @@ export default observer(function SkillsSegment() {
       <Segment
         style={{ marginBottom: "3.5em", minHeight: "6em" }}
         className={
-          skillCount === 0 ? "becomeExpert-skillsSegment__noSkills" : ""
+          profile?.skills.length === 0 && removedSkill
+            ? "becomeExpert-skillsSegment__noSkills"
+            : ""
         }
       >
         {profile &&
           profile.skills.map((skill) => (
             <Label
               className="becomeExpert--skillLabel__hover asAButton"
-              onClick={() => removeSkill(skill)}
+              onClick={() => {
+                removeSkill(skill);
+                setRemovedSkill(true);
+              }}
               key={skill.id}
             >
               {skill.name}
             </Label>
           ))}
-        {skillCount === 0 && (
+        {profile?.skills.length === 0 && removedSkill && (
           <Label
             style={{ position: "absolute", zIndex: 2, top: "110%", left: "0" }}
             content="You must select at least one skill"

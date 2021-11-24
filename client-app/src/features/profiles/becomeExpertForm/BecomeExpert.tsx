@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
+import { history } from "../../..";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import CertificationSegment from "./segments/CertificationSegment";
@@ -19,8 +20,7 @@ export default observer(function BecomeExpert() {
   const {
     profile,
     loadProfile,
-    becomeExpert,
-    skillCount,
+    updateProfile,
     loading,
     uploading,
     loadingProfile,
@@ -65,7 +65,9 @@ export default observer(function BecomeExpert() {
   }
 
   function handleSaveChanges() {
-    becomeExpert(profile!);
+    updateProfile(profile!).then(() =>
+      history.push(`/profiles/${profile!.username}`)
+    );
   }
 
   useEffect(() => {
@@ -157,7 +159,7 @@ export default observer(function BecomeExpert() {
             <div
               className="becomeExpert-progressButton"
               onClick={() => {
-                if (skillCount === 0)
+                if (profile?.skills.length === 0)
                   window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
               }}
             >
@@ -166,7 +168,7 @@ export default observer(function BecomeExpert() {
                 className="positive--custom"
                 size="large"
                 onClick={handleSaveChanges}
-                disabled={skillCount === 0}
+                disabled={profile?.skills.length === 0}
                 loading={loading || uploading}
               />
             </div>

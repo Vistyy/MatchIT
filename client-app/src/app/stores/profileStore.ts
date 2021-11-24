@@ -18,14 +18,12 @@ import {
 import { SkillSearchItem } from "../models/search";
 import { store } from "./store";
 import { v4 as uuid } from "uuid";
-import { history } from "../..";
 
 export default class ProfileStore {
   profile: Profile | null = null;
   loadingProfile = false;
   uploading = false;
   loading = false;
-  skillCount: number | undefined = undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -40,7 +38,6 @@ export default class ProfileStore {
 
   resetState = () => {
     this.profile = null;
-    this.skillCount = undefined;
   };
 
   loadProfile = async (username: string) => {
@@ -129,31 +126,11 @@ export default class ProfileStore {
   updateProfile = async (profile: Partial<Profile>) => {
     this.loading = true;
     try {
-      await agent.Profiles.updateProfile(profile);
-      runInAction(() => {
-        if (
-          profile.displayName &&
-          profile.displayName !== store.userStore.user?.displayName
-        ) {
-          store.userStore.setDisplayName(profile.displayName);
-        }
-        this.profile = { ...this.profile, ...(profile as Profile) };
-        this.loading = false;
-      });
-    } catch (error) {
-      console.log(error);
-      runInAction(() => (this.loading = false));
-    }
-  };
-
-  becomeExpert = async (profile: Partial<Profile>) => {
-    this.loading = true;
-    try {
       const uploadedPortfolio = await this.uploadTempPortfolioFiles(
         profile.portfolio!
       );
       runInAction(() => (profile.portfolio = uploadedPortfolio));
-      await agent.Profiles.becomeExpert(profile);
+      await agent.Profiles.updateProfile(profile);
       runInAction(() => {
         this.profile = { ...this.profile, ...(profile as Profile) };
         this.loading = false;
@@ -162,20 +139,17 @@ export default class ProfileStore {
       console.log(error);
       runInAction(() => (this.loading = false));
     }
-    history.push(`/profiles/${profile.username}`);
   };
 
   addSkill = (skill: Skill) => {
     if (this.profile) {
       this.profile.skills.push(skill);
-      this.skillCount = this.profile.skills.length;
     }
   };
 
   removeSkill = (skill: Skill) => {
     if (this.profile) {
       this.profile.skills = this.profile.skills.filter((s) => s !== skill);
-      this.skillCount = this.profile.skills.length;
     }
     store.expertStore.skillNames.push({
       title: skill.name,

@@ -30,16 +30,30 @@ export default observer(function PortfolioItemElement({
         {portfolioItem.attachments.map((file) => (
           <div key={file.id} className="file-thumbnail-container">
             <Card className="file-thumbnail-card">
-              {file.resourceType.startsWith("image") ? (
+              {file.url.startsWith("blob") ? (
+                <>
+                  {file.resourceType.includes("image") ? (
+                    <Image
+                      src={file.url}
+                      size={"small"}
+                      style={{ display: "inline-block" }}
+                    />
+                  ) : (
+                    <Document file={file.url}>
+                      <Page pageNumber={1} width={150} />
+                    </Document>
+                  )}
+                </>
+              ) : (
                 <Image
-                  src={file.url}
+                  src={
+                    file.url.endsWith(".pdf")
+                      ? file.url.replace(new RegExp(".pdf$"), ".png")
+                      : file.url
+                  }
                   size={"small"}
                   style={{ display: "inline-block" }}
                 />
-              ) : (
-                <Document file={file.url}>
-                  <Page pageNumber={1} width={150} />
-                </Document>
               )}
               <div
                 className="overlay asAButton"
