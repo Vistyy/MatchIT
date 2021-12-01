@@ -11,7 +11,8 @@ namespace Domain
         public Photo Photo { get; set; }
         public ICollection<Review> ReviewsGiven { get; set; } = new List<Review>();
         public ICollection<Review> ReviewsReceived { get; set; } = new List<Review>();
-        public int Rating { get; set; }
+        public int RatingSum { get; set; }
+        public int RatingCount { get; set; }
         public string Location { get; set; }
         public DateTime CreationTime { get; set; }
         public ICollection<Job> PostedJobs { get; set; } = new List<Job>();
