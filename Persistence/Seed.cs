@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -95,16 +96,46 @@ namespace Persistence
                         }
                     }
                 };
+
                 await context.Certifications.AddRangeAsync(certifications);
                 await context.EducationItems.AddRangeAsync(education);
                 await context.EmploymentItems.AddRangeAsync(employment);
                 await context.ExperienceItems.AddRangeAsync(experience);
+
+                var jobs = new List<Job>
+                {
+                    new Job
+                    {
+                        CreationTime = new DateTime(2020, 10, 13),
+                        Description = "a job required to complete the job you must have some skills, this is a random text",
+                        RequiredSkills = new List<Skill>
+                        {
+                            skills[0], skills[1]
+                        },
+                        IsActive = true,
+                        Title = "job number one",
+                    },
+                    new Job
+                    {
+                        CreationTime = new DateTime(2018, 3, 29),
+                        Description = "a second job required to complete the job you must have some skills, this is a random text",
+                        RequiredSkills = new List<Skill>
+                        {
+                            skills[1], skills[2]
+                        },
+                        IsActive = true,
+                        Title = "job number two",
+                    }
+                };
+
+
                 var users = new List<AppUser>
                 {
                     new AppUser
                     {
                         DisplayName = "Bob",
                         UserName = "bob",
+                        Bio= "Hi, my name is Bob. I like programming and doing stuff with computers.",
                         Email = "bob@test.com",
                         Skills = new List<Skill>
                         {
@@ -147,9 +178,11 @@ namespace Persistence
                         {
                             skills[2]
                         }
-
                     }
                 };
+
+                users[0].PostedJobs.Add(jobs[0]);
+                users[1].PostedJobs.Add(jobs[1]);
 
                 foreach (var user in users)
                 {

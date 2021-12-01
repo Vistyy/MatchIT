@@ -5,49 +5,51 @@ import InfiniteScroll from "react-infinite-scroller";
 import { Grid, Loader } from "semantic-ui-react";
 import { PagingParams } from "../../../app/models/pagination";
 import { useStore } from "../../../app/stores/store";
-import ExpertFilters from "./ExpertFilters";
-import ExpertList from "./ExpertList";
-import ExpertListItemPlaceholder from "./ExpertListItemPlaceholder";
+import JobFilters from "./JobFilters";
+import JobList from "./JobList";
+import JobListItemPlaceholder from "./JobListItemPlaceholder";
 
-export default observer(function ExpertDashboard() {
-  const { expertStore } = useStore();
+export default observer(function JobDashboard() {
+  const { jobStore } = useStore();
   const {
-    loadExperts,
-    expertRegistry,
+    loadJobs,
+    jobRegistry,
     setPagingParams,
     pagination,
-    loadingInitial,
+    loadingJobs: loadingInitial,
     clearFilter,
-  } = expertStore;
+  } = jobStore;
   const [loadingNext, setLoadingNext] = useState(false);
 
   function handleGetNext() {
     setLoadingNext(true);
     setPagingParams(new PagingParams(pagination!.currentPage + 1));
-    loadExperts().then(() => setLoadingNext(false));
+    loadJobs().then(() => setLoadingNext(false));
   }
 
   useEffect(() => {
     runInAction(() => {
       clearFilter();
-      expertRegistry.clear();
+      jobRegistry.clear();
     });
-  }, [clearFilter, expertRegistry]);
+  }, [clearFilter, jobRegistry]);
 
   useEffect(() => {
-    if (expertRegistry.size <= 0 && !loadingInitial) loadExperts();
-  }, [expertRegistry.size, loadExperts, loadingInitial]);
+    if (jobRegistry.size <= 0 && !loadingInitial) {
+      loadJobs();
+    }
+  }, [jobRegistry.size, loadJobs, loadingInitial]);
 
   return (
     <Grid>
       <Grid.Column width="6">
-        <ExpertFilters />
+        <JobFilters />
       </Grid.Column>
       <Grid.Column width="10">
         {loadingInitial && !loadingNext ? (
           <>
-            <ExpertListItemPlaceholder />
-            <ExpertListItemPlaceholder />
+            <JobListItemPlaceholder />
+            <JobListItemPlaceholder />
           </>
         ) : (
           <InfiniteScroll
@@ -60,7 +62,7 @@ export default observer(function ExpertDashboard() {
             }
             initialLoad={false}
           >
-            <ExpertList />
+            <JobList />
           </InfiniteScroll>
         )}
       </Grid.Column>

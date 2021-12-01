@@ -3,10 +3,10 @@ using Domain;
 
 namespace Application.Skills
 {
-    public class SkillDto
+    public class ExpertSkillDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int ExpertCount { get; set; }
+        public int Count { get; set; }
     }
 }

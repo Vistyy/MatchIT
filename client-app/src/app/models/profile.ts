@@ -1,6 +1,7 @@
 import { User } from "./user";
 
 export interface Profile {
+  id: string;
   username: string;
   displayName: string;
   image?: Photo;
@@ -35,9 +36,11 @@ export interface Photo {
 
 export interface Job {
   id: string;
-  employer: string;
+  employer: Profile;
   requiredSkills: Skill[];
-  additionalAttachments: string[];
+  title: string;
+  description: string;
+  attachments: UserFile[];
   creationTime: Date;
   isActive: boolean;
   jobBids: JobBid[];
@@ -53,7 +56,7 @@ export interface Review {
 export interface Skill {
   id: number;
   name: string;
-  expertCount: number;
+  count: number;
 }
 
 export interface JobBid {

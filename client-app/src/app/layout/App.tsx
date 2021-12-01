@@ -18,6 +18,8 @@ import ExpertDashboard from "../../features/experts/dashboard/ExpertDashboard";
 import ProfilePage from "../../features/profiles/profilePage/ProfilePage";
 import BecomeExpert from "../../features/profiles/becomeExpertForm/BecomeExpert";
 import FilePreviewModal from "../common/fileUpload/FilePreviewModal";
+import JobDashboard from "../../features/jobs/dashboard/JobDashboard";
+import JobPage from "../../features/jobs/jobPage/JobPage";
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -47,10 +49,9 @@ function App() {
             <Container style={{ marginTop: "7em" }}>
               <Switch>
                 <Route exact path="/" component={ExpertDashboard} />
-                <Route
-                  path="/profiles/:username"
-                  component={ProfilePage}
-                />
+                <Route exact path="/jobs" component={JobDashboard} />
+                <Route exact path="/jobs/:id" component={JobPage} />
+                <Route path="/profiles/:username" component={ProfilePage} />
                 <PrivateRoute path="/becomeExpert" component={BecomeExpert} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />

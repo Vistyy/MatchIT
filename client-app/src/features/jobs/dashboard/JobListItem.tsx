@@ -2,16 +2,16 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
-import { Profile } from "../../../app/models/profile";
+import { Job } from "../../../app/models/profile";
 import { useStore } from "../../../app/stores/store";
 
 interface Props {
-  expert: Profile;
+  job: Job;
 }
 
-export default observer(function ExpertListItem({ expert }: Props) {
+export default observer(function JobListItem({ job }: Props) {
   const {
-    expertStore: { setSkillPredicate, skillPredicate },
+    jobStore: { setSkillPredicate, skillPredicate },
   } = useStore();
 
   return (
@@ -19,25 +19,21 @@ export default observer(function ExpertListItem({ expert }: Props) {
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image
-              size="tiny"
-              src={expert.image?.url || "/assets/user.png"}
-            />
             <Item.Content>
-              <Item.Header as={Link} to={`/profiles/${expert.username}`}>
-                {expert.username}
+              <Item.Header as={Link} to={`/jobs/${job.id}`}>
+                {`${job.title} by ${job.employer.displayName}`}
               </Item.Header>
-              <Item.Description>{expert.bio}</Item.Description>
+              <Item.Description>{job.description}</Item.Description>
             </Item.Content>
           </Item>
         </Item.Group>
       </Segment>
-      <Segment style={{ boxSizing: "border-box" }}>
-        {expert.skills.map((skill) => (
+      <Segment>
+        {job.requiredSkills.map((skill) => (
           <Button
             className="skillList-skillButton"
             as={Link}
-            to={`/`}
+            to={`/jobs`}
             key={skill.id}
             content={skill.name}
             disabled={Array.from(skillPredicate.values())[0]

@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Button, Segment } from "semantic-ui-react";
-import ScrollToTop from "../../../app/layout/ScrollToTop";
 import { useStore } from "../../../app/stores/store";
 import CertificationSegment from "../becomeExpertForm/segments/CertificationSegment";
 import EducationSegment from "../becomeExpertForm/segments/EducationSegment";

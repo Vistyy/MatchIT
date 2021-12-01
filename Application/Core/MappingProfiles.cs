@@ -1,5 +1,6 @@
 using System.Linq;
 using Application.Experts;
+using Application.Jobs;
 using Application.Skills;
 using Domain;
 
@@ -22,8 +23,15 @@ namespace Application.Core
             .ForMember(d => d.Image, o => o.MapFrom(s => s.Photo));
             // TODO - figure out how to store the rating
 
-            CreateMap<Skill, SkillDto>()
-            .ForMember(d => d.ExpertCount, o => o.MapFrom(s => s.Users.Count));
+            CreateMap<Skill, ExpertSkillDto>()
+            .ForMember(d => d.Count, o => o.MapFrom(s => s.Users.Count));
+
+            CreateMap<Skill, JobSkillDto>()
+            .ForMember(d => d.Count, o => o.MapFrom(s => s.Jobs.Count));
+
+            CreateMap<Job, JobListItemDto>();
+            
+            CreateMap<Job, JobDto>();
         }
     }
 }

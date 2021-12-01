@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResult } from "../models/pagination";
-import { Photo, Profile, Skill, UserFile } from "../models/profile";
+import { Job, Photo, Profile, Skill, UserFile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -134,6 +134,14 @@ const Skills = {
   listUsed: (params: URLSearchParams) =>
     axios.get<Skill[]>("/skills", { params }).then(responseBody),
   listAll: () => requests.get<Skill[]>("/skills/all"),
+  listJobRequired: (params: URLSearchParams) =>
+    axios.get<Skill[]>("/skills/job-required", { params }).then(responseBody),
+};
+
+const Jobs = {
+  get: (id: string) => requests.get<Job>(`/jobs/${id}`),
+  list: (params: URLSearchParams) =>
+    axios.get<PaginatedResult<Job[]>>("/jobs", { params }).then(responseBody),
 };
 
 const agent = {
@@ -141,6 +149,7 @@ const agent = {
   Profiles,
   Experts,
   Skills,
+  Jobs,
 };
 
 export default agent;

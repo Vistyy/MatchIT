@@ -14,7 +14,7 @@ export default class ExpertStore {
   pagingParams = new PagingParams();
   skillPredicate = new Map().set("skill", "all");
   skillFilter: string[] = [];
-  filterDelay: any;
+  filterDelay: NodeJS.Timeout = setTimeout(() => {}, 0);
   skillNames: SkillSearchItem[] = [];
 
   constructor() {
@@ -26,7 +26,6 @@ export default class ExpertStore {
         this.filterDelay = setTimeout(() => {
           this.pagingParams = new PagingParams();
           runInAction(() => this.expertRegistry.clear());
-          this.loadExperts();
           this.loadUsedSkills();
         }, 500);
       }
@@ -37,7 +36,6 @@ export default class ExpertStore {
     this.pagingParams = pagingParams;
   };
 
-  // TODO - set values for filtering
   setSkillPredicate = (value: string) => {
     this.skillFilter.includes(value)
       ? this.skillFilter.splice(this.skillFilter.indexOf(value), 1)
@@ -66,10 +64,10 @@ export default class ExpertStore {
         this.setExpert(expert);
       });
       this.setPagination(result.pagination);
-      this.setLoadingInitial(false);
+      runInAction(() => (this.loadingInitial = false));
     } catch (error) {
       console.log(error);
-      this.setLoadingInitial(false);
+      runInAction(() => (this.loadingInitial = false));
     }
   };
 
@@ -78,11 +76,7 @@ export default class ExpertStore {
   };
 
   private setExpert = (expert: Profile) => {
-    this.expertRegistry.set(expert.username, expert);
-  };
-
-  setLoadingInitial = (state: boolean) => {
-    this.loadingInitial = state;
+    this.expertRegistry.set(expert.id, expert);
   };
 
   loadAllSkills = async () => {

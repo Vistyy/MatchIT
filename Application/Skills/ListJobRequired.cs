@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
-using Application.Experts;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
@@ -13,48 +13,46 @@ using Persistence;
 
 namespace Application.Skills
 {
-    public class ListUsed
+    public class ListJobRequired
     {
-        public class Query : IRequest<Result<List<ExpertSkillDto>>>
+        public class Query : IRequest<Result<List<JobSkillDto>>>
         {
             public SkillParams Params { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<ExpertSkillDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<JobSkillDto>>>
         {
-            private readonly DataContext _context;
             private readonly IMapper _mapper;
-
+            private readonly DataContext _context;
             public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
 
-            public async Task<Result<List<ExpertSkillDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<JobSkillDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var skillsQuery = _context.Skills.Where(s => s.Users.Count > 0).ProjectTo<ExpertSkillDto>(_mapper.ConfigurationProvider).AsQueryable();
+                var skillsQuery = _context.Skills.Where(s => s.Jobs.Count > 0).ProjectTo<JobSkillDto>(_mapper.ConfigurationProvider).AsQueryable();
 
                 var skills = await skillsQuery.ToListAsync();
 
                 if (request.Params.Skill != "all" && request.Params.Skill != "")
                 {
                     var paramSkills = request.Params.Skill.Split(",");
-                    
-                    var usersQuery = _context.Users.Include(s => s.Skills).Where(u => u.Skills.Count > 0);
-                    var users = await usersQuery.ToListAsync();
+                    var jobsQuery = _context.Jobs.Include(j => j.RequiredSkills).Where(j => j.RequiredSkills.Count > 0);
+                    var jobs = await jobsQuery.ToListAsync();
 
-                    foreach (ExpertSkillDto skill in skills)
+                    foreach (JobSkillDto skill in skills)
                     {
-                        var expertCount = 0;
+                        var jobCount = 0;
 
-                        foreach (AppUser user in users)
+                        foreach (Job job in jobs)
                         {
                             var matchAllParamSkills = false;
 
                             foreach (string paramSkill in paramSkills)
                             {
-                                if (user.Skills.Any(s => s.Name == paramSkill))
+                                if (job.RequiredSkills.Any(s => s.Name == paramSkill))
                                 {
                                     matchAllParamSkills = true;
                                     continue;
@@ -64,12 +62,12 @@ namespace Application.Skills
 
                             }
 
-                            if (user.Skills.Any(s => s.Id == skill.Id) && matchAllParamSkills)
+                            if (job.RequiredSkills.Any(s => s.Id == skill.Id) && matchAllParamSkills)
                             {
-                                expertCount++;
+                                jobCount++;
                             }
                         }
-                        skill.Count = expertCount;
+                        skill.Count = jobCount;
                     }
                     skills = skills.OrderByDescending(s => s.Count).ToList();
 
@@ -81,9 +79,9 @@ namespace Application.Skills
                             return 1;
                         });
                     }
-                }
 
-                return Result<List<ExpertSkillDto>>.Success(skills);
+                }
+                return Result<List<JobSkillDto>>.Success(skills);
             }
         }
     }

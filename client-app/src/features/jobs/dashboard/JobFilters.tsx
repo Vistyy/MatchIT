@@ -1,15 +1,15 @@
 import { observer } from "mobx-react-lite";
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Button, Header, Menu } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 
-export default observer(function ExpertFilters() {
+export default observer(function () {
   const {
-    expertStore: {
+    jobStore: {
       skillPredicate,
       setSkillPredicate,
-      loadUsedSkills,
+      loadRequiredSkills,
       skillRegistry,
       skillFilter,
       filterDelay,
@@ -19,8 +19,8 @@ export default observer(function ExpertFilters() {
   } = useStore();
 
   useEffect(() => {
-    loadUsedSkills();
-  }, [loadUsedSkills]);
+    loadRequiredSkills();
+  }, [loadRequiredSkills]);
 
   useEffect(() => {
     window.scrollTo({

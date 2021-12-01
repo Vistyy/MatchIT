@@ -9,8 +9,9 @@ import ProfileHeader from "./ProfileHeader";
 
 export default observer(function ProfilePage() {
   const { username } = useParams<{ username: string }>();
-  const { profileStore } = useStore();
-  const { loadingProfile, loadProfile, profile, resetState } = profileStore;
+  const {
+    profileStore: { loadingProfile, loadProfile, profile, resetState },
+  } = useStore();
 
   useEffect(() => {
     resetState();
@@ -24,7 +25,7 @@ export default observer(function ProfilePage() {
       <Grid.Column width="16">
         {profile && (
           <>
-            <ProfileHeader profile={profile} />
+            <ProfileHeader />
             <ProfileContent />
           </>
         )}

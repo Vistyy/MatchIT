@@ -4,8 +4,9 @@ import { useStore } from "../../../app/stores/store";
 import ExpertListItem from "./ExpertListItem";
 
 export default observer(function ExpertList() {
-  const { expertStore } = useStore();
-  const { expertRegistry } = expertStore;
+  const {
+    expertStore: { expertRegistry },
+  } = useStore();
 
   return (
     <>

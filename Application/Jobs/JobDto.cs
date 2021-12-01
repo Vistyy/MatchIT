@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Application.Profiles;
+using Domain;
 
-namespace Domain
+namespace Application.Jobs
 {
-    public class Job
+    public class JobDto
     {
-        public Guid Id { get; set; }
-        public string EmployerId { get; set; }
-        public AppUser Employer { get; set; }
+         public Guid Id { get; set; }
+        public Profile Employer { get; set; }
         public ICollection<Skill> RequiredSkills { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

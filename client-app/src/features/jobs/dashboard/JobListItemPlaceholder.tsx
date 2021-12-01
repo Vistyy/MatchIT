@@ -1,7 +1,7 @@
 import React from "react";
-import { Placeholder, Segment } from "semantic-ui-react";
+import { Segment, Placeholder } from "semantic-ui-react";
 
-export default function ExpertListItemPlaceholder() {
+export default function JobListItemPlaceholder() {
   return (
     <Placeholder fluid>
       <Segment.Group>
