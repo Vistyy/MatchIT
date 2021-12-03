@@ -8,12 +8,13 @@ import { useStore } from "../../../app/stores/store";
 import ExpertFilters from "./ExpertFilters";
 import ExpertList from "./ExpertList";
 import ExpertListItemPlaceholder from "./ExpertListItemPlaceholder";
+import ExpertSort from "./ExpertSort";
 
 export default observer(function ExpertDashboard() {
   const { expertStore } = useStore();
   const {
     loadExperts,
-    expertRegistry,
+    expertArray,
     setPagingParams,
     pagination,
     loadingInitial,
@@ -30,18 +31,23 @@ export default observer(function ExpertDashboard() {
   useEffect(() => {
     runInAction(() => {
       clearFilter();
-      expertRegistry.clear();
+      expertArray.length = 0;
     });
-  }, [clearFilter, expertRegistry]);
+  }, [clearFilter, expertArray]);
 
   useEffect(() => {
-    if (expertRegistry.size <= 0 && !loadingInitial) loadExperts();
-  }, [expertRegistry.size, loadExperts, loadingInitial]);
+    if (expertArray.length <= 0 && !loadingInitial) loadExperts();
+  }, [expertArray.length, loadExperts, loadingInitial]);
 
   return (
     <Grid>
       <Grid.Column width="6">
-        <ExpertFilters />
+        <Grid.Row style={{ marginBottom: "50px" }}>
+          <ExpertSort />
+        </Grid.Row>
+        <Grid.Row>
+          <ExpertFilters />
+        </Grid.Row>
       </Grid.Column>
       <Grid.Column width="10">
         {loadingInitial && !loadingNext ? (

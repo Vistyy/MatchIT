@@ -5,12 +5,12 @@ import JobListItem from "./JobListItem";
 
 export default observer(function () {
   const {
-    jobStore: { jobRegistry },
+    jobStore: { jobArray },
   } = useStore();
   return (
     <>
-      {Array.from(jobRegistry).map(([id, job]) => (
-        <JobListItem key={id} job={job} />
+      {jobArray.map((job) => (
+        <JobListItem key={job.id} job={job} />
       ))}
     </>
   );

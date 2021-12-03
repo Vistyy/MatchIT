@@ -5,13 +5,13 @@ import ExpertListItem from "./ExpertListItem";
 
 export default observer(function ExpertList() {
   const {
-    expertStore: { expertRegistry },
+    expertStore: { expertArray },
   } = useStore();
 
   return (
     <>
-      {Array.from(expertRegistry).map(([id, expert]) => (
-        <ExpertListItem key={id} expert={expert} />
+      {expertArray.slice().map((expert) => (
+        <ExpertListItem key={expert.userName} expert={expert} />
       ))}
     </>
   );

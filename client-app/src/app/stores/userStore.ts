@@ -38,10 +38,11 @@ export default class UserStore {
     store.commonStore.setToken(null);
     this.user = null;
     store.profileStore.profile = null;
-    history.push("/");
     store.expertStore.resetState();
     store.profileStore.resetState();
     store.fileStore.resetState();
+    store.jobStore.resetState();
+    history.push("/");
   };
 
   getUser = async () => {

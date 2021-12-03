@@ -14,7 +14,7 @@ namespace Application.Profiles
     {
         public class Query : IRequest<Result<Profile>>
         {
-            public string Username { get; set; }
+            public string UserName { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<Profile>>
@@ -37,7 +37,7 @@ namespace Application.Profiles
                 .Include(u => u.Employment).ThenInclude(u => u.Description)
                 .Include(u => u.Experience).ThenInclude(e => e.Description)
                 .ProjectTo<Profile>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(x => x.Username == request.Username);
+                .SingleOrDefaultAsync(x => x.UserName == request.UserName);
 
                 return Result<Profile>.Success(user);
             }

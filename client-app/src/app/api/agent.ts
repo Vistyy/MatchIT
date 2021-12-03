@@ -100,7 +100,7 @@ const Account = {
 };
 
 const Profiles = {
-  get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+  get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`),
   uploadPhoto: (file: Blob) => {
     let formData = new FormData();
     formData.append("File", file);
@@ -123,7 +123,7 @@ const Profiles = {
 };
 
 const Experts = {
-  get: (username: string) => requests.get<Profile>(`/experts/${username}`),
+  get: (userName: string) => requests.get<Profile>(`/experts/${userName}`),
   list: (params: URLSearchParams) =>
     axios
       .get<PaginatedResult<Profile[]>>("/experts", { params })

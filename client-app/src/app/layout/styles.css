@@ -2,6 +2,15 @@ body {
   background-color: #eaeaea !important;
 }
 
+a,
+a:hover,
+a:visited,
+a:active,
+a:link {
+  color: inherit;
+  text-decoration: none;
+}
+
 .positive--custom {
   color: white !important;
   background-color: rgb(49, 132, 196) !important;
@@ -254,4 +263,8 @@ body {
 
 .container.is-selected input {
   border: none;
+}
+
+.listSort-dropdown {
+  color: #00b5ad !important;
 }

@@ -7,11 +7,11 @@ namespace API.Controllers
 {
     public class ProfilesController : BaseApiController
     {
-        [HttpGet("{username}")]
+        [HttpGet("{userName}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProfile(string username)
+        public async Task<IActionResult> GetProfile(string userName)
         {
-            return HandleResult(await Mediator.Send(new Details.Query { Username = username }));
+            return HandleResult(await Mediator.Send(new Details.Query { UserName = userName }));
         }
 
         [HttpPut]

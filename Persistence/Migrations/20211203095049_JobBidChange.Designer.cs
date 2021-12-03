@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211203095049_JobBidChange")]
+    partial class JobBidChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,11 +271,10 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.JobBid", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("BidderId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("BidderId")
+                    b.Property<Guid>("JobId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -282,12 +283,7 @@ namespace Persistence.Migrations
                     b.Property<int>("Fee")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BidderId");
+                    b.HasKey("BidderId", "JobId");
 
                     b.HasIndex("JobId");
 
@@ -641,7 +637,9 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.AppUser", "Bidder")
                         .WithMany("JobBids")
-                        .HasForeignKey("BidderId");
+                        .HasForeignKey("BidderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Job", "Job")
                         .WithMany("JobBids")

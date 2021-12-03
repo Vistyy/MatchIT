@@ -57,7 +57,7 @@ export default observer(function NavBar() {
                   <Dropdown.Menu style={{ marginTop: "0.35em" }}>
                     <Dropdown.Item
                       as={Link}
-                      to={`/profiles/${user?.username}`}
+                      to={`/profiles/${user?.userName}`}
                       text="My Profile"
                       icon="user"
                     />

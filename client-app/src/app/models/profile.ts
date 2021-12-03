@@ -1,8 +1,7 @@
 import { User } from "./user";
 
 export interface Profile {
-  id: string;
-  username: string;
+  userName: string;
   displayName: string;
   image?: Photo;
   bio?: string;
@@ -23,7 +22,7 @@ export interface Profile {
 
 export class Profile implements Profile {
   constructor(user: User) {
-    this.username = user.username;
+    this.userName = user.userName;
     this.displayName = user.displayName;
     this.image = user.image;
   }
@@ -61,7 +60,9 @@ export interface Skill {
 
 export interface JobBid {
   id: string;
-  bidder: string;
+  description: string;
+  fee: number;
+  bidder: Profile;
 }
 
 export interface Description {

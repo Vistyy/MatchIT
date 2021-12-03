@@ -17,12 +17,12 @@ namespace Domain
         public DateTime CreationTime { get; set; }
         public ICollection<Job> PostedJobs { get; set; } = new List<Job>();
         public ICollection<JobBid> JobBids { get; set; } = new List<JobBid>();
-        public ICollection<PortfolioItem> Portfolio { get; set; }
-        public ICollection<EmploymentItem> Employment { get; set; }
-        public ICollection<ExperienceItem> Experience { get; set; }
-        public ICollection<EducationItem> Education { get; set; }
+        public ICollection<PortfolioItem> Portfolio { get; set; } = new List<PortfolioItem>();
+        public ICollection<EmploymentItem> Employment { get; set; } = new List<EmploymentItem>();
+        public ICollection<ExperienceItem> Experience { get; set; } = new List<ExperienceItem>();
+        public ICollection<EducationItem> Education { get; set; } = new List<EducationItem>();
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();
-        public ICollection<Certification> Certifications { get; set; }
+        public ICollection<Certification> Certifications { get; set; } = new List<Certification>();
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

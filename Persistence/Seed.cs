@@ -128,7 +128,6 @@ namespace Persistence
                     }
                 };
 
-
                 var users = new List<AppUser>
                 {
                     new AppUser
@@ -145,7 +144,16 @@ namespace Persistence
                         Certifications = certifications,
                         Education = education,
                         Employment = employment,
-                        Experience = experience
+                        Experience = experience,
+                        JobBids = new List<JobBid>
+                        {
+                            new JobBid
+                            {
+                                Job = jobs[1],
+                                Description = "1337i will make the requested files and it will be nice :)",
+                                Fee= 1337
+                            },
+                        }
                     },
                     new AppUser
                     {
@@ -155,6 +163,16 @@ namespace Persistence
                         Skills = new List<Skill>
                         {
                             skills[1]
+                        },
+                        JobBids = new List<JobBid>
+                        {
+                            new JobBid
+                            {
+                                Job = jobs[0],
+                                Description = "2137i will make the requested files and it will be nice :)",
+                                Fee= 2137
+                            },
+
                         }
 
                     },
@@ -167,6 +185,15 @@ namespace Persistence
                         {
                             skills[0],
                             skills[1]
+                        },
+                        JobBids = new List<JobBid>()
+                        {
+                            new JobBid
+                            {
+                                Job = jobs[0],
+                                Description = "420i will make the requested files and it will be nice :)",
+                                Fee= 420
+                            },
                         }
                     },
                     new AppUser
@@ -177,6 +204,21 @@ namespace Persistence
                         Skills = new List<Skill>
                         {
                             skills[2]
+                        },
+                        JobBids = new List<JobBid>() 
+                        {
+                            new JobBid
+                            {
+                                Job = jobs[0],
+                                Description = "69i will make the requested files and it will be nice :)",
+                                Fee= 69
+                            },
+                            new JobBid
+                            {
+                                Job = jobs[1],
+                                Description = "42069i will make the requested files and it will be nice :)",
+                                Fee= 42069
+                            },
                         }
                     }
                 };

@@ -8,12 +8,13 @@ import { useStore } from "../../../app/stores/store";
 import JobFilters from "./JobFilters";
 import JobList from "./JobList";
 import JobListItemPlaceholder from "./JobListItemPlaceholder";
+import JobSort from "./JobSort";
 
 export default observer(function JobDashboard() {
   const { jobStore } = useStore();
   const {
     loadJobs,
-    jobRegistry,
+    jobArray,
     setPagingParams,
     pagination,
     loadingJobs: loadingInitial,
@@ -30,20 +31,25 @@ export default observer(function JobDashboard() {
   useEffect(() => {
     runInAction(() => {
       clearFilter();
-      jobRegistry.clear();
+      jobArray.length = 0;
     });
-  }, [clearFilter, jobRegistry]);
+  }, [clearFilter, jobArray]);
 
   useEffect(() => {
-    if (jobRegistry.size <= 0 && !loadingInitial) {
+    if (jobArray.length <= 0 && !loadingInitial) {
       loadJobs();
     }
-  }, [jobRegistry.size, loadJobs, loadingInitial]);
+  }, [jobArray.length, loadJobs, loadingInitial]);
 
   return (
     <Grid>
       <Grid.Column width="6">
-        <JobFilters />
+        <Grid.Row style={{marginBottom: '50px'}}>
+          <JobSort />
+        </Grid.Row>
+        <Grid.Row>
+          <JobFilters />
+        </Grid.Row>
       </Grid.Column>
       <Grid.Column width="10">
         {loadingInitial && !loadingNext ? (

@@ -6,7 +6,8 @@ import { SkillSearchItem } from "../models/search";
 import { store } from "./store";
 
 export default class ExpertStore {
-  expertRegistry = new Map<string, Profile>();
+  expertArray: Profile[] = [];
+  sortedExpertArray: Profile[] = [];
   skillRegistry = new Map<number, Skill>();
   loadingInitial = false;
   loading = false;
@@ -16,6 +17,7 @@ export default class ExpertStore {
   skillFilter: string[] = [];
   filterDelay: NodeJS.Timeout = setTimeout(() => {}, 0);
   skillNames: SkillSearchItem[] = [];
+  sortExpertsBy: string = "ratingHighest";
 
   constructor() {
     makeAutoObservable(this);
@@ -25,11 +27,18 @@ export default class ExpertStore {
       () => {
         this.filterDelay = setTimeout(() => {
           this.pagingParams = new PagingParams();
-          runInAction(() => this.expertRegistry.clear());
+          runInAction(() => this.expertArray.length = 0);
           this.loadUsedSkills();
         }, 500);
       }
     );
+
+    reaction(
+      () => this.sortExpertsBy,
+      () => {
+        this.sortExperts();
+      }
+    )
   }
 
   setPagingParams = (pagingParams: PagingParams) => {
@@ -76,8 +85,19 @@ export default class ExpertStore {
   };
 
   private setExpert = (expert: Profile) => {
-    this.expertRegistry.set(expert.id, expert);
+    this.expertArray.push(expert);
   };
+
+  sortExperts = () => {
+    if(this.sortExpertsBy === "ratingHighest")
+    {
+      this.expertArray.sort((ex1, ex2) => ex1.rating > ex2.rating ? 1: -1);
+    }
+  }
+
+  changeSorting = (sortBy: string) => {
+    this.sortExpertsBy = sortBy;
+  }
 
   loadAllSkills = async () => {
     this.loading = true;
@@ -135,10 +155,7 @@ export default class ExpertStore {
   };
 
   resetState = () => {
-    this.expertRegistry.clear();
-    this.skillRegistry.clear();
-    this.skillPredicate.set("skill", "all");
-    this.skillFilter.length = 0;
+    this.clearFilter();
     this.skillNames.length = 0;
   };
 }

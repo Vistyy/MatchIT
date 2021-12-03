@@ -8,15 +8,15 @@ import ProfileContent from "./ProfileContent";
 import ProfileHeader from "./ProfileHeader";
 
 export default observer(function ProfilePage() {
-  const { username } = useParams<{ username: string }>();
+  const { userName } = useParams<{ userName: string }>();
   const {
     profileStore: { loadingProfile, loadProfile, profile, resetState },
   } = useStore();
 
   useEffect(() => {
     resetState();
-    loadProfile(username);
-  }, [loadProfile, resetState, username]);
+    loadProfile(userName);
+  }, [loadProfile, resetState, userName]);
 
   if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
 

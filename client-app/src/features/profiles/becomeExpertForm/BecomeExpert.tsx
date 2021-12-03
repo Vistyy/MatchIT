@@ -66,12 +66,12 @@ export default observer(function BecomeExpert() {
 
   function handleSaveChanges() {
     updateProfile(profile!).then(() =>
-      history.push(`/profiles/${profile!.username}`)
+      history.push(`/profiles/${profile!.userName}`)
     );
   }
 
   useEffect(() => {
-    if (user) loadProfile(user.username);
+    if (user) loadProfile(user.userName);
   }, [user, loadProfile]);
 
   useEffect(() => {

@@ -21,6 +21,7 @@ namespace Persistence
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<UserFile> Files { get; set; }
+        public DbSet<JobBid> JobBids { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -46,7 +47,7 @@ namespace Persistence
             .HasMany(u => u.PostedJobs)
             .WithOne(pj => pj.Employer)
             .HasForeignKey(u => u.EmployerId);
-
+            
             builder.Entity<JobBid>()
             .HasOne(jb => jb.Bidder)
             .WithMany(u => u.JobBids)

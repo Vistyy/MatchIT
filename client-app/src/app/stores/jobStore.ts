@@ -2,19 +2,21 @@ import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Job, Skill } from "../models/profile";
+import { store } from "./store";
 
 export default class JobStore {
   loadingJob = false;
   loadingJobs = false;
   loading = false;
   job: Job | null = null;
-  jobRegistry = new Map<string, Job>();
+  jobArray: Job[] = [];
   pagingParams = new PagingParams();
   pagination: Pagination | null = null;
   skillRegistry = new Map<number, Skill>();
   skillPredicate = new Map().set("skill", "all");
   skillFilter: string[] = [];
   filterDelay: any;
+  sortJobsBy: string = "dateNewest";
 
   constructor() {
     makeAutoObservable(this);
@@ -24,10 +26,24 @@ export default class JobStore {
       () => {
         this.filterDelay = setTimeout(() => {
           this.pagingParams = new PagingParams();
-          runInAction(() => this.jobRegistry.clear());
+          runInAction(() => (this.jobArray.length = 0));
           this.loadRequiredSkills();
         }, 500);
       }
+    );
+
+    reaction(
+      () => this.sortJobsBy,
+      () => {
+        this.sortJobs();
+      }
+    );
+  }
+
+  get isEmployer() {
+    return (
+      store.userStore.isLoggedIn() &&
+      this.job?.employer.userName === store.userStore.user?.userName
     );
   }
 
@@ -60,6 +76,7 @@ export default class JobStore {
   }
 
   resetState = () => {
+    this.clearFilter();
     this.job = null;
   };
 
@@ -84,6 +101,7 @@ export default class JobStore {
       result.data.forEach((job) => {
         this.setJob(job);
       });
+      this.sortJobs();
       this.setPagination(result.pagination);
       runInAction(() => (this.loadingJobs = false));
     } catch (error) {
@@ -92,8 +110,24 @@ export default class JobStore {
     }
   };
 
+  sortJobs = () => {
+    if (this.sortJobsBy === "dateNewest") {
+      this.jobArray.sort((j1, j2) =>
+        j1.creationTime < j2.creationTime ? 1 : -1
+      );
+    } else if (this.sortJobsBy === "dateOldest") {
+      this.jobArray.sort((j1, j2) =>
+        j1.creationTime > j2.creationTime ? 1 : -1
+      );
+    }
+  };
+
   private setJob = (job: Job) => {
-    this.jobRegistry.set(job.id, job);
+    this.jobArray.push(job);
+  };
+
+  changeSorting = (sortBy: string) => {
+    this.sortJobsBy = sortBy;
   };
 
   loadRequiredSkills = async () => {

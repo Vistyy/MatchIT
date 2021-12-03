@@ -34,7 +34,7 @@ namespace Application.Jobs
             {
                 var job = await _context.Jobs
                 .Include(j => j.Attachments)
-                .Include(j => j.JobBids)
+                .Include(j => j.JobBids).ThenInclude(jb => jb.Bidder)
                 .Include(j => j.RequiredSkills)
                 .ProjectTo<JobDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(j => j.Id == request.Id);

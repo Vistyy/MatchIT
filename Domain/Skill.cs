@@ -7,7 +7,7 @@ namespace Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<AppUser> Users { get; set; }
-        public ICollection<Job> Jobs { get; set; }
+        public ICollection<AppUser> Users { get; set; } = new List<AppUser>();
+        public ICollection<Job> Jobs { get; set; } = new List<Job>();
     }
 }

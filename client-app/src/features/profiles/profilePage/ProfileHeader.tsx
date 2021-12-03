@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -18,7 +17,6 @@ export default observer(function ProfileHeader() {
     modalStore,
     profileStore: { uploadPhoto, deletePhoto, isCurrentUser, profile },
     userStore: { isLoggedIn },
-    expertStore: { setSkillPredicate, clearFilter },
   } = useStore();
   const [visible, setVisible] = useState(false);
 

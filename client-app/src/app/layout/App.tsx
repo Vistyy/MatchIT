@@ -51,7 +51,7 @@ function App() {
                 <Route exact path="/" component={ExpertDashboard} />
                 <Route exact path="/jobs" component={JobDashboard} />
                 <Route exact path="/jobs/:id" component={JobPage} />
-                <Route path="/profiles/:username" component={ProfilePage} />
+                <Route path="/profiles/:userName" component={ProfilePage} />
                 <PrivateRoute path="/becomeExpert" component={BecomeExpert} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />

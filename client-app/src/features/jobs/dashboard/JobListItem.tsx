@@ -1,7 +1,9 @@
+import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
+import ProfilePopup from "../../../app/common/profile/ProfilePopup";
 import { Job } from "../../../app/models/profile";
 import { useStore } from "../../../app/stores/store";
 
@@ -21,8 +23,14 @@ export default observer(function JobListItem({ job }: Props) {
           <Item>
             <Item.Content>
               <Item.Header as={Link} to={`/jobs/${job.id}`}>
-                {`${job.title} by ${job.employer.displayName}`}
+                {job.title}
               </Item.Header>
+              <Item.Meta>
+                <ProfilePopup profile={job.employer} />
+              </Item.Meta>
+              <Item.Meta>
+                {`Posted on: ${format(new Date(job.creationTime), "dd-MM-yyyy")}`}
+              </Item.Meta>
               <Item.Description>{job.description}</Item.Description>
             </Item.Content>
           </Item>

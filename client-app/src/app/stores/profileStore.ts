@@ -30,8 +30,8 @@ export default class ProfileStore {
   }
 
   get isCurrentUser() {
-    if (store.userStore.user?.username === this.profile?.username) {
-      return store.userStore.user?.username === this.profile?.username;
+    if (store.userStore.user?.userName === this.profile?.userName) {
+      return store.userStore.user?.userName === this.profile?.userName;
     }
     return false;
   }
@@ -40,10 +40,10 @@ export default class ProfileStore {
     this.profile = null;
   };
 
-  loadProfile = async (username: string) => {
+  loadProfile = async (userName: string) => {
     this.loadingProfile = true;
     try {
-      const profile = await agent.Profiles.get(username);
+      const profile = await agent.Profiles.get(userName);
       runInAction(() => {
         this.profile = profile;
         this.loadingProfile = false;
