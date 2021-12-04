@@ -23,6 +23,16 @@ export default observer(function NavBar() {
           <Menu.Item as={NavLink} to="/jobs" name="Jobs" />
           {isLoggedIn() ? (
             <Menu.Menu fixed="top" position="right">
+              {user && (
+                <Menu.Item position="right">
+                  <Button
+                    as={NavLink}
+                    to="/addJob"
+                    content="Add New Job Offer"
+                    inverted
+                  />
+                </Menu.Item>
+              )}
               {user && !user.isExpert && (
                 <Menu.Item position="right">
                   <Button

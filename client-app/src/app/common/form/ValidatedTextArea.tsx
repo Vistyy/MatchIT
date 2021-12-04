@@ -14,7 +14,7 @@ export default function ValidatedTextArea(props: Props) {
   return (
     <Form.Field error={meta.touched && !!meta.error}>
       <label>{props.label}</label>
-      <textarea {...field} {...props} />
+      <textarea {...field} {...props} style={{ resize: "none" }} />
       {meta.touched && meta.error ? (
         <Label basic color="red">
           {`${props.placeholder} is a required field`}

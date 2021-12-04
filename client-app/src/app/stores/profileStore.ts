@@ -155,6 +155,7 @@ export default class ProfileStore {
       title: skill.name,
     } as SkillSearchItem);
   };
+  
   addPortfolioItem = (files: Map<string, any>, description: string) => {
     const portfolioFiles: UserFile[] = [];
     files.forEach((file) => portfolioFiles.push(file));

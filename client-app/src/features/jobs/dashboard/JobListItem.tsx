@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
 import ProfilePopup from "../../../app/common/profile/ProfilePopup";
-import { Job } from "../../../app/models/profile";
+import { Job } from "../../../app/models/job";
 import { useStore } from "../../../app/stores/store";
 
 interface Props {

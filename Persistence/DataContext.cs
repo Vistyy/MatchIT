@@ -47,7 +47,7 @@ namespace Persistence
             .HasMany(u => u.PostedJobs)
             .WithOne(pj => pj.Employer)
             .HasForeignKey(u => u.EmployerId);
-            
+
             builder.Entity<JobBid>()
             .HasOne(jb => jb.Bidder)
             .WithMany(u => u.JobBids)

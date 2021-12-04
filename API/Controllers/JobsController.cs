@@ -21,5 +21,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = Guid.Parse(id) }));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(Add.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }

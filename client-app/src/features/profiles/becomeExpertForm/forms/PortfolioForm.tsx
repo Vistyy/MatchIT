@@ -11,7 +11,7 @@ interface Props {
 
 export default observer(function PortfolioForm({ setEditMode }: Props) {
   const {
-    fileStore: { temporaryFiles },
+    fileStore: { temporaryFiles, resetState },
     profileStore: { addPortfolioItem },
   } = useStore();
   const [portfolioItemDescription, setPortfolioItemDescription] =
@@ -25,7 +25,7 @@ export default observer(function PortfolioForm({ setEditMode }: Props) {
 
   function handleAddPortfolioItem() {
     addPortfolioItem(temporaryFiles, portfolioItemDescription);
-    runInAction(() => temporaryFiles.clear());
+    resetState();
     setEditMode(false);
   }
 

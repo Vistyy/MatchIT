@@ -1,8 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
+import { Job } from "../models/job";
 import { PaginatedResult } from "../models/pagination";
-import { Job, Photo, Profile, Skill, UserFile } from "../models/profile";
+import { Photo, Profile, Skill, UserFile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -142,6 +143,7 @@ const Jobs = {
   get: (id: string) => requests.get<Job>(`/jobs/${id}`),
   list: (params: URLSearchParams) =>
     axios.get<PaginatedResult<Job[]>>("/jobs", { params }).then(responseBody),
+  add: (job: Partial<Job>) => requests.post("/jobs", job)
 };
 
 const agent = {

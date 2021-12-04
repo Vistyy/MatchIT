@@ -20,6 +20,7 @@ import BecomeExpert from "../../features/profiles/becomeExpertForm/BecomeExpert"
 import FilePreviewModal from "../common/fileUpload/FilePreviewModal";
 import JobDashboard from "../../features/jobs/dashboard/JobDashboard";
 import JobPage from "../../features/jobs/jobPage/JobPage";
+import AddJob from "../../features/jobs/addJob/AddJob";
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -53,6 +54,7 @@ function App() {
                 <Route exact path="/jobs/:id" component={JobPage} />
                 <Route path="/profiles/:userName" component={ProfilePage} />
                 <PrivateRoute path="/becomeExpert" component={BecomeExpert} />
+                <PrivateRoute path="/addJob" component={AddJob} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
                 <Route

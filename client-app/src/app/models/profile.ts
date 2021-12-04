@@ -1,3 +1,4 @@
+import { Job, JobBid } from "./job";
 import { User } from "./user";
 
 export interface Profile {
@@ -33,18 +34,6 @@ export interface Photo {
   url: string;
 }
 
-export interface Job {
-  id: string;
-  employer: Profile;
-  requiredSkills: Skill[];
-  title: string;
-  description: string;
-  attachments: UserFile[];
-  creationTime: Date;
-  isActive: boolean;
-  jobBids: JobBid[];
-}
-
 export interface Review {
   id: string;
   rating: number;
@@ -56,13 +45,6 @@ export interface Skill {
   id: number;
   name: string;
   count: number;
-}
-
-export interface JobBid {
-  id: string;
-  description: string;
-  fee: number;
-  bidder: Profile;
 }
 
 export interface Description {

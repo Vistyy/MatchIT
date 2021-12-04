@@ -1,6 +1,6 @@
 import React from "react";
 import { Item, Segment } from "semantic-ui-react";
-import { JobBid } from "../../../app/models/profile";
+import { JobBid } from "../../../app/models/job";
 
 interface Props {
   jobBids: JobBid[];

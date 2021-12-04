@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import React from "react";
 import { Item, Label, Segment } from "semantic-ui-react";
 import ProfilePopup from "../../../app/common/profile/ProfilePopup";
-import { Job } from "../../../app/models/profile";
+import { Job } from "../../../app/models/job";
 
 interface Props {
     job: Job;
