@@ -4,7 +4,7 @@ import { Button, Header, Menu } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 
-export default observer(function () {
+export default observer(function JobFilters() {
   const {
     jobStore: {
       skillPredicate,
@@ -14,7 +14,7 @@ export default observer(function () {
       skillFilter,
       filterDelay,
       clearFilter,
-      loading,
+      loadingSkills,
     },
   } = useStore();
 
@@ -67,16 +67,14 @@ export default observer(function () {
           }}
           onClick={() => clearFilter()}
         />
-        {loading ? (
+        {loadingSkills ? (
           <Menu.Item style={{ height: "100px" }}>
             <LoadingComponent content="Loading..." />
           </Menu.Item>
         ) : (
           <>
             {Array.from(skillRegistry)
-              .sort(([_, s1], [__, s2]) =>
-                s1.count > s2.count ? -1 : 1
-              )
+              .sort(([_, s1], [__, s2]) => (s1.count > s2.count ? -1 : 1))
               .map(([id, skill]) => (
                 <Menu.Item
                   key={id}

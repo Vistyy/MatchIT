@@ -1,8 +1,7 @@
-import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import { Grid, Loader } from "semantic-ui-react";
+import { Grid, Header, Loader } from "semantic-ui-react";
 import { PagingParams } from "../../../app/models/pagination";
 import { useStore } from "../../../app/stores/store";
 import ExpertFilters from "./ExpertFilters";
@@ -17,10 +16,11 @@ export default observer(function ExpertDashboard() {
     expertArray,
     setPagingParams,
     pagination,
-    loadingInitial,
-    clearFilter,
+    loadingExperts,
+    resetState,
   } = expertStore;
   const [loadingNext, setLoadingNext] = useState(false);
+  const [loadingInitial, setLoadingInitial] = useState(false);
 
   function handleGetNext() {
     setLoadingNext(true);
@@ -29,15 +29,15 @@ export default observer(function ExpertDashboard() {
   }
 
   useEffect(() => {
-    runInAction(() => {
-      clearFilter();
-      expertArray.length = 0;
-    });
-  }, [clearFilter, expertArray]);
+    resetState();
+  }, [resetState]);
 
   useEffect(() => {
-    if (expertArray.length <= 0 && !loadingInitial) loadExperts();
-  }, [expertArray.length, loadExperts, loadingInitial]);
+    if (expertArray.length === 0 && !loadingExperts && !loadingInitial) {
+      loadExperts();
+      setLoadingInitial(true);
+    }
+  }, [expertArray.length, loadExperts, loadingExperts, loadingInitial]);
 
   return (
     <Grid>
@@ -50,7 +50,7 @@ export default observer(function ExpertDashboard() {
         </Grid.Row>
       </Grid.Column>
       <Grid.Column width="10">
-        {loadingInitial && !loadingNext ? (
+        {loadingExperts && !loadingNext ? (
           <>
             <ExpertListItemPlaceholder />
             <ExpertListItemPlaceholder />
@@ -66,7 +66,11 @@ export default observer(function ExpertDashboard() {
             }
             initialLoad={false}
           >
-            <ExpertList />
+            {loadingInitial && expertArray.length > 0 ? (
+              <ExpertList expertArray={expertArray} />
+            ) : (
+              <Header content="There are no experts yet" icon="list" />
+            )}
           </InfiniteScroll>
         )}
       </Grid.Column>

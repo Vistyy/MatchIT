@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Files;
 using Application.Interfaces;
@@ -58,6 +59,17 @@ namespace Infrastructure.FileStorage.Files
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
             return result.Result == "ok" ? result.Result : null;
+        }
+
+        public async Task<string> DeleteFiles(List<string> publicIds)
+        {
+            var deleteParams = new DelResParams
+            {
+                PublicIds = publicIds
+            };
+            var result = await _cloudinary.DeleteResourcesAsync(deleteParams);
+
+            return result.Partial == false ? "ok" : null;
         }
     }
 }

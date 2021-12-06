@@ -1,12 +1,16 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 import { Dropdown, DropdownProps } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 
-export default observer(function () {
+export default observer(function ExpertSort() {
   const {
     expertStore: { sortExpertsBy, changeSorting },
   } = useStore();
+
+  useEffect(() => {
+    
+  })
 
   function handleSortChange(
     e: React.SyntheticEvent<HTMLElement, Event>,
@@ -23,7 +27,7 @@ export default observer(function () {
         className="listSort-dropdown"
         style={{ float: "right" }}
         options={[{ key: 1, text: "Rating: highest", value: "ratingHighest" }]}
-        defaultValue={sortExpertsBy}
+        value={sortExpertsBy}
         onChange={handleSortChange}
       />
     </>

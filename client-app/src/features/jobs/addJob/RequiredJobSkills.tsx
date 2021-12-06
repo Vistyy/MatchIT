@@ -2,7 +2,6 @@ import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
-import { Skill } from "../../../app/models/profile";
 import { useStore } from "../../../app/stores/store";
 import JobSkillSearchInput from "./JobSkillSearchInput";
 
@@ -14,7 +13,7 @@ export default observer(function RequiredJobSkills() {
       getSkillNames,
       skillRegistry,
       skillNames,
-      loading,
+      loadingSkills,
       requiredSkills,
     },
   } = useStore();
@@ -68,7 +67,7 @@ export default observer(function RequiredJobSkills() {
           />
         )}
       </Segment>
-      <JobSkillSearchInput source={skillNames} loadingSkills={loading} />
+      <JobSkillSearchInput source={skillNames} loadingSkills={loadingSkills} />
     </>
   );
 });

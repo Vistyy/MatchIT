@@ -38,25 +38,42 @@ namespace Persistence
                 .HasForeignKey(r => r.RevieweeId);
            });
 
-            builder.Entity<Job>()
-            .HasOne(j => j.Employer)
-            .WithMany(e => e.PostedJobs)
-            .HasForeignKey(j => j.EmployerId);
+            builder.Entity<Job>(b =>
+            {
+                b.HasOne(j => j.Employer)
+                .WithMany(e => e.PostedJobs)
+                .HasForeignKey(j => j.EmployerId)
+                .OnDelete(DeleteBehavior.Cascade);
+                b.HasMany(j => j.Attachments)
+                .WithOne(a => a.Job)
+                .HasForeignKey(a => a.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+            
+            builder.Entity<JobBid>(b =>
+            {
+                b.HasOne(jb => jb.Bidder)
+                .WithMany(u => u.JobBids)
+                .HasForeignKey(jb => jb.BidderId)
+                .OnDelete(DeleteBehavior.Cascade);
+                b.HasOne(jb => jb.Job)
+                .WithMany(j => j.JobBids)
+                .HasForeignKey(jb => jb.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
 
             builder.Entity<AppUser>()
             .HasMany(u => u.PostedJobs)
             .WithOne(pj => pj.Employer)
-            .HasForeignKey(u => u.EmployerId);
+            .HasForeignKey(u => u.EmployerId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<JobBid>()
-            .HasOne(jb => jb.Bidder)
-            .WithMany(u => u.JobBids)
-            .HasForeignKey(jb => jb.BidderId);
+            builder.Entity<PortfolioItem>()
+            .HasMany(p => p.Attachments)
+            .WithOne(a => a.PortfolioItem)
+            .HasForeignKey(a => a.PortfolioItemId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<JobBid>()
-            .HasOne(jb => jb.Job)
-            .WithMany(j => j.JobBids)
-            .HasForeignKey(jb => jb.JobId);
         }
 
     }

@@ -268,3 +268,16 @@ a:link {
 .listSort-dropdown {
   color: #00b5ad !important;
 }
+
+.jobListItem-deleteButton {
+  position: absolute !important;
+  top: 5px;
+  right: 5px;
+}
+
+.jobListItem-confirmDeleteModal .primary.button {
+  background-color: #db2828 !important;
+}
+.jobListItem-confirmDeleteModal .primary.button:hover {
+  background-color: rgb(255, 19, 19) !important;
+}

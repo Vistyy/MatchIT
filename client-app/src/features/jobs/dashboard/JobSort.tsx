@@ -16,21 +16,21 @@ export default observer(function JobSort() {
   }
 
   return (
-      <Dropdown
-        direction="left"
-        selection
-        className="listSort-dropdown"
-        style={{ float: "right" }}
-        options={[
-          { key: 1, text: "Date: oldest", value: "dateOldest" },
-          {
-            key: 2,
-            text: "Date: newest",
-            value: "dateNewest",
-          },
-        ]}
-        defaultValue={sortJobsBy}
-        onChange={handleSortChange}
-      />
+    <Dropdown
+      direction="left"
+      selection
+      className="listSort-dropdown"
+      style={{ float: "right" }}
+      options={[
+        { key: 1, text: "Date: oldest", value: "dateOldest" },
+        {
+          key: 2,
+          text: "Date: newest",
+          value: "dateNewest",
+        },
+      ]}
+      value={sortJobsBy}
+      onChange={handleSortChange}
+    />
   );
 });

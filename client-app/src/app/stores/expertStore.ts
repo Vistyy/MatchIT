@@ -7,9 +7,9 @@ import { store } from "./store";
 
 export default class ExpertStore {
   expertArray: Profile[] = [];
-  sortedExpertArray: Profile[] = [];
   skillRegistry = new Map<number, Skill>();
-  loadingInitial = false;
+  loadingExperts = false;
+  loadingSkills = false;
   loading = false;
   pagination: Pagination | null = null;
   pagingParams = new PagingParams();
@@ -27,7 +27,7 @@ export default class ExpertStore {
       () => {
         this.filterDelay = setTimeout(() => {
           this.pagingParams = new PagingParams();
-          runInAction(() => this.expertArray.length = 0);
+          runInAction(() => (this.expertArray.length = 0));
           this.loadUsedSkills();
         }, 500);
       }
@@ -36,10 +36,38 @@ export default class ExpertStore {
     reaction(
       () => this.sortExpertsBy,
       () => {
-        this.sortExperts();
+        this.pagingParams = new PagingParams();
+        runInAction(() => (this.expertArray.length = 0));
+        this.loadUsedSkills();
       }
-    )
+    );
   }
+
+  resetState = () => {
+    this.clearFilter();
+    this.resetSkillNames();
+    this.resetExpertArray();
+    this.resetSorting();
+    this.resetPagination();
+  };
+
+  clearFilter = () => {
+    this.skillFilter.length = 0;
+    this.skillPredicate.set("skill", "all");
+  };
+
+  resetSkillNames = () => {
+    this.skillNames.length = 0;
+  };
+
+  resetExpertArray = () => {
+    this.expertArray.length = 0;
+  };
+  resetSorting = () => this.changeSorting("ratingHighest");
+  resetPagination = () => {
+    this.pagination = null;
+    this.pagingParams = new PagingParams();
+  };
 
   setPagingParams = (pagingParams: PagingParams) => {
     this.pagingParams = pagingParams;
@@ -62,21 +90,23 @@ export default class ExpertStore {
       params.append(key, value);
     });
 
+    params.append("sortBy", this.sortExpertsBy);
+
     return params;
   }
 
   loadExperts = async () => {
-    this.loadingInitial = true;
+    this.loadingExperts = true;
     try {
       const result = await agent.Experts.list(this.axiosParams);
       result.data.forEach((expert) => {
         this.setExpert(expert);
       });
       this.setPagination(result.pagination);
-      runInAction(() => (this.loadingInitial = false));
+      runInAction(() => (this.loadingExperts = false));
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loadingInitial = false));
+      runInAction(() => (this.loadingExperts = false));
     }
   };
 
@@ -88,52 +118,40 @@ export default class ExpertStore {
     this.expertArray.push(expert);
   };
 
-  sortExperts = () => {
-    if(this.sortExpertsBy === "ratingHighest")
-    {
-      this.expertArray.sort((ex1, ex2) => ex1.rating > ex2.rating ? 1: -1);
-    }
-  }
-
   changeSorting = (sortBy: string) => {
     this.sortExpertsBy = sortBy;
-  }
+  };
 
   loadAllSkills = async () => {
-    this.loading = true;
+    this.loadingSkills = true;
     try {
       const result = await agent.Skills.listAll();
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     }
   };
 
   loadUsedSkills = async () => {
-    this.loading = true;
+    this.loadingSkills = true;
     try {
       const result = await agent.Skills.listUsed(this.axiosParams);
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     }
   };
 
   private setSkill = (skill: Skill) => {
     this.skillRegistry.set(skill.id, skill);
-  };
-
-  clearFilter = () => {
-    this.skillFilter.length = 0;
-    this.skillPredicate.set("skill", "all");
   };
 
   getSkillNames = () => {
@@ -152,10 +170,5 @@ export default class ExpertStore {
       return s1.title >= s2.title ? 1 : -1;
     });
     return this.skillNames;
-  };
-
-  resetState = () => {
-    this.clearFilter();
-    this.skillNames.length = 0;
   };
 }

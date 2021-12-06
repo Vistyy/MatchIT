@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
-using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -31,7 +28,21 @@ namespace Application.Jobs
 
             public async Task<Result<PagedList<JobListItemDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Jobs.Where(j => j.IsActive).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                var query = Enumerable.Empty<JobListItemDto>().AsQueryable();
+                if(request.Params.SortBy == "dateNewest")
+                {
+                query = _context.Jobs.Where(j => j.IsActive).OrderByDescending(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+
+                }
+                else if (request.Params.SortBy == "dateOldest")
+                {
+                query = _context.Jobs.Where(j => j.IsActive).OrderBy(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                } 
+                else 
+                {
+                query = _context.Jobs.Where(j => j.IsActive).OrderByDescending(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+
+                }
 
                 if (request.Params.Skill != "all" && request.Params.Skill != "")
                 {

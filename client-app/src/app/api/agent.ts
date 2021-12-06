@@ -117,14 +117,11 @@ const Profiles = {
       headers: { "Content-type": "multipart/form-data" },
     });
   },
-  // updateProfile: (profile: Partial<Profile>) =>
-  //   requests.put(`/profiles`, profile),
   updateProfile: (profile: Partial<Profile>) =>
     requests.put(`/profiles`, profile),
 };
 
 const Experts = {
-  get: (userName: string) => requests.get<Profile>(`/experts/${userName}`),
   list: (params: URLSearchParams) =>
     axios
       .get<PaginatedResult<Profile[]>>("/experts", { params })
@@ -143,7 +140,12 @@ const Jobs = {
   get: (id: string) => requests.get<Job>(`/jobs/${id}`),
   list: (params: URLSearchParams) =>
     axios.get<PaginatedResult<Job[]>>("/jobs", { params }).then(responseBody),
-  add: (job: Partial<Job>) => requests.post("/jobs", job)
+  listUser: (userName: string, params: URLSearchParams) =>
+    axios
+      .get<PaginatedResult<Job[]>>(`/jobs/user/${userName}`, { params })
+      .then(responseBody),
+  add: (job: Partial<Job>) => requests.post("/jobs", job),
+  delete: (id: string) => requests.del(`/jobs/${id}`)
 };
 
 const agent = {

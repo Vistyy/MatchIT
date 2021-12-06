@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
 import { Search, SearchResultData } from "semantic-ui-react";
 import { searchReducer } from "../../../app/common/util/hooks";
-import { Skill } from "../../../app/models/profile";
 import { SkillSearchItem, State } from "../../../app/models/search";
 import { useStore } from "../../../app/stores/store";
 

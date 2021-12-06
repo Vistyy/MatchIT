@@ -72,6 +72,12 @@ export default observer(function NavBar() {
                       icon="user"
                     />
                     <Dropdown.Item
+                      as={Link}
+                      to={`/jobs/user/${user?.userName}`}
+                      text="My Jobs"
+                      icon="suitcase"
+                    />
+                    <Dropdown.Item
                       onClick={logout}
                       text="Logout"
                       icon="power"

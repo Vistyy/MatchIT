@@ -15,17 +15,29 @@ namespace API.Controllers
             return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
         }
 
+        [HttpGet("user/{userName}")]
+        public async Task<IActionResult> GetUserJobs([FromQuery] JobParams param, string userName)
+        {
+            return HandlePagedResult(await Mediator.Send(new ListUser.Query { Params = param, UserName = userName }));
+        }
+
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetJob(string id)
+        public async Task<IActionResult> GetJob(Guid id)
         {
-            return HandleResult(await Mediator.Send(new Details.Query { Id = Guid.Parse(id) }));
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(Add.Command command)
         {
             return HandleResult(await Mediator.Send(command));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteJob(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
     }
 }

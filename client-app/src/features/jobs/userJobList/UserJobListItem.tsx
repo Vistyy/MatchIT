@@ -1,11 +1,12 @@
 import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Item, Segment } from "semantic-ui-react";
+import { Button, Confirm, Item, Segment } from "semantic-ui-react";
 import ProfilePopup from "../../../app/common/profile/ProfilePopup";
 import { Job } from "../../../app/models/job";
 import { useStore } from "../../../app/stores/store";
+import DeleteJobButton from "../DeleteJobButton";
 
 interface Props {
   job: Job;
@@ -13,7 +14,8 @@ interface Props {
 
 export default observer(function JobListItem({ job }: Props) {
   const {
-    jobStore: { setSkillPredicate, skillPredicate },
+    jobStore: { setSkillPredicate, skillPredicate},
+    userStore: { user },
   } = useStore();
 
   return (
@@ -36,6 +38,9 @@ export default observer(function JobListItem({ job }: Props) {
               </Item.Meta>
               <Item.Description>{job.description}</Item.Description>
             </Item.Content>
+            {job.employer.userName === user?.userName && (
+              <DeleteJobButton jobId={job.id} />
+            )}
           </Item>
         </Item.Group>
       </Segment>

@@ -105,12 +105,13 @@ export default class ProfileStore {
     this.loading = true;
     try {
       await Promise.all(
-        portfolioItems.map(async (item, itemIndex) => {
+        portfolioItems.map(async (item) => {
           await Promise.all(
-            item.attachments.map(async (attachment, attachmentIndex) => {
+            item.attachments.map(async (attachment) => {
               if (attachment.url.startsWith("blob:")) {
                 const response = await this.uploadFile(attachment);
                 attachment.url = response!.url;
+                attachment.id = response!.id;
               }
             })
           );

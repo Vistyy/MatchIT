@@ -9,6 +9,7 @@ import { SkillSearchItem } from "../models/search";
 import { history } from "../..";
 
 export default class JobStore {
+  loadingSkills = false;
   loadingJob = false;
   loadingJobs = false;
   loading = false;
@@ -33,7 +34,7 @@ export default class JobStore {
       () => {
         this.filterDelay = setTimeout(() => {
           this.pagingParams = new PagingParams();
-          runInAction(() => (this.jobArray.length = 0));
+          this.resetJobArray();
           this.loadRequiredSkills();
         }, 500);
       }
@@ -42,7 +43,9 @@ export default class JobStore {
     reaction(
       () => this.sortJobsBy,
       () => {
-        this.sortJobs();
+        this.pagingParams = new PagingParams();
+        runInAction(() => (this.jobArray.length = 0));
+        this.loadRequiredSkills();
       }
     );
   }
@@ -78,6 +81,7 @@ export default class JobStore {
     this.skillPredicate.forEach((value, key) => {
       params.append(key, value);
     });
+    params.append("sortBy", this.sortJobsBy);
 
     return params;
   }
@@ -85,6 +89,9 @@ export default class JobStore {
   resetState = () => {
     this.clearFilter();
     this.resetJob();
+    this.resetJobArray();
+    this.resetSorting();
+    this.resetPagination();
   };
 
   clearFilter = () => {
@@ -95,6 +102,12 @@ export default class JobStore {
   resetJob = () => (this.job = null);
 
   resetRequiredSkills = () => (this.requiredSkills.length = 0);
+  resetJobArray = () => (this.jobArray.length = 0);
+  resetSorting = () => this.changeSorting("dateNewest");
+  resetPagination = () => {
+    this.pagination = null;
+    this.pagingParams = new PagingParams();
+  };
 
   loadJob = async (id: string) => {
     this.loadingJob = true;
@@ -110,6 +123,21 @@ export default class JobStore {
     }
   };
 
+  deleteJob = async (id: string) => {
+    this.loading = true;
+    try {
+      await agent.Jobs.delete(id);
+      runInAction(() => {
+        this.jobArray = this.jobArray.filter((job) => job.id !== id);
+        this.loading = false;
+        history.push(`/jobs/user/${this.job?.employer.userName}`);
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
   loadJobs = async () => {
     this.loadingJobs = true;
     try {
@@ -117,7 +145,6 @@ export default class JobStore {
       result.data.forEach((job) => {
         this.setJob(job);
       });
-      this.sortJobs();
       this.setPagination(result.pagination);
       runInAction(() => (this.loadingJobs = false));
     } catch (error) {
@@ -126,15 +153,23 @@ export default class JobStore {
     }
   };
 
-  sortJobs = () => {
-    if (this.sortJobsBy === "dateNewest") {
-      this.jobArray.sort((j1, j2) =>
-        j1.creationTime < j2.creationTime ? 1 : -1
-      );
-    } else if (this.sortJobsBy === "dateOldest") {
-      this.jobArray.sort((j1, j2) =>
-        j1.creationTime > j2.creationTime ? 1 : -1
-      );
+  loadUserJobs = async () => {
+    this.loadingJobs = true;
+    if (store.userStore.user) {
+      try {
+        const result = await agent.Jobs.listUser(
+          store.userStore.user.userName,
+          this.axiosParams
+        );
+        result.data.forEach((job) => {
+          this.setJob(job);
+        });
+        this.setPagination(result.pagination);
+        runInAction(() => (this.loadingJobs = false));
+      } catch (error) {
+        console.log(error);
+        runInAction(() => (this.loadingJobs = false));
+      }
     }
   };
 
@@ -147,16 +182,16 @@ export default class JobStore {
   };
 
   loadRequiredSkills = async () => {
-    this.loading = true;
+    this.loadingSkills = true;
     try {
       const result = await agent.Skills.listJobRequired(this.axiosParams);
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     }
   };
 
@@ -165,16 +200,16 @@ export default class JobStore {
   };
 
   loadAllSkills = async () => {
-    this.loading = true;
+    this.loadingSkills = true;
     try {
       const result = await agent.Skills.listAll();
       if (this.skillRegistry.size > 0)
         runInAction(() => this.skillRegistry.clear());
       result.forEach((skill) => this.setSkill(skill));
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.loadingSkills = false));
     }
   };
 
@@ -215,28 +250,31 @@ export default class JobStore {
       const blob = await fetch(file.url).then((r) => r.blob());
       const response = await agent.Profiles.uploadFile(blob);
       const uploadedFile = response.data;
+      runInAction(() => (this.uploading = false));
       return uploadedFile;
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.uploading = false));
     }
   };
 
   uploadJobAttachments = async (jobAttachments: UserFile[]) => {
-    this.loading = true;
+    this.uploading = true;
     try {
       await Promise.all(
         jobAttachments.map(async (attachment) => {
           if (attachment.url.startsWith("blob:")) {
             const response = await this.uploadFile(attachment);
             attachment.url = response!.url;
+            attachment.id = response!.id;
           }
         })
       );
+      runInAction(() => (this.uploading = false));
       return jobAttachments;
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.uploading = false));
     }
   };
 
@@ -246,7 +284,9 @@ export default class JobStore {
   ) => {
     this.loading = true;
     try {
-      const jobAttachments = await this.uploadJobAttachments(Array.from(files.values()));
+      const jobAttachments = await this.uploadJobAttachments(
+        Array.from(files.values())
+      );
       const job: Partial<Job> = {
         id: uuid(),
         title: jobTitle,
@@ -255,13 +295,14 @@ export default class JobStore {
         isActive: true,
         requiredSkills: this.requiredSkills,
       };
-      console.log(job.id);
-
       await agent.Jobs.add(job);
       runInAction(() => {
         this.loading = false;
         history.push(`/jobs/${job.id}`);
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
   };
 }

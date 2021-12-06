@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { Grid, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
+import DeleteJobButton from "../DeleteJobButton";
 import JobAttachmentsSegment from "./JobAttachmentsSegment";
 import JobBidsSegment from "./JobBidsSegment";
 import JobDetailsSegment from "./JobDetailsSegment";
@@ -30,7 +31,10 @@ export default observer(function JobPage() {
             {job.attachments.length > 0 && (
               <JobAttachmentsSegment attachments={job.attachments} />
             )}
-            {isEmployer && job.jobBids.length > 0 && <JobBidsSegment jobBids={job.jobBids} />}
+            {isEmployer && job.jobBids.length > 0 && (
+              <JobBidsSegment jobBids={job.jobBids} />
+            )}
+            {isEmployer && <DeleteJobButton jobId={job.id} />}
           </Segment.Group>
         )}
       </Grid.Column>

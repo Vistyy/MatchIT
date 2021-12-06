@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211205184630_JobAttachmentsChange")]
+    partial class JobAttachmentsChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,7 +402,7 @@ namespace Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("JobId")
+                    b.Property<Guid>("JobId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("PortfolioItemId")
@@ -692,16 +694,14 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Job", "Job")
                         .WithMany("Attachments")
                         .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Domain.PortfolioItem", "PortfolioItem")
+                    b.HasOne("Domain.PortfolioItem", null)
                         .WithMany("Attachments")
-                        .HasForeignKey("PortfolioItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PortfolioItemId");
 
                     b.Navigation("Job");
-
-                    b.Navigation("PortfolioItem");
                 });
 
             modelBuilder.Entity("JobSkill", b =>

@@ -7,12 +7,18 @@ import ValidatedTextInput from "../../../app/common/form/ValidatedTextInput";
 import ValidatedTextArea from "../../../app/common/form/ValidatedTextArea";
 import FileAddWidget from "../../../app/common/fileUpload/FileAddWidget";
 import { observer } from "mobx-react-lite";
-import { runInAction } from "mobx";
 import RequiredJobSkills from "./RequiredJobSkills";
 
 export default observer(function AddJob() {
   const {
-    jobStore: { addJob, job, resetJob, requiredSkills, resetRequiredSkills },
+    jobStore: {
+      addJob,
+      job,
+      resetJob,
+      requiredSkills,
+      resetRequiredSkills,
+      loading,
+    },
     fileStore: { temporaryFiles, resetState },
   } = useStore();
 
@@ -27,9 +33,10 @@ export default observer(function AddJob() {
   }, [resetRequiredSkills]);
 
   useEffect(() => {
-      if(requiredSkills.length === 0) setDisableButton(true);
-      else setDisableButton(false);
-  }, [requiredSkills.length])
+    if (requiredSkills.length === 0) setDisableButton(true);
+    else setDisableButton(false);
+  }, [requiredSkills.length]);
+
   return (
     <>
       <Formik
@@ -40,8 +47,7 @@ export default observer(function AddJob() {
         }}
         onSubmit={(jobFormValues, { setErrors }) => {
           try {
-            addJob(jobFormValues, temporaryFiles);
-            resetState();
+            addJob(jobFormValues, temporaryFiles).then(resetState);
           } catch (error: any) {
             setErrors({ error });
           }
@@ -80,6 +86,7 @@ export default observer(function AddJob() {
                 type="submit"
                 className="positive--custom"
                 disabled={disableButton}
+                loading={loading}
               />
             </Segment>
           </Form>
