@@ -297,14 +297,13 @@ export default class JobStore {
   ) => {
     this.loading = true;
     try {
-      let uploadedCV;
-      if (cv) uploadedCV = await store.fileStore.uploadFile(cv);
+      const response = await store.fileStore.uploadFile(cv);
+      cv = response!;
       const jobBid: Partial<JobBid> = {
         description: jobBidDescription,
         fee: jobBidFee,
-        cv: uploadedCV,
+        cv: cv,
       };
-      console.log(jobBid.description, jobBid.fee);
       await agent.Jobs.addBid(this.job!.id, jobBid);
       runInAction(() => {
         this.loading = false;

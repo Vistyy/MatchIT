@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -9,6 +10,8 @@ import {
   Image,
   Label,
   Card,
+  Icon,
+  Menu,
 } from "semantic-ui-react";
 import FileUploadWidget from "../../../app/common/fileUpload/upload/FileUploadWidget";
 import PhotoUploadWidget from "../../../app/common/imageUpload/PhotoUploadWidget";
@@ -90,7 +93,18 @@ export default observer(function ProfileHeader() {
               </Item>
             </Item.Group>
           </Grid.Column>
-          <Grid.Column width="2" />
+          <Grid.Column width="2">
+            {profile.githubProfileUrl && (
+              <Menu.Item href={profile.githubProfileUrl} target="_blank">
+                <Icon name="github" size="big" link />
+              </Menu.Item>
+            )}
+            {profile.linkedInProfileUrl && (
+              <Menu.Item href={profile.linkedInProfileUrl} target="_blank">
+                <Icon name="linkedin" size="big" link />
+              </Menu.Item>
+            )}
+          </Grid.Column>
           <Grid.Column width="4">
             {!profile.cv ? (
               <>
@@ -105,23 +119,28 @@ export default observer(function ProfileHeader() {
                 )}
               </>
             ) : (
-              <Card className="file-thumbnail-card">
-                <Image
-                  src={
-                    profile.cv.url.endsWith(".pdf")
-                      ? profile.cv.url
-                          .slice()
-                          .replace(new RegExp(".pdf$"), ".png")
-                      : profile.cv.url
-                  }
-                  size={"small"}
-                  style={{ display: "inline-block" }}
-                />
-                <div
-                  className="overlay asAButton"
-                  onClick={() => openFilePreviewModal(profile.cv)}
-                ></div>
-              </Card>
+              <div
+                className="file-thumbnail-container"
+                style={{ float: "right" }}
+              >
+                <Card className="file-thumbnail-card">
+                  <Image
+                    src={
+                      profile.cv.url.endsWith(".pdf")
+                        ? profile.cv.url
+                            .slice()
+                            .replace(new RegExp(".pdf$"), ".png")
+                        : profile.cv.url
+                    }
+                    size={"small"}
+                    style={{ display: "inline-block" }}
+                  />
+                  <div
+                    className="overlay asAButton"
+                    onClick={() => openFilePreviewModal(profile.cv)}
+                  ></div>
+                </Card>
+              </div>
             )}
           </Grid.Column>
         </Grid>

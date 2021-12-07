@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Header, Image, Item, Popup } from "semantic-ui-react";
 import { Profile } from "../../models/profile";
-import UserRating from "./UserRating";
 
 interface Props {
     profile: Profile;
@@ -24,12 +23,12 @@ export default function ProfilePopup({profile}: Props) {
                       </Header>
                     </Header>
                   }
-                  content={
-                    <UserRating
-                      rating={profile.rating}
-                      disabled
-                    />
-                  }
+                  // content={
+                  //   <UserRating
+                  //     rating={profile.rating}
+                  //     disabled
+                  //   />
+                  // }
                   hoverable
                   trigger={
                     <Item.Header as="h4" style={{ display: "inline" }}>

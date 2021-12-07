@@ -35,6 +35,7 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
         }
         setEditMode(false);
       }}
+      onReset={(values, { resetForm }) => resetForm()}
       validationSchema={Yup.object({
         companyName: Yup.string().required(),
         companyPosition: Yup.string().required(),
@@ -83,6 +84,7 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
             disabled={!isValid}
           />
           <Button
+            type="reset"
             content="Cancel"
             size="big"
             style={{ fontSize: "1.35em" }}

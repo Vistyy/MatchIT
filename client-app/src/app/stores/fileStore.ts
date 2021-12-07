@@ -24,12 +24,16 @@ export default class FileStore {
 
   resetState = () => {
     this.temporaryFiles.clear();
-  }
+  };
 
   addFiles = (files: any[]) => {
     files.forEach((file) => {
       const fileId = uuid();
-      this.temporaryFiles.set(fileId, {id: fileId, url: file.preview, resourceType: file.type});
+      this.temporaryFiles.set(fileId, {
+        id: fileId,
+        url: file.preview,
+        resourceType: file.type,
+      });
     });
   };
 
@@ -45,9 +49,10 @@ export default class FileStore {
     try {
       const blob = await fetch(file.url).then((r) => r.blob());
       const response = await agent.Files.uploadFile(blob);
-      const uploadedFile = response.data;
+      file.id = response.data.id;
+      file.url = response.data.url;
       runInAction(() => (this.uploading = false));
-      return uploadedFile;
+      return file;
     } catch (error) {
       console.log(error);
       runInAction(() => (this.uploading = false));

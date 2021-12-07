@@ -9,6 +9,8 @@ namespace Application.Profiles
         public string UserName { get; set; }
         public string DisplayName { get; set; }
         public string Bio { get; set; }
+        public string GithubProfileUrl { get; set; }
+        public string LinkedInProfileUrl { get; set; }
         public Photo Image { get; set; }
         public UserFile CV { get; set; }
         public ICollection<Review> Reviews { get; set; }

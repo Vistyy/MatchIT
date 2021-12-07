@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Button, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
+import AccountLinksSegment from "../becomeExpertForm/segments/AccountLinksSegment";
 import CertificationSegment from "../becomeExpertForm/segments/CertificationSegment";
 import EducationSegment from "../becomeExpertForm/segments/EducationSegment";
 import EmploymentSegment from "../becomeExpertForm/segments/EmploymentSegment";
@@ -26,6 +27,9 @@ export default observer(function EditProfile({ setEditMode }: Props) {
   }
   return (
     <Segment.Group>
+      <Segment>
+        <AccountLinksSegment />
+      </Segment>
       <Segment style={{ paddingBottom: "4rem" }}>
         <SkillsSegment />
         <PortfolioSegment />

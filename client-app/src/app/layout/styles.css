@@ -278,6 +278,36 @@ a:link {
 .jobListItem-confirmDeleteModal .primary.button {
   background-color: #db2828 !important;
 }
+
 .jobListItem-confirmDeleteModal .primary.button:hover {
   background-color: rgb(255, 19, 19) !important;
+}
+
+.accountLink-input__disabled.field,
+.accountLink-input__disabled.field .disabled.field,
+.accountLink-input__disabled.field .input.disabled,
+.accountLink-input__disabled .input.disabled input {
+  opacity: 0.85 !important;
+}
+
+.loading--custom:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+  animation: ellipsis steps(4,end) 900ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 20px;    
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 20px;    
+  }
 }

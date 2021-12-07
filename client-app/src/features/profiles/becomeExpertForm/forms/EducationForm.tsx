@@ -34,6 +34,7 @@ export default observer(function EducationForm({ setEditMode }: Props) {
         }
         setEditMode(false);
       }}
+      onReset={(values, { resetForm }) => resetForm()}
       validationSchema={Yup.object({
         facilityName: Yup.string().required(),
         facilityLocation: Yup.string().required(),
@@ -81,6 +82,7 @@ export default observer(function EducationForm({ setEditMode }: Props) {
             disabled={!isValid}
           />
           <Button
+            type="reset"
             content="Cancel"
             size="big"
             style={{ fontSize: "1.35em" }}

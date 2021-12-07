@@ -113,6 +113,8 @@ const Profiles = {
   updateProfile: (profile: Partial<Profile>) =>
     requests.put(`/profiles`, profile),
   addCV: (cv: UserFile) => requests.put("/profiles/cv", cv),
+  addAccountLinks: (profile: Partial<Profile>) =>
+    requests.put("/profiles/accountLinks", profile),
 };
 
 const Files = {

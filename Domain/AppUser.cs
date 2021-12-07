@@ -8,6 +8,8 @@ namespace Domain
     {
         public string DisplayName { get; set; }
         public string Bio { get; set; }
+        public string GithubProfileUrl { get; set; }
+        public string LinkedInProfileUrl { get; set; }
         public Photo Photo { get; set; }
         public ICollection<Review> ReviewsGiven { get; set; } = new List<Review>();
         public ICollection<Review> ReviewsReceived { get; set; } = new List<Review>();

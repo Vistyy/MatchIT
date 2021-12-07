@@ -2,7 +2,6 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Item, Segment } from "semantic-ui-react";
-import UserRating from "../../../app/common/profile/UserRating";
 import { Profile } from "../../../app/models/profile";
 import { useStore } from "../../../app/stores/store";
 
@@ -29,7 +28,7 @@ export default observer(function ExpertListItem({ expert }: Props) {
                 {expert.userName}
               </Item.Header>
               <Item.Description>{expert.bio}</Item.Description>
-              <UserRating rating={expert.rating} disabled />
+              {/* <UserRating rating={expert.rating} disabled /> */}
             </Item.Content>
           </Item>
         </Item.Group>

@@ -26,5 +26,12 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new AddCV.Command { CV = cv }));
         }
+
+        [HttpPut("accountLinks")]
+        public async Task<IActionResult> AddAccountLinks(AddAccountLinks.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+
+        }
     }
 }

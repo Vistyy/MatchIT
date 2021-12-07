@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Dimmer, Header, Icon, Loader } from "semantic-ui-react";
+import { Header, Icon } from "semantic-ui-react";
 import LoadingComponent from "../../../layout/LoadingComponent";
 import { useStore } from "../../../stores/store";
 
@@ -51,7 +51,7 @@ export default observer(function FileUploadWidgetDropzone({
       <input {...getInputProps()} />
       {!uploading ? (
         <>
-          <Icon name="upload" size="huge"/>
+          <Icon name="upload" size="huge" />
           <Header content={`Drop files here (max. 1)`} />
         </>
       ) : (

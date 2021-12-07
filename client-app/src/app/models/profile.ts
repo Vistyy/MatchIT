@@ -5,6 +5,8 @@ export interface Profile {
   userName: string;
   displayName: string;
   image?: Photo;
+  githubProfileUrl: string;
+  linkedInProfileUrl: string;
   bio?: string;
   location: string;
   dateJoined: Date;
@@ -119,4 +121,9 @@ export interface UserFile {
   id: string;
   url: string;
   resourceType: string;
+}
+
+export interface AccountLinksFormValues {
+  githubProfileUrl: string;
+  linkedInProfileUrl: string;
 }

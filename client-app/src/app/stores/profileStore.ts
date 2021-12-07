@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import {
+  AccountLinksFormValues,
   Certification,
   CertificationFormValues,
   EducationFormValues,
@@ -22,6 +23,7 @@ import { v4 as uuid } from "uuid";
 export default class ProfileStore {
   profile: Profile | null = null;
   loadingProfile = false;
+  loadingLinks = false;
   uploading = false;
   loading = false;
 
@@ -96,12 +98,12 @@ export default class ProfileStore {
         resourceType: file.type,
         url: file.preview,
       };
-      console.log("beforecv");
-      const uploadedCV = await store.fileStore.uploadFile(cv);
-      await agent.Profiles.addCV(uploadedCV!);
-      console.log("afteraddcv");
+      const response = await store.fileStore.uploadFile(cv);
+      cv.id = response!.id;
+      cv.url = response!.url;
+      await agent.Profiles.addCV(cv);
       runInAction(() => {
-        this.profile!.cv = uploadedCV!;
+        this.profile!.cv = cv;
         this.uploading = false;
       });
     } catch (error) {
@@ -119,13 +121,13 @@ export default class ProfileStore {
             item.attachments.map(async (attachment) => {
               if (attachment.url.startsWith("blob:")) {
                 const response = await store.fileStore.uploadFile(attachment);
-                attachment.url = response!.url;
-                attachment.id = response!.id;
+                attachment = response!;
               }
             })
           );
         })
       );
+      runInAction(() => (this.loading = false));
       return portfolioItems;
     } catch (error) {
       console.log(error);
@@ -144,6 +146,27 @@ export default class ProfileStore {
       runInAction(() => {
         this.profile = { ...this.profile, ...(profile as Profile) };
         this.loading = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  addAccountLinks = async ({
+    githubProfileUrl,
+    linkedInProfileUrl,
+  }: AccountLinksFormValues) => {
+    this.loadingLinks = true;
+    try {
+      const profile: Partial<Profile> = {
+        githubProfileUrl,
+        linkedInProfileUrl,
+      };
+      await agent.Profiles.addAccountLinks(profile);
+      runInAction(() => {
+        this.profile = { ...this.profile, ...(profile as Profile) };
+        this.loadingLinks = false;
       });
     } catch (error) {
       console.log(error);

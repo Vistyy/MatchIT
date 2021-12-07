@@ -26,6 +26,8 @@ export default function ValidatedTextInput(props: Props) {
         <Label basic color="red">
           {meta.error.includes("required field")
             ? `${props.errorElementName} is required`
+            : meta.error.includes("must match")
+            ? `Link must be a ${props.errorElementName}`
             : `${meta.error.replace(props.name, props.errorElementName)}`}
         </Label>
       ) : null}
