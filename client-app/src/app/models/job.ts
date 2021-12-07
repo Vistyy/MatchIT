@@ -1,4 +1,3 @@
-import { PagingParams } from "./pagination";
 import { Profile, Skill, UserFile } from "./profile";
 
 export interface Job {
@@ -23,4 +22,10 @@ export interface JobBid {
   description: string;
   fee: number;
   bidder: Profile;
+  cv: UserFile;
+}
+
+export interface JobBidFormValues {
+  jobBidDescription: string;
+  jobBidFee: number;
 }

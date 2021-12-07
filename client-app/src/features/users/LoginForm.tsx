@@ -24,11 +24,12 @@ export default observer(function LoginForm() {
             color="teal"
             textAlign="center"
           />
-          <ValidatedTextInput name="email" placeholder="Email" />
+          <ValidatedTextInput name="email" placeholder="Email" errorElementName="Email"/>
           <ValidatedTextInput
             name="password"
             placeholder="Password"
             type="password"
+            errorElementName="Password"
           />
           <ErrorMessage
             name="error"

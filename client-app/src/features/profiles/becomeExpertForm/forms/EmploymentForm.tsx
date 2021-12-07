@@ -42,24 +42,36 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
         jobDescription: Yup.string().required(),
       })}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit , isValid}) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="companyName"
             placeholder="Company Name"
             label="Company Name"
+            errorElementName="Company Name"
           />
           <ValidatedTextInput
             name="companyPosition"
             placeholder="Role in the company"
             label="Role in the company"
+            errorElementName="Role in the company"
           />
-          <ValidatedDatePicker name="employedFrom" label="Employed From" />
-          <ValidatedDatePicker name="employedTo" label="Employed To" optional />
+          <ValidatedDatePicker
+            name="employedFrom"
+            label="Employed From"
+            errorElementName="Employed From"
+          />
+          <ValidatedDatePicker
+            name="employedTo"
+            label="Employed To"
+            optional
+            errorElementName="Employed To"
+          />
           <ValidatedTextArea
             name="jobDescription"
             label="Job Description"
             placeholder="Job Description"
+            errorElementName="Job Description"
             rows={5}
           />
           <Button
@@ -68,6 +80,7 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
             style={{ fontSize: "1.35em" }}
             type="submit"
             className="positive--custom"
+            disabled={!isValid}
           />
           <Button
             content="Cancel"

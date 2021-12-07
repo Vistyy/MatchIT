@@ -99,6 +99,7 @@ export default class ExpertStore {
     this.loadingExperts = true;
     try {
       const result = await agent.Experts.list(this.axiosParams);
+      console.log("balls");
       result.data.forEach((expert) => {
         this.setExpert(expert);
       });

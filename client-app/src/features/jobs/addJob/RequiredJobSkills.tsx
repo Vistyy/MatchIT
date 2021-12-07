@@ -5,7 +5,13 @@ import { Header, Label, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import JobSkillSearchInput from "./JobSkillSearchInput";
 
-export default observer(function RequiredJobSkills() {
+interface Props {
+  setDisableButton: (disableButton: boolean) => void;
+}
+
+export default observer(function RequiredJobSkills({
+  setDisableButton,
+}: Props) {
   const {
     jobStore: {
       removeRequiredSkill,
@@ -18,6 +24,10 @@ export default observer(function RequiredJobSkills() {
     },
   } = useStore();
   const [removedSkill, setRemovedSkill] = useState(false);
+
+  useEffect(() => {
+    setDisableButton(removedSkill && requiredSkills.length === 0);
+  }, [removedSkill, requiredSkills.length, setDisableButton]);
 
   useEffect(() => {
     loadAllSkills().then(getSkillNames);
@@ -67,7 +77,11 @@ export default observer(function RequiredJobSkills() {
           />
         )}
       </Segment>
-      <JobSkillSearchInput source={skillNames} loadingSkills={loadingSkills} />
+      <JobSkillSearchInput
+        source={skillNames}
+        loadingSkills={loadingSkills}
+        setRemovedSkill={setRemovedSkill}
+      />
     </>
   );
 });

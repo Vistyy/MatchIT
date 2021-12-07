@@ -18,6 +18,7 @@ export default observer(function JobDashboard() {
     pagination,
     loadingJobs,
     resetState,
+    loadingSkills,
   } = jobStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(false);
@@ -33,11 +34,15 @@ export default observer(function JobDashboard() {
   }, [resetState]);
 
   useEffect(() => {
-    if (jobArray.length <= 0 && !loadingJobs && !loadingInitial) {
+    if (
+      jobArray.length <= 0 &&
+      !loadingJobs &&
+      (!loadingInitial || loadingSkills)
+    ) {
       loadJobs();
       setLoadingInitial(true);
     }
-  }, [jobArray.length, loadJobs, loadingInitial, loadingJobs]);
+  }, [jobArray.length, loadJobs, loadingInitial, loadingJobs, loadingSkills]);
 
   return (
     <Grid>

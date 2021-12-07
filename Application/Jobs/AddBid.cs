@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
-using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,66 +12,58 @@ using Persistence;
 
 namespace Application.Jobs
 {
-    public class Add
+    public class AddBid
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; }
-            public string Title { get; set; }
+            public Guid JobId { get; set; }
             public string Description { get; set; }
-            public ICollection<UserFile> Attachments { get; set; }
-            public bool IsActive { get; set; }
-            public ICollection<Skill> RequiredSkills { get; set; }
+            public double Fee { get; set; }
+            public UserFile CV { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            private readonly IFileAccessor _fileAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor, IFileAccessor fileAccessor)
             {
+                _fileAccessor = fileAccessor;
                 _userAccessor = userAccessor;
                 _context = context;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if(request.RequiredSkills.Count == 0) return null;
-                
                 var user = await _context.Users
-                .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+                .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
 
                 if (user == null) return null;
 
-                var skills = new List<Skill>();
+                var job = await _context.Jobs
+                .Include(j => j.JobBids)
+                .FirstOrDefaultAsync(j => j.Id == request.JobId);
 
-                foreach (Skill reqSkill in request.RequiredSkills)
+                if (job == null) return null;
+
+                Console.WriteLine(request.Description);
+
+                var jobBid = new JobBid
                 {
-                    var skill = await _context.Skills.FirstOrDefaultAsync(s => s.Id == reqSkill.Id);
-                    skills.Add(skill);
-                }
-
-
-                var job = new Job
-                {
-                    Id = request.Id,
-                    Title = request.Title,
+                    Bidder = user,
+                    Job = job,
                     Description = request.Description,
-                    Attachments = request.Attachments,
-                    IsActive = request.IsActive,
-                    CreationTime = DateTime.UtcNow,
-                    RequiredSkills = skills,
-                    Employer = user
+                    Fee = request.Fee,
                 };
 
-                _context.Jobs.Add(job);
+                job.JobBids.Add(jobBid);
 
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (result) return Result<Unit>.Success(Unit.Value);
 
                 return Result<Unit>.Failure("Problem adding job");
-
             }
         }
     }

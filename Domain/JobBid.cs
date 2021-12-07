@@ -10,6 +10,6 @@ namespace Domain
         public Guid JobId { get; set; }
         public Job Job { get; set; }
         public string Description { get; set; }
-        public int Fee { get; set; }
+        public double Fee { get; set; }
     }
 }

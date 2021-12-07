@@ -40,13 +40,26 @@ export default observer(function RegisterForm() {
             color="teal"
             textAlign="center"
           />
-          <ValidatedTextInput name="displayName" placeholder="Display Name" />
-          <ValidatedTextInput name="userName" placeholder="Username" />
-          <ValidatedTextInput name="email" placeholder="Email" />
+          <ValidatedTextInput
+            name="displayName"
+            placeholder="Display Name"
+            errorElementName="Display Name"
+          />
+          <ValidatedTextInput
+            name="userName"
+            placeholder="Username"
+            errorElementName="Username"
+          />
+          <ValidatedTextInput
+            name="email"
+            placeholder="Email"
+            errorElementName="Email"
+          />
           <ValidatedTextInput
             name="password"
             placeholder="Password"
             type="password"
+            errorElementName="Password"
           />
           <ErrorMessage
             name="error"

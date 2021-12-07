@@ -1,5 +1,6 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { v4 as uuid } from "uuid";
+import agent from "../api/agent";
 import { UserFile } from "../models/profile";
 import { Modal } from "./modalStore";
 
@@ -15,6 +16,7 @@ export default class FileStore {
     file: undefined,
   };
   temporaryFiles = new Map<string, UserFile>();
+  uploading = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -36,6 +38,20 @@ export default class FileStore {
       URL.revokeObjectURL(this.temporaryFiles.get(fileToDeleteId)!.url);
       this.temporaryFiles.delete(fileToDeleteId);
     });
+  };
+
+  uploadFile = async (file: UserFile) => {
+    this.uploading = true;
+    try {
+      const blob = await fetch(file.url).then((r) => r.blob());
+      const response = await agent.Files.uploadFile(blob);
+      const uploadedFile = response.data;
+      runInAction(() => (this.uploading = false));
+      return uploadedFile;
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.uploading = false));
+    }
   };
 
   openFilePreviewModal = (

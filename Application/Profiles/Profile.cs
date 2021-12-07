@@ -10,6 +10,7 @@ namespace Application.Profiles
         public string DisplayName { get; set; }
         public string Bio { get; set; }
         public Photo Image { get; set; }
+        public UserFile CV { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public string Location { get; set; }
         public DateTime CreationTime { get; set; }

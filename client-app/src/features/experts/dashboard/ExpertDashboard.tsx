@@ -17,7 +17,7 @@ export default observer(function ExpertDashboard() {
     setPagingParams,
     pagination,
     loadingExperts,
-    resetState,
+    resetState, loadingSkills
   } = expertStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(false);
@@ -33,11 +33,11 @@ export default observer(function ExpertDashboard() {
   }, [resetState]);
 
   useEffect(() => {
-    if (expertArray.length === 0 && !loadingExperts && !loadingInitial) {
+    if (expertArray.length === 0 && !loadingExperts && (!loadingInitial || loadingSkills)) {
       loadExperts();
       setLoadingInitial(true);
     }
-  }, [expertArray.length, loadExperts, loadingExperts, loadingInitial]);
+  }, [expertArray.length, loadExperts, loadingExperts, loadingInitial, loadingSkills]);
 
   return (
     <Grid>

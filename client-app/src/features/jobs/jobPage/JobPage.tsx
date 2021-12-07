@@ -1,11 +1,13 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Grid, Segment } from "semantic-ui-react";
+import { NavLink } from "react-router-dom";
+import { Button, Grid, Header, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import DeleteJobButton from "../DeleteJobButton";
 import JobAttachmentsSegment from "./JobAttachmentsSegment";
+import JobBidForm from "./jobBid/JobBidForm";
 import JobBidsSegment from "./JobBidsSegment";
 import JobDetailsSegment from "./JobDetailsSegment";
 
@@ -13,7 +15,9 @@ export default observer(function JobPage() {
   const { id } = useParams<{ id: string }>();
   const {
     jobStore: { loadJob, loadingJob, job, resetState, isEmployer },
+    userStore: { user },
   } = useStore();
+  const [addJobBidMode, setAddJobBidMode] = useState(false);
 
   useEffect(() => {
     resetState();
@@ -35,6 +39,33 @@ export default observer(function JobPage() {
               <JobBidsSegment jobBids={job.jobBids} />
             )}
             {isEmployer && <DeleteJobButton jobId={job.id} />}
+            {!isEmployer && (
+              <Segment>
+                {user?.isExpert ? (
+                  <>
+                    <Header content="Interested? Make an offer:" />
+                    <Button
+                      content="Bid on the job"
+                      onClick={() => setAddJobBidMode(true)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Header content="Want to make an offer?" />
+                    <Button
+                      content="Become an Expert"
+                      as={NavLink}
+                      to="/becomeExpert"
+                    />
+                  </>
+                )}
+              </Segment>
+            )}
+            {addJobBidMode && (
+              <Segment style={{ padding: "20px 40px" }}>
+                <JobBidForm setEditMode={setAddJobBidMode} />
+              </Segment>
+            )}
           </Segment.Group>
         )}
       </Grid.Column>

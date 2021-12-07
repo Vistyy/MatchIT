@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Grid,
@@ -8,17 +8,27 @@ import {
   Transition,
   Image,
   Label,
+  Card,
 } from "semantic-ui-react";
+import FileUploadWidget from "../../../app/common/fileUpload/upload/FileUploadWidget";
 import PhotoUploadWidget from "../../../app/common/imageUpload/PhotoUploadWidget";
 import { useStore } from "../../../app/stores/store";
 
 export default observer(function ProfileHeader() {
   const {
     modalStore,
-    profileStore: { uploadPhoto, deletePhoto, isCurrentUser, profile },
+    profileStore: { uploadPhoto, deletePhoto, isCurrentUser, profile, addCV },
     userStore: { isLoggedIn },
+    fileStore: { openFilePreviewModal },
   } = useStore();
   const [visible, setVisible] = useState(false);
+  const [addCVMode, setAddCVMode] = useState(false);
+
+  useEffect(() => {
+    if (profile && profile.cv) {
+      setAddCVMode(false);
+    }
+  }, [profile, profile?.cv]);
 
   function handlePhotoChange(file: Blob) {
     if (isLoggedIn()) {
@@ -38,7 +48,7 @@ export default observer(function ProfileHeader() {
     <Segment>
       {profile && (
         <Grid>
-          <Grid.Column width="12">
+          <Grid.Column width="10">
             <Item.Group>
               <Item
                 onMouseEnter={() => setVisible(true)}
@@ -80,7 +90,40 @@ export default observer(function ProfileHeader() {
               </Item>
             </Item.Group>
           </Grid.Column>
-          <Grid.Column width="4"></Grid.Column>
+          <Grid.Column width="2" />
+          <Grid.Column width="4">
+            {!profile.cv ? (
+              <>
+                {!addCVMode ? (
+                  <Button
+                    content="Add CV"
+                    floated="right"
+                    onClick={() => setAddCVMode(true)}
+                  />
+                ) : (
+                  <FileUploadWidget uploadFile={addCV} />
+                )}
+              </>
+            ) : (
+              <Card className="file-thumbnail-card">
+                <Image
+                  src={
+                    profile.cv.url.endsWith(".pdf")
+                      ? profile.cv.url
+                          .slice()
+                          .replace(new RegExp(".pdf$"), ".png")
+                      : profile.cv.url
+                  }
+                  size={"small"}
+                  style={{ display: "inline-block" }}
+                />
+                <div
+                  className="overlay asAButton"
+                  onClick={() => openFilePreviewModal(profile.cv)}
+                ></div>
+              </Card>
+            )}
+          </Grid.Column>
         </Grid>
       )}
     </Segment>

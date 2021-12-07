@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Job, JobFormValues } from "../models/job";
+import { Job, JobBid, JobBidFormValues, JobFormValues } from "../models/job";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Skill, UserFile } from "../models/profile";
 import { store } from "./store";
@@ -244,29 +244,14 @@ export default class JobStore {
     } as SkillSearchItem);
   };
 
-  uploadFile = async (file: UserFile) => {
-    this.uploading = true;
-    try {
-      const blob = await fetch(file.url).then((r) => r.blob());
-      const response = await agent.Profiles.uploadFile(blob);
-      const uploadedFile = response.data;
-      runInAction(() => (this.uploading = false));
-      return uploadedFile;
-    } catch (error) {
-      console.log(error);
-      runInAction(() => (this.uploading = false));
-    }
-  };
-
   uploadJobAttachments = async (jobAttachments: UserFile[]) => {
     this.uploading = true;
     try {
       await Promise.all(
         jobAttachments.map(async (attachment) => {
           if (attachment.url.startsWith("blob:")) {
-            const response = await this.uploadFile(attachment);
-            attachment.url = response!.url;
-            attachment.id = response!.id;
+            const response = await store.fileStore.uploadFile(attachment);
+            attachment = response!;
           }
         })
       );
@@ -299,6 +284,31 @@ export default class JobStore {
       runInAction(() => {
         this.loading = false;
         history.push(`/jobs/${job.id}`);
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  addJobBid = async (
+    { jobBidDescription, jobBidFee }: JobBidFormValues,
+    cv: UserFile
+  ) => {
+    this.loading = true;
+    try {
+      let uploadedCV;
+      if (cv) uploadedCV = await store.fileStore.uploadFile(cv);
+      const jobBid: Partial<JobBid> = {
+        description: jobBidDescription,
+        fee: jobBidFee,
+        cv: uploadedCV,
+      };
+      console.log(jobBid.description, jobBid.fee);
+      await agent.Jobs.addBid(this.job!.id, jobBid);
+      runInAction(() => {
+        this.loading = false;
+        history.push(`/jobs/${this.job!.id}`);
       });
     } catch (error) {
       console.log(error);

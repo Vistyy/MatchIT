@@ -36,20 +36,26 @@ export default observer(function CertificationForm({ setEditMode }: Props) {
         dateAcquired: Yup.date().required(),
       })}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, isValid }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="certificateName"
             placeholder="Certificate Name"
             label="Certificate Name"
+            errorElementName="Certificate Name"
           />
-          <ValidatedDatePicker name='dateAcquired' label='Date Acquired' />
+          <ValidatedDatePicker
+            name="dateAcquired"
+            label="Date Acquired"
+            errorElementName="Date Acquired"
+          />
           <Button
             content="Add"
             size="big"
             style={{ fontSize: "1.35em" }}
             type="submit"
             className="positive--custom"
+            disabled={!isValid}
           />
           <Button
             content="Cancel"

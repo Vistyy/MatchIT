@@ -5,7 +5,7 @@ import { useStore } from "../../../app/stores/store";
 import * as Yup from "yup";
 import ValidatedTextInput from "../../../app/common/form/ValidatedTextInput";
 import ValidatedTextArea from "../../../app/common/form/ValidatedTextArea";
-import FileAddWidget from "../../../app/common/fileUpload/FileAddWidget";
+import FileAddWidget from "../../../app/common/fileUpload/add/FileAddWidget";
 import { observer } from "mobx-react-lite";
 import RequiredJobSkills from "./RequiredJobSkills";
 
@@ -57,7 +57,7 @@ export default observer(function AddJob() {
           jobDescription: Yup.string().required(),
         })}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isValid }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
             <Segment style={{ padding: "20px 40px" }}>
               <Grid>
@@ -66,14 +66,16 @@ export default observer(function AddJob() {
                     name="jobTitle"
                     placeholder="Job Title"
                     label="Job Title"
+                    errorElementName="Job Title"
                   />
                   <ValidatedTextArea
                     name="jobDescription"
                     placeholder="Job Description"
                     label="Job Description"
+                    errorElementName="Job Description"
                     rows={3}
                   />
-                  <RequiredJobSkills />
+                  <RequiredJobSkills setDisableButton={setDisableButton} />
                 </Grid.Column>
               </Grid>
               <Grid>
@@ -85,7 +87,7 @@ export default observer(function AddJob() {
                 style={{ fontSize: "1.35em", marginTop: "50px" }}
                 type="submit"
                 className="positive--custom"
-                disabled={disableButton}
+                disabled={disableButton || !isValid}
                 loading={loading}
               />
             </Segment>

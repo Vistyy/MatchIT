@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Confirm, Item, Segment } from "semantic-ui-react";
+import { Button, Item, Segment } from "semantic-ui-react";
 import ProfilePopup from "../../../app/common/profile/ProfilePopup";
 import { Job } from "../../../app/models/job";
 import { useStore } from "../../../app/stores/store";

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { Button, Grid, Input, Segment } from "semantic-ui-react";
-import FileAddWidget from "../../../../app/common/fileUpload/FileAddWidget";
+import { Button, Grid, Input } from "semantic-ui-react";
+import FileAddWidget from "../../../../app/common/fileUpload/add/FileAddWidget";
 import { useStore } from "../../../../app/stores/store";
 
 interface Props {

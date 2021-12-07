@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211206111833_JobBidCV")]
+    partial class JobBidCV
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,9 +42,6 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Bio")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CVId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -108,8 +107,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CVId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -281,6 +278,9 @@ namespace Persistence.Migrations
                     b.Property<string>("BidderId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CVId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
@@ -293,6 +293,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BidderId");
+
+                    b.HasIndex("CVId");
 
                     b.HasIndex("JobId");
 
@@ -586,15 +588,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
-                    b.HasOne("Domain.UserFile", "CV")
-                        .WithMany()
-                        .HasForeignKey("CVId");
-
                     b.HasOne("Domain.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId");
-
-                    b.Navigation("CV");
 
                     b.Navigation("Photo");
                 });
@@ -656,6 +652,10 @@ namespace Persistence.Migrations
                         .HasForeignKey("BidderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Domain.UserFile", "CV")
+                        .WithMany()
+                        .HasForeignKey("CVId");
+
                     b.HasOne("Domain.Job", "Job")
                         .WithMany("JobBids")
                         .HasForeignKey("JobId")
@@ -663,6 +663,8 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Bidder");
+
+                    b.Navigation("CV");
 
                     b.Navigation("Job");
                 });

@@ -9,8 +9,13 @@ export default observer(function SkillsSegment() {
   const { expertStore, profileStore } = useStore();
   const [removedSkill, setRemovedSkill] = useState(false);
 
-  const { loadAllSkills, skillNames, skillRegistry, getSkillNames, loadingSkills } =
-    expertStore;
+  const {
+    loadAllSkills,
+    skillNames,
+    skillRegistry,
+    getSkillNames,
+    loadingSkills,
+  } = expertStore;
 
   const { profile, removeSkill } = profileStore;
 
@@ -62,7 +67,11 @@ export default observer(function SkillsSegment() {
           />
         )}
       </Segment>
-      <SkillSearchInput source={skillNames} loadingSkills={loadingSkills} />
+      <SkillSearchInput
+        source={skillNames}
+        loadingSkills={loadingSkills}
+        setRemovedSkill={setRemovedSkill}
+      />
     </>
   );
 });

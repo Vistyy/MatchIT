@@ -39,5 +39,12 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
+
+        [HttpPost("{id}/bid")]
+        public async Task<IActionResult> AddBid(Guid id, AddBid.Command command)
+        {
+            command.JobId = id;
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }

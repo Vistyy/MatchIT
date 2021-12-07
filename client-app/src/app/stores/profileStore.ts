@@ -88,16 +88,25 @@ export default class ProfileStore {
     }
   };
 
-  uploadFile = async (file: UserFile) => {
+  addCV = async (file: any) => {
     this.uploading = true;
     try {
-      const blob = await fetch(file.url).then((r) => r.blob());
-      const response = await agent.Profiles.uploadFile(blob);
-      const uploadedFile = response.data;
-      return uploadedFile;
+      const cv: UserFile = {
+        id: uuid(),
+        resourceType: file.type,
+        url: file.preview,
+      };
+      console.log("beforecv");
+      const uploadedCV = await store.fileStore.uploadFile(cv);
+      await agent.Profiles.addCV(uploadedCV!);
+      console.log("afteraddcv");
+      runInAction(() => {
+        this.profile!.cv = uploadedCV!;
+        this.uploading = false;
+      });
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.uploading = false));
     }
   };
 
@@ -109,7 +118,7 @@ export default class ProfileStore {
           await Promise.all(
             item.attachments.map(async (attachment) => {
               if (attachment.url.startsWith("blob:")) {
-                const response = await this.uploadFile(attachment);
+                const response = await store.fileStore.uploadFile(attachment);
                 attachment.url = response!.url;
                 attachment.id = response!.id;
               }
@@ -156,7 +165,7 @@ export default class ProfileStore {
       title: skill.name,
     } as SkillSearchItem);
   };
-  
+
   addPortfolioItem = (files: Map<string, any>, description: string) => {
     const portfolioFiles: UserFile[] = [];
     files.forEach((file) => portfolioFiles.push(file));

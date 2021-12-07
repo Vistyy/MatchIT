@@ -38,22 +38,25 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
         formattedText: Yup.string().required(),
       })}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, isValid }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="title"
             placeholder="Experience Name"
             label="Experience Name"
+            errorElementName="Experience Name"
           />
           <ValidatedTextInput
             name="summary"
             placeholder="Summary"
             label="Summary"
+            errorElementName="Summary"
           />
           <ValidatedTextArea
             name="formattedText"
             label="Description"
             placeholder="Description"
+            errorElementName="Description"
             rows={5}
           />
           <Button
@@ -62,6 +65,7 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
             style={{ fontSize: "1.35em" }}
             type="submit"
             className="positive--custom"
+            disabled={!isValid}
           />
           <Button
             content="Cancel"

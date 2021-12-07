@@ -41,31 +41,36 @@ export default observer(function EducationForm({ setEditMode }: Props) {
         studyingFrom: Yup.date().required(),
       })}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, isValid }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="facilityName"
             placeholder="Facility Name"
             label="Facility Name"
+            errorElementName="Facility Name"
           />
           <ValidatedTextInput
             name="facilityLocation"
             placeholder="Facility Location"
             label="Facility Location"
+            errorElementName="Facility Location"
           />
           <ValidatedTextInput
             name="fieldOfStudy"
             placeholder="Field Of Study"
             label="Field Of Study"
+            errorElementName="Field of Study"
           />
           <ValidatedDatePicker
             name="studyingFrom"
             label="Attending From"
+            errorElementName="Attending From"
           />
           <ValidatedDatePicker
             name="studyingTo"
             label="Attending To"
             optional
+            errorElementName="Attending To"
           />
           <Button
             content="Add"
@@ -73,6 +78,7 @@ export default observer(function EducationForm({ setEditMode }: Props) {
             style={{ fontSize: "1.35em" }}
             type="submit"
             className="positive--custom"
+            disabled={!isValid}
           />
           <Button
             content="Cancel"

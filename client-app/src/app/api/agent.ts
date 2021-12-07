@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
-import { Job } from "../models/job";
+import { Job, JobBid } from "../models/job";
 import { PaginatedResult } from "../models/pagination";
 import { Photo, Profile, Skill, UserFile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
@@ -110,6 +110,12 @@ const Profiles = {
     });
   },
   deletePhoto: (id: string) => requests.del(`/photos/${id}`),
+  updateProfile: (profile: Partial<Profile>) =>
+    requests.put(`/profiles`, profile),
+  addCV: (cv: UserFile) => requests.put("/profiles/cv", cv),
+};
+
+const Files = {
   uploadFile: (file: Blob) => {
     let formData = new FormData();
     formData.append("File", file);
@@ -117,8 +123,6 @@ const Profiles = {
       headers: { "Content-type": "multipart/form-data" },
     });
   },
-  updateProfile: (profile: Partial<Profile>) =>
-    requests.put(`/profiles`, profile),
 };
 
 const Experts = {
@@ -145,7 +149,9 @@ const Jobs = {
       .get<PaginatedResult<Job[]>>(`/jobs/user/${userName}`, { params })
       .then(responseBody),
   add: (job: Partial<Job>) => requests.post("/jobs", job),
-  delete: (id: string) => requests.del(`/jobs/${id}`)
+  delete: (id: string) => requests.del(`/jobs/${id}`),
+  addBid: (jobId: string, jobBid: Partial<JobBid>) =>
+    requests.post(`/jobs/${jobId}/bid`, jobBid),
 };
 
 const agent = {
@@ -154,6 +160,7 @@ const agent = {
   Experts,
   Skills,
   Jobs,
+  Files,
 };
 
 export default agent;

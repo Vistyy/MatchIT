@@ -10,13 +10,22 @@ import { useStore } from "../../../app/stores/store";
 interface Props {
   source: SkillSearchItem[];
   loadingSkills: boolean;
+  setRemovedSkill: (removedSkill: boolean) => void;
 }
 
 export default observer(function JobSkillSearchInput({
   source,
   loadingSkills,
+  setRemovedSkill,
 }: Props) {
-    const {jobStore: {addRequiredSkill, removeRequiredSkill, requiredSkills, skillRegistry}} = useStore();
+  const {
+    jobStore: {
+      addRequiredSkill,
+      removeRequiredSkill,
+      requiredSkills,
+      skillRegistry,
+    },
+  } = useStore();
   const initialState: State = {
     loading: true,
     results: [],
@@ -85,6 +94,7 @@ export default observer(function JobSkillSearchInput({
       value={value}
       minCharacters={0}
       selectFirstResult
+      onBlur={() => setRemovedSkill(true)}
     />
   );
 });

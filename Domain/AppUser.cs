@@ -14,7 +14,8 @@ namespace Domain
         public int RatingSum { get; set; }
         public int RatingCount { get; set; }
         public string Location { get; set; }
-        public DateTime CreationTime { get; set; }
+        public UserFile CV { get; set; }
+        public DateTime CreationTime { get; private set; } = DateTime.UtcNow;
         public ICollection<Job> PostedJobs { get; set; } = new List<Job>();
         public ICollection<JobBid> JobBids { get; set; } = new List<JobBid>();
         public ICollection<PortfolioItem> Portfolio { get; set; } = new List<PortfolioItem>();

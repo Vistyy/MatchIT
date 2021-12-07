@@ -12,6 +12,7 @@ export interface Profile {
   reviews: Review[];
   skills: Skill[];
   rating: number;
+  cv: UserFile;
   portfolio: PortfolioItem[];
   employment: EmploymentItem[];
   experience: ExperienceItem[];
