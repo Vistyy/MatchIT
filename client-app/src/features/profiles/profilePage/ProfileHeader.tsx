@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -20,7 +19,7 @@ import { useStore } from "../../../app/stores/store";
 export default observer(function ProfileHeader() {
   const {
     modalStore,
-    profileStore: { uploadPhoto, deletePhoto, isCurrentUser, profile, addCV },
+    profileStore: { uploadProfilePhoto, isCurrentUser, profile, addCV },
     userStore: { isLoggedIn },
     fileStore: { openFilePreviewModal },
   } = useStore();
@@ -35,13 +34,7 @@ export default observer(function ProfileHeader() {
 
   function handlePhotoChange(file: Blob) {
     if (isLoggedIn()) {
-      if (profile!.image) {
-        deletePhoto(profile!.image)
-          .then(() => uploadPhoto(file))
-          .then(() => modalStore.closeModal());
-      } else {
-        uploadPhoto(file).then(() => modalStore.closeModal());
-      }
+      uploadProfilePhoto(file);
     } else {
       modalStore.closeModal();
     }
@@ -59,7 +52,7 @@ export default observer(function ProfileHeader() {
               >
                 <Item.Image size="small">
                   <Image
-                    src={profile.image?.url || "/assets/user.png"}
+                    src={profile.photo?.url || "/assets/user.png"}
                     style={{
                       border: "1px solid #eaeaea",
                     }}
@@ -96,12 +89,17 @@ export default observer(function ProfileHeader() {
           <Grid.Column width="2">
             {profile.githubProfileUrl && (
               <Menu.Item href={profile.githubProfileUrl} target="_blank">
-                <Icon name="github" size="big" link />
+                <Icon name="github" size="big" link style={{ color: "#000" }} />
               </Menu.Item>
             )}
             {profile.linkedInProfileUrl && (
               <Menu.Item href={profile.linkedInProfileUrl} target="_blank">
-                <Icon name="linkedin" size="big" link />
+                <Icon
+                  name="linkedin"
+                  size="big"
+                  link
+                  style={{ color: "#0077b5" }}
+                />
               </Menu.Item>
             )}
           </Grid.Column>
@@ -115,32 +113,54 @@ export default observer(function ProfileHeader() {
                     onClick={() => setAddCVMode(true)}
                   />
                 ) : (
-                  <FileUploadWidget uploadFile={addCV} />
+                  <>
+                    <Button
+                      content="Cancel"
+                      onClick={() => setAddCVMode(false)}
+                    />
+                    <FileUploadWidget uploadFile={addCV} />
+                  </>
                 )}
               </>
             ) : (
-              <div
-                className="file-thumbnail-container"
-                style={{ float: "right" }}
-              >
-                <Card className="file-thumbnail-card">
-                  <Image
-                    src={
-                      profile.cv.url.endsWith(".pdf")
-                        ? profile.cv.url
-                            .slice()
-                            .replace(new RegExp(".pdf$"), ".png")
-                        : profile.cv.url
-                    }
-                    size={"small"}
-                    style={{ display: "inline-block" }}
-                  />
+              <>
+                <Button
+                  content="Change CV"
+                  onClick={() => setAddCVMode(true)}
+                />
+                {addCVMode ? (
+                  <>
+                    <Button
+                      content="Cancel"
+                      onClick={() => setAddCVMode(false)}
+                    />
+                    <FileUploadWidget uploadFile={addCV} />
+                  </>
+                ) : (
                   <div
-                    className="overlay asAButton"
-                    onClick={() => openFilePreviewModal(profile.cv)}
-                  ></div>
-                </Card>
-              </div>
+                    className="file-thumbnail-container"
+                    style={{ float: "right" }}
+                  >
+                    <Card className="file-thumbnail-card">
+                      <Image
+                        src={
+                          profile.cv.url.endsWith(".pdf")
+                            ? profile.cv.url
+                                .slice()
+                                .replace(new RegExp(".pdf$"), ".png")
+                            : profile.cv.url
+                        }
+                        size={"small"}
+                        style={{ display: "inline-block" }}
+                      />
+                      <div
+                        className="overlay asAButton"
+                        onClick={() => openFilePreviewModal(profile.cv)}
+                      ></div>
+                    </Card>
+                  </div>
+                )}
+              </>
             )}
           </Grid.Column>
         </Grid>

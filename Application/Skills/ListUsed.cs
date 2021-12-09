@@ -40,7 +40,7 @@ namespace Application.Skills
                 if (request.Params.Skill != "all" && request.Params.Skill != "")
                 {
                     var paramSkills = request.Params.Skill.Split(",");
-                    
+
                     var usersQuery = _context.Users.Include(s => s.Skills).Where(u => u.Skills.Count > 0);
                     var users = await usersQuery.ToListAsync();
 
@@ -71,16 +71,7 @@ namespace Application.Skills
                         }
                         skill.Count = expertCount;
                     }
-                    skills = skills.OrderByDescending(s => s.Count).ToList();
-
-                    foreach (string paramSkill in paramSkills)
-                    {
-                        skills.Sort((x, y) =>
-                        {
-                            if (x.Name == paramSkill) return -1;
-                            return 1;
-                        });
-                    }
+                    skills = skills.OrderBy(s => s.Name).ToList();
                 }
 
                 return Result<List<ExpertSkillDto>>.Success(skills);

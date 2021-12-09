@@ -5,50 +5,46 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Profiles
+namespace Application.Jobs
 {
-    public class AddCV
+    public class DeleteBid
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public UserFile CV { get; set; }
+            public Guid Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            private readonly IFileAccessor _fileAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor, IFileAccessor fileAccessor)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
-                _userAccessor = userAccessor;
                 _context = context;
-                _fileAccessor = fileAccessor;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users
-                .Include(u => u.CV)
-                .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
 
                 if (user == null) return null;
 
-                if (user.CV != null) await _fileAccessor.DeleteFile(user.CV.Id);
-                user.CV = request.CV;
+                var jobBid = await _context.JobBids.FirstOrDefaultAsync(jb => jb.Id == request.Id);
 
-                _context.Entry(user).State = EntityState.Modified;
+                if (jobBid == null) return null;
+
+                _context.JobBids.Remove(jobBid);
 
                 var success = await _context.SaveChangesAsync() > 0;
 
                 if (success) return Result<Unit>.Success(Unit.Value);
 
-                return Result<Unit>.Failure("Problem updating profile");
+                return Result<Unit>.Failure("Problem deleting job bid.");
             }
         }
     }

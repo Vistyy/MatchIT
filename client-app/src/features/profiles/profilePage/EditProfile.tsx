@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import AccountLinksSegment from "../becomeExpertForm/segments/AccountLinksSegment";
@@ -16,54 +16,94 @@ interface Props {
 
 export default observer(function EditProfile({ setEditMode }: Props) {
   const {
-    profileStore: { loading, uploading, profile, updateProfile },
+    profileStore: {
+      loading,
+      uploading,
+      editedProfile,
+      updateProfile,
+      updatingProfile,
+      startProfileEditing,
+    },
   } = useStore();
 
   function handleSaveChanges() {
-    updateProfile(profile!).then(() => {
+    updateProfile(editedProfile!).then(() => {
       setEditMode(false);
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     });
   }
+
+  useEffect(() => {
+    startProfileEditing();
+  }, [startProfileEditing]);
+
   return (
-    <Segment.Group>
+    <>
       <Segment>
         <AccountLinksSegment />
       </Segment>
-      <Segment style={{ paddingBottom: "4rem" }}>
-        <SkillsSegment />
-        <PortfolioSegment />
-        <EmploymentSegment />
-        <ExperienceSegment />
-        <EducationSegment />
-        <CertificationSegment />
-        <Button.Group style={{ float: "right", marginRight: "1rem" }}>
-          <Button
-            content="Cancel"
-            style={{ marginRight: "15px" }}
-            onClick={() => {
-              setEditMode(false);
-              window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-            }}
-          />
-          <div
-            className="becomeExpert-progressButton"
-            onClick={() => {
-              if (profile?.skills.length === 0)
-                window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-            }}
-          >
+      <Segment.Group>
+        <Segment style={{ paddingBottom: "4rem" }}>
+          <Button.Group style={{ float: "right", marginRight: "1rem" }}>
             <Button
-              content="Save Changes"
-              className="positive--custom"
-              size="large"
-              onClick={handleSaveChanges}
-              disabled={profile?.skills.length === 0}
-              loading={loading || uploading}
+              content="Cancel"
+              style={{ marginRight: "15px" }}
+              onClick={() => {
+                setEditMode(false);
+                window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              }}
             />
-          </div>
-        </Button.Group>
-      </Segment>
-    </Segment.Group>
+            <div
+              className="becomeExpert-progressButton"
+              onClick={() => {
+                if (editedProfile?.skills.length === 0)
+                  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              }}
+            >
+              <Button
+                content="Save Changes"
+                className="positive--custom"
+                size="large"
+                onClick={handleSaveChanges}
+                disabled={editedProfile?.skills.length === 0}
+                loading={loading || uploading || updatingProfile}
+              />
+            </div>
+          </Button.Group>
+          <SkillsSegment />
+          <PortfolioSegment />
+          <EmploymentSegment />
+          <ExperienceSegment />
+          <EducationSegment />
+          <CertificationSegment />
+          <Button.Group style={{ float: "right", marginRight: "1rem" }}>
+            <Button
+              content="Cancel"
+              style={{ marginRight: "15px" }}
+              onClick={() => {
+                setEditMode(false);
+                window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              }}
+            />
+            <div
+              className="becomeExpert-progressButton"
+              onClick={() => {
+                if (editedProfile?.skills.length === 0)
+                  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              }}
+            >
+              <Button
+                content="Save Changes"
+                className="positive--custom"
+                size="large"
+                onClick={handleSaveChanges}
+                disabled={editedProfile?.skills.length === 0}
+                loading={loading || uploading || updatingProfile}
+              />
+            </div>
+          </Button.Group>
+        </Segment>
+      </Segment.Group>
+    </>
   );
 });

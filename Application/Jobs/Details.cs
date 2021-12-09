@@ -33,9 +33,10 @@ namespace Application.Jobs
             public async Task<Result<JobDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var job = await _context.Jobs
+                .Include(j => j.Employer.Photo)
                 .Include(j => j.Attachments)
-                .Include(j => j.JobBids).ThenInclude(jb => jb.Bidder)
-                .Include(j => j.RequiredSkills)
+                .Include(j => j.JobBids).ThenInclude(jb => jb.Bidder.Photo)
+                .Include(j => j.RequiredSkills).AsSplitQuery()
                 .ProjectTo<JobDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(j => j.Id == request.Id);
 

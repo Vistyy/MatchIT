@@ -40,11 +40,24 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
-        [HttpPost("{id}/bid")]
+        [HttpPost("{jobId}/bid")]
         public async Task<IActionResult> AddBid(Guid id, AddBid.Command command)
         {
             command.JobId = id;
             return HandleResult(await Mediator.Send(command));
+        }
+
+        [HttpDelete("bids/{id}")]
+        public async Task<IActionResult> DeleteBid(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteBid.Command { Id = id }));
+        }
+
+        [HttpDelete("{id}/{bidId}")]
+        public async Task<IActionResult> AcceptBid(Guid id, Guid bidId)
+        {
+            return HandleResult(await Mediator.Send(new AcceptBid.Command { JobId = id, JobBidId = bidId }));
+
         }
     }
 }

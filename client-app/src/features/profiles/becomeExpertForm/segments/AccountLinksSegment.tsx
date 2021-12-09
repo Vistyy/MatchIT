@@ -13,7 +13,7 @@ export default observer(function AccountLinksSegment() {
 
   return (
     <>
-    <Header>Profile links</Header>
+      <Header>Profile links</Header>
       {linkEditMode ? (
         <AccountLinksForm setEditMode={setLinkEditMode} profile={profile!} />
       ) : (
@@ -22,16 +22,16 @@ export default observer(function AccountLinksSegment() {
             <label>Link to your GitHub Profile</label>
             {loadingLinks ? (
               <Input
+                disabled
                 className="loading--custom"
-                fluid
                 placeholder="Loading..."
+                value=""
               />
             ) : (
               <Input
                 placeholder="Link to your GitHub Profile"
                 disabled
                 value={profile?.githubProfileUrl || ""}
-                loading={loadingLinks}
               ></Input>
             )}
           </div>
@@ -39,9 +39,11 @@ export default observer(function AccountLinksSegment() {
             <label>Link to your LinkedIn Profile</label>
             {loadingLinks ? (
               <Input
+                disabled
                 className="loading--custom"
                 fluid
                 placeholder="Loading..."
+                value=""
               />
             ) : (
               <Input

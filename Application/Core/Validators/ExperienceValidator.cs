@@ -9,7 +9,7 @@ namespace Application.Core.Validators
         {
             RuleFor(e => e.Description.Title).NotEmpty();
             RuleFor(e => e.Description.Summary).NotEmpty();
-            RuleFor(e => e.Description.FormattedText).NotEmpty();
+            RuleFor(e => e.Description.BulletPoints).NotEmpty();
         }
     }
 }

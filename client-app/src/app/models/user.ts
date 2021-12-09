@@ -4,7 +4,7 @@ export interface User {
   userName: string;
   displayName: string;
   token: string;
-  image?: Photo;
+  photo?: Photo;
   isExpert: boolean;
 }
 

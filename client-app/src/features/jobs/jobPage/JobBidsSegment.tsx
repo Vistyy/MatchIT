@@ -1,6 +1,7 @@
-import React from "react";
-import { Item, Segment } from "semantic-ui-react";
+import React, { Fragment } from "react";
+import { Segment } from "semantic-ui-react";
 import { JobBid } from "../../../app/models/job";
+import JobBidsSegmentItem from "./jobBid/JobBidSegmentItem";
 
 interface Props {
   jobBids: JobBid[];
@@ -10,13 +11,9 @@ export default function JobBidsSegment({ jobBids }: Props) {
   return (
     <Segment>
       {jobBids.map((jobBid) => (
-        <Segment raised key={jobBid.id}>
-          <Item>
-            <Item.Description content={jobBid.description} />
-            <Item.Meta content={jobBid.fee} />
-            <Item.Header>{jobBid.bidder.userName}</Item.Header>
-          </Item>
-        </Segment>
+        <Fragment key={jobBid.id}>
+          <JobBidsSegmentItem jobBid={jobBid} />
+        </Fragment>
       ))}
     </Segment>
   );

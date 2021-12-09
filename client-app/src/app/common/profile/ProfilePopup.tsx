@@ -14,7 +14,7 @@ export default function ProfilePopup({profile}: Props) {
                     <Header>
                       <Image
                         avatar
-                        src={profile.image?.url || "/assets/user.png"}
+                        src={profile.photo?.url || "/assets/user.png"}
                       />
                       <Header
                         style={{ marginLeft: "4px", display: "inline" }}

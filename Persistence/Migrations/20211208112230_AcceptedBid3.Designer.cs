@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211208112230_AcceptedBid3")]
+    partial class AcceptedBid3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,25 +131,6 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.BulletPoint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("DescriptionId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DescriptionId");
-
-                    b.ToTable("BulletPoint");
-                });
-
             modelBuilder.Entity("Domain.Certification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,6 +157,9 @@ namespace Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FormattedText")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Summary")
@@ -627,13 +613,6 @@ namespace Persistence.Migrations
                     b.Navigation("Photo");
                 });
 
-            modelBuilder.Entity("Domain.BulletPoint", b =>
-                {
-                    b.HasOne("Domain.Description", null)
-                        .WithMany("BulletPoints")
-                        .HasForeignKey("DescriptionId");
-                });
-
             modelBuilder.Entity("Domain.Certification", b =>
                 {
                     b.HasOne("Domain.AppUser", null)
@@ -843,11 +822,6 @@ namespace Persistence.Migrations
                     b.Navigation("ReviewsGiven");
 
                     b.Navigation("ReviewsReceived");
-                });
-
-            modelBuilder.Entity("Domain.Description", b =>
-                {
-                    b.Navigation("BulletPoints");
                 });
 
             modelBuilder.Entity("Domain.Job", b =>

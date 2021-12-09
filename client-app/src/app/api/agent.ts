@@ -102,7 +102,7 @@ const Account = {
 
 const Profiles = {
   get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`),
-  uploadPhoto: (file: Blob) => {
+  uploadProfilePhoto: (file: Blob) => {
     let formData = new FormData();
     formData.append("File", file);
     return axios.post<Photo>("photos", formData, {
@@ -154,6 +154,9 @@ const Jobs = {
   delete: (id: string) => requests.del(`/jobs/${id}`),
   addBid: (jobId: string, jobBid: Partial<JobBid>) =>
     requests.post(`/jobs/${jobId}/bid`, jobBid),
+  deleteBid: (jobBidId: string) => requests.del(`/jobs/bids/${jobBidId}`),
+  acceptBid: (jobId: string, jobBidId: string) =>
+    requests.del(`/jobs/${jobId}/${jobBidId}`,),
 };
 
 const agent = {

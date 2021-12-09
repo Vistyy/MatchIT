@@ -8,7 +8,7 @@ import ExperienceForm from "../forms/ExperienceForm";
 
 export default observer(function ExperienceSegment() {
   const {
-    profileStore: { profile },
+    profileStore: { editedProfile },
   } = useStore();
 
   const [editExperienceMode, setEditExperienceMode] = useState(false);
@@ -23,8 +23,8 @@ export default observer(function ExperienceSegment() {
           onClick={() => setEditExperienceMode(true)}
         />
       )}
-      {profile &&
-        profile.experience.map((experienceItem) => (
+      {editedProfile &&
+        editedProfile.experience.map((experienceItem) => (
           <ExperienceItemElement
             key={experienceItem.id}
             experienceItem={experienceItem}

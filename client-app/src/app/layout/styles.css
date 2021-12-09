@@ -94,7 +94,14 @@ a:link {
   outline: 0;
 }
 
-.ui .skillList-skillButton {
+.ui.skillList-container {
+  padding: 0.7em;
+  padding-bottom: 0.3em;
+}
+
+.ui.skillList-container .skillList-skillButton {
+  margin-right: 0.4em;
+  margin-bottom: 0.4em;
   opacity: 1 !important;
   background-color: rgb(255, 255, 255);
   outline: 1px solid rgb(133, 183, 217);
@@ -102,7 +109,7 @@ a:link {
     border linea 0.04s;
 }
 
-.ui .skillList-skillButton:hover {
+.ui.skillList-container .skillList-skillButton:hover {
   background-color: rgba(145, 145, 145, 0.05) !important;
   outline: 2px solid rgb(133, 183, 217);
   transition: background-color linear 0.04s, outline linear 0.04s;
@@ -294,20 +301,20 @@ a:link {
   overflow: hidden;
   display: inline-block;
   vertical-align: bottom;
-  -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
-  animation: ellipsis steps(4,end) 900ms infinite;
+  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+  animation: ellipsis steps(4, end) 900ms infinite;
   content: "\2026"; /* ascii code for the ellipsis character */
   width: 0px;
 }
 
 @keyframes ellipsis {
   to {
-    width: 20px;    
+    width: 20px;
   }
 }
 
 @-webkit-keyframes ellipsis {
   to {
-    width: 20px;    
+    width: 20px;
   }
 }

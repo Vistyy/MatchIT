@@ -5,6 +5,7 @@ using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Jobs
@@ -29,18 +30,30 @@ namespace Application.Jobs
             public async Task<Result<PagedList<JobListItemDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = Enumerable.Empty<JobListItemDto>().AsQueryable();
-                if(request.Params.SortBy == "dateNewest")
+                if (request.Params.SortBy == "dateNewest")
                 {
-                query = _context.Jobs.Where(j => j.IsActive).OrderByDescending(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                    query = _context.Jobs
+                    .Include(j => j.Employer.Photo)
+                    .Where(j => j.IsActive)
+                    .OrderByDescending(j => j.CreationTime)
+                    .ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
 
                 }
                 else if (request.Params.SortBy == "dateOldest")
                 {
-                query = _context.Jobs.Where(j => j.IsActive).OrderBy(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
-                } 
-                else 
+                    query = _context.Jobs
+                    .Include(j => j.Employer.Photo)
+                    .Where(j => j.IsActive)
+                    .OrderBy(j => j.CreationTime)
+                    .ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                }
+                else
                 {
-                query = _context.Jobs.Where(j => j.IsActive).OrderByDescending(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                    query = _context.Jobs
+                    .Include(j => j.Employer.Photo)
+                    .Where(j => j.IsActive)
+                    .OrderByDescending(j => j.CreationTime)
+                    .ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
 
                 }
 

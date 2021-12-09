@@ -34,7 +34,7 @@ namespace Application.Skills
             {
                 var query = _context.Skills.ProjectTo<ExpertSkillDto>(_mapper.ConfigurationProvider);
 
-                var skills = await query.ToListAsync();
+                var skills = await query.OrderBy(s => s.Name).ToListAsync();
 
                 return Result<List<ExpertSkillDto>>.Success(skills);
             }

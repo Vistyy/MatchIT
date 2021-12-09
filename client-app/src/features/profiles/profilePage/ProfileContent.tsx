@@ -21,21 +21,33 @@ export default observer(function ProfileContent() {
         <Segment.Group>
           {profile && profile.isExpert && (
             <>
-              <Segment>
-                <ProfileEmployment employment={profile.employment} />
-              </Segment>
-              <Segment>
-                <ProfilePortfolio portfolio={profile.portfolio} />
-              </Segment>
-              <Segment>
-                <ProfileEducation education={profile.education} />
-              </Segment>
-              <Segment>
-                <ProfileCertification certification={profile.certifications} />
-              </Segment>
-              <Segment>
-                <ProfileExperience experience={profile.experience} />
-              </Segment>
+              {profile.employment && profile.employment.length > 0 && (
+                <Segment>
+                  <ProfileEmployment employment={profile.employment} />
+                </Segment>
+              )}
+              {profile.portfolio && profile.portfolio.length > 0 && (
+                <Segment>
+                  <ProfilePortfolio portfolio={profile.portfolio} />
+                </Segment>
+              )}
+              {profile.education && profile.education.length > 0 && (
+                <Segment>
+                  <ProfileEducation education={profile.education} />
+                </Segment>
+              )}
+              {profile.certifications && profile.certifications.length > 0 && (
+                <Segment>
+                  <ProfileCertification
+                    certification={profile.certifications}
+                  />
+                </Segment>
+              )}
+              {profile.experience && profile.experience.length > 0 && (
+                <Segment>
+                  <ProfileExperience experience={profile.experience} />
+                </Segment>
+              )}
               {isCurrentUser && (
                 <Button
                   content="Edit Profile"

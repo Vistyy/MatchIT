@@ -22,7 +22,9 @@ import { v4 as uuid } from "uuid";
 
 export default class ProfileStore {
   profile: Profile | null = null;
+  editedProfile: Profile | null = null;
   loadingProfile = false;
+  updatingProfile = false;
   loadingLinks = false;
   uploading = false;
   loading = false;
@@ -40,7 +42,12 @@ export default class ProfileStore {
 
   resetState = () => {
     this.profile = null;
+    this.editedProfile = null;
   };
+
+  startProfileEditing = () => {
+    this.editedProfile = {...this.profile!};
+  }
 
   loadProfile = async (userName: string) => {
     this.loadingProfile = true;
@@ -56,15 +63,15 @@ export default class ProfileStore {
     }
   };
 
-  uploadPhoto = async (file: Blob) => {
+  uploadProfilePhoto = async (file: Blob) => {
     this.uploading = true;
     try {
-      const response = await agent.Profiles.uploadPhoto(file);
+      const response = await agent.Profiles.uploadProfilePhoto(file);
       const photo = response.data;
       runInAction(() => {
         if (this.profile && store.userStore.user) {
           store.userStore.setImage(photo);
-          this.profile.image = photo;
+          this.profile.photo = photo;
         }
         this.uploading = false;
       });
@@ -80,7 +87,7 @@ export default class ProfileStore {
       await agent.Profiles.deletePhoto(photo.id);
       runInAction(() => {
         if (this.profile) {
-          this.profile.image = undefined;
+          this.profile.photo = undefined;
           this.loading = false;
         }
       });
@@ -135,21 +142,21 @@ export default class ProfileStore {
     }
   };
 
-  updateProfile = async (profile: Partial<Profile>) => {
-    this.loading = true;
+  updateProfile = async (editedProfile: Partial<Profile>) => {
+    this.updatingProfile = true;
     try {
       const uploadedPortfolio = await this.uploadTempPortfolioFiles(
-        profile.portfolio!
+        editedProfile.portfolio!
       );
-      runInAction(() => (profile.portfolio = uploadedPortfolio));
-      await agent.Profiles.updateProfile(profile);
+      runInAction(() => (editedProfile.portfolio = uploadedPortfolio));
+      await agent.Profiles.updateProfile(editedProfile);
       runInAction(() => {
-        this.profile = { ...this.profile, ...(profile as Profile) };
-        this.loading = false;
+        this.profile = { ...this.profile, ...(editedProfile as Profile) };
+        this.updatingProfile = false;
       });
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.updatingProfile = false));
     }
   };
 
@@ -175,14 +182,14 @@ export default class ProfileStore {
   };
 
   addSkill = (skill: Skill) => {
-    if (this.profile) {
-      this.profile.skills.push(skill);
+    if (this.editedProfile) {
+      this.editedProfile.skills.push(skill);
     }
   };
 
   removeSkill = (skill: Skill) => {
-    if (this.profile) {
-      this.profile.skills = this.profile.skills.filter((s) => s !== skill);
+    if (this.editedProfile) {
+      this.editedProfile.skills = this.editedProfile.skills.filter((s) => s !== skill);
     }
     store.expertStore.skillNames.push({
       title: skill.name,
@@ -197,7 +204,7 @@ export default class ProfileStore {
       attachments: portfolioFiles,
       description: description,
     };
-    this.profile?.portfolio.push({ ...portfolioItem });
+    this.editedProfile?.portfolio.push({ ...portfolioItem });
   };
 
   addEmploymentItem = ({
@@ -205,7 +212,7 @@ export default class ProfileStore {
     employedTo,
     companyName,
     companyPosition,
-    jobDescription,
+    jobBulletPoints,
   }: EmploymentFormValues) => {
     const employmentItem: EmploymentItem = {
       id: uuid(),
@@ -215,22 +222,22 @@ export default class ProfileStore {
         id: uuid(),
         title: companyName,
         summary: companyPosition,
-        formattedText: jobDescription,
+        bulletPoints: jobBulletPoints,
       },
     };
-    this.profile?.employment.push(employmentItem);
+    this.editedProfile?.employment.push(employmentItem);
   };
 
   addExperienceItem = ({
     title,
     summary,
-    formattedText,
+    bulletPoints,
   }: ExperienceFormValues) => {
     const experienceItem: ExperienceItem = {
       id: uuid(),
-      description: { id: uuid(), title, summary, formattedText },
+      description: { id: uuid(), title, summary, bulletPoints: bulletPoints },
     };
-    this.profile?.experience.push(experienceItem);
+    this.editedProfile?.experience.push(experienceItem);
   };
 
   addEducationItem = ({
@@ -248,7 +255,7 @@ export default class ProfileStore {
       studyingFrom,
       studyingTo,
     };
-    this.profile?.education.push(educationItem);
+    this.editedProfile?.education.push(educationItem);
   };
 
   addCertification = ({
@@ -260,6 +267,6 @@ export default class ProfileStore {
       name: certificateName,
       dateAcquired,
     };
-    this.profile?.certifications.push(certification);
+    this.editedProfile?.certifications.push(certification);
   };
 }

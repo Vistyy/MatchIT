@@ -10,6 +10,7 @@ export interface Job {
   creationTime: Date;
   isActive: boolean;
   jobBids: JobBid[];
+  acceptedJobBid: JobBid;
 }
 
 export interface JobFormValues {

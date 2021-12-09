@@ -14,6 +14,7 @@ namespace Application.Jobs
         public ICollection<UserFile> Attachments { get; set; }
         public DateTime CreationTime { get; set; }
         public bool IsActive { get; set; }
+        public JobBid AcceptedJobBid { get; set; }
         public ICollection<JobBid> JobBids { get; set; }
     }
 }

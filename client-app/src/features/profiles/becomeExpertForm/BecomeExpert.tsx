@@ -18,12 +18,14 @@ export default observer(function BecomeExpert() {
   } = useStore();
 
   const {
-    profile,
+    editedProfile,
     loadProfile,
     updateProfile,
     loading,
     uploading,
     loadingProfile,
+    startProfileEditing,
+    updatingProfile,
   } = profileStore;
 
   const skillsRef = useRef<HTMLDivElement>(null);
@@ -65,21 +67,23 @@ export default observer(function BecomeExpert() {
   }
 
   function handleSaveChanges() {
-    updateProfile(profile!).then(() =>
-      history.push(`/profiles/${profile!.userName}`)
+    updateProfile(editedProfile!).then(() =>
+      history.push(`/profiles/${editedProfile!.userName}`)
     );
   }
 
   useEffect(() => {
-    if (user) loadProfile(user.userName);
-  }, [user, loadProfile]);
+    if (user) {
+      loadProfile(user.userName).then(() => startProfileEditing());
+    }
+  }, [user, loadProfile, startProfileEditing]);
 
   useEffect(() => {
     setButtonState(false);
-    if (profile) {
+    if (editedProfile) {
       switch (activeStep) {
         case 1:
-          setButtonState(profile.skills.length > 0);
+          setButtonState(editedProfile.skills.length > 0);
           // setButtonState(true);
           break;
         case 2:
@@ -104,7 +108,7 @@ export default observer(function BecomeExpert() {
           break;
       }
     }
-  }, [activeStep, profile, profile?.skills.length, profile?.portfolio.length, profile?.employment.length, profile?.experience.length, profile?.education.length, profile?.certifications.length]);
+  }, [activeStep, editedProfile, editedProfile?.skills.length]);
 
   if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
   return (
@@ -159,7 +163,7 @@ export default observer(function BecomeExpert() {
             <div
               className="becomeExpert-progressButton"
               onClick={() => {
-                if (profile?.skills.length === 0)
+                if (editedProfile?.skills.length === 0)
                   window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
               }}
             >
@@ -168,8 +172,8 @@ export default observer(function BecomeExpert() {
                 className="positive--custom"
                 size="large"
                 onClick={handleSaveChanges}
-                disabled={profile?.skills.length === 0}
-                loading={loading || uploading}
+                disabled={editedProfile?.skills.length === 0}
+                loading={loading || uploading || updatingProfile}
               />
             </div>
           )}

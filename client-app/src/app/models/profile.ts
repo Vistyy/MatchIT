@@ -4,7 +4,7 @@ import { User } from "./user";
 export interface Profile {
   userName: string;
   displayName: string;
-  image?: Photo;
+  photo?: Photo;
   githubProfileUrl: string;
   linkedInProfileUrl: string;
   bio?: string;
@@ -28,7 +28,7 @@ export class Profile implements Profile {
   constructor(user: User) {
     this.userName = user.userName;
     this.displayName = user.displayName;
-    this.image = user.image;
+    this.photo = user.photo;
   }
 }
 
@@ -54,7 +54,12 @@ export interface Description {
   id: string;
   title: string;
   summary: string;
-  formattedText: string;
+  bulletPoints: BulletPoint[];
+}
+
+export interface BulletPoint {
+  id: string;
+  text: string;
 }
 
 export interface PortfolioItem {
@@ -75,7 +80,7 @@ export interface EmploymentFormValues {
   employedTo?: Date;
   companyName: string;
   companyPosition: string;
-  jobDescription: string;
+  jobBulletPoints: BulletPoint[];
 }
 
 export interface ExperienceItem {
@@ -86,7 +91,7 @@ export interface ExperienceItem {
 export interface ExperienceFormValues {
   title: string;
   summary: string;
-  formattedText: string;
+  bulletPoints: BulletPoint[];
 }
 
 export interface EducationItem {

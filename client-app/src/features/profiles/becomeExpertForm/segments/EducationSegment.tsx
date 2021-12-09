@@ -8,7 +8,7 @@ import EducationForm from "../forms/EducationForm";
 
 export default observer(function EducationSegment() {
   const {
-    profileStore: { profile },
+    profileStore: { editedProfile },
   } = useStore();
   const [editEducationMode, setEditEducationMode] = useState(false);
   return (
@@ -22,8 +22,8 @@ export default observer(function EducationSegment() {
           onClick={() => setEditEducationMode(true)}
         />
       )}
-      {profile &&
-        profile.education.map((educationItem) => (
+      {editedProfile &&
+        editedProfile.education.map((educationItem) => (
           <EducationItemElement
             key={educationItem.id}
             educationItem={educationItem}

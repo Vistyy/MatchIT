@@ -48,6 +48,7 @@ namespace Persistence
                 .WithOne(a => a.Job)
                 .HasForeignKey(a => a.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+                b.HasOne(j => j.AcceptedJobBid).WithOne(jb => jb.AcceptedJob).HasForeignKey<JobBid>(jb => jb.AcceptedJobId);
             });
             
             builder.Entity<JobBid>(b =>

@@ -8,7 +8,7 @@ import EmploymentForm from "../forms/EmploymentForm";
 
 export default observer(function EmploymentSegment() {
   const {
-    profileStore: { profile },
+    profileStore: { editedProfile },
   } = useStore();
   const [editEmploymentMode, setEditEmploymentMode] = useState(false);
   return (
@@ -22,8 +22,8 @@ export default observer(function EmploymentSegment() {
           onClick={() => setEditEmploymentMode(true)}
         />
       )}
-      {profile &&
-        profile.employment.map((employmentItem) => (
+      {editedProfile &&
+        editedProfile.employment.map((employmentItem) => (
           <EmploymentItemElement
             key={employmentItem.id}
             employmentItem={employmentItem}

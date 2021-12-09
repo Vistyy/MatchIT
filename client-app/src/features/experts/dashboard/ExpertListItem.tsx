@@ -21,11 +21,11 @@ export default observer(function ExpertListItem({ expert }: Props) {
           <Item>
             <Item.Image
               size="tiny"
-              src={expert.image?.url || "/assets/user.png"}
+              src={expert.photo?.url || "/assets/user.png"}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/profiles/${expert.userName}`}>
-                {expert.userName}
+                {expert.displayName}
               </Item.Header>
               <Item.Description>{expert.bio}</Item.Description>
               {/* <UserRating rating={expert.rating} disabled /> */}
@@ -33,12 +33,11 @@ export default observer(function ExpertListItem({ expert }: Props) {
           </Item>
         </Item.Group>
       </Segment>
-      <Segment style={{ boxSizing: "border-box" }}>
+      <Segment className="skillList-container">
         {expert.skills.map((skill) => (
           <Button
+          size="small"
             className="skillList-skillButton"
-            as={Link}
-            to={`/`}
             key={skill.id}
             content={skill.name}
             disabled={Array.from(skillPredicate.values())[0]

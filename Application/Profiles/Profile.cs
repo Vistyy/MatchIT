@@ -11,7 +11,7 @@ namespace Application.Profiles
         public string Bio { get; set; }
         public string GithubProfileUrl { get; set; }
         public string LinkedInProfileUrl { get; set; }
-        public Photo Image { get; set; }
+        public Photo Photo { get; set; }
         public UserFile CV { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public string Location { get; set; }

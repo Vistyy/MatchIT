@@ -34,8 +34,8 @@ namespace Application.Profiles
                 .Include(u => u.Portfolio).ThenInclude(p => p.Attachments)
                 .Include(u => u.Certifications)
                 .Include(u => u.Education)
-                .Include(u => u.Employment).ThenInclude(u => u.Description)
-                .Include(u => u.Experience).ThenInclude(e => e.Description)
+                .Include(u => u.Employment).ThenInclude(u => u.Description.BulletPoints)
+                .Include(u => u.Experience).ThenInclude(e => e.Description.BulletPoints).AsSplitQuery()
                 .ProjectTo<Profile>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.UserName == request.UserName);
 

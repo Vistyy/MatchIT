@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
 import { Button } from "semantic-ui-react";
 import ValidatedTextArea from "../../../../app/common/form/ValidatedTextArea";
+import { BulletPoint } from "../../../../app/models/profile";
 
 interface Props {
   setEditMode: (editMode: boolean) => void;
@@ -21,7 +22,7 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
       initialValues={{
         title: "",
         summary: "",
-        formattedText: "",
+        bulletPoints: [] as BulletPoint[],
         error: null,
       }}
       onSubmit={(values, { setErrors }) => {
@@ -36,7 +37,7 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
       validationSchema={Yup.object({
         title: Yup.string().required(),
         summary: Yup.string().required(),
-        formattedText: Yup.string().required(),
+        bulletPoints: Yup.string().required(),
       })}
     >
       {({ handleSubmit, isValid }) => (

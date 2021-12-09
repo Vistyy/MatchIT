@@ -36,10 +36,15 @@ namespace Application.Experts
                 {
                     query = _context.Users.Where(u => u.Skills.Count > 0).OrderByDescending(u => u.RatingCount / u.RatingSum).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
                 }
+                else if (request.Params.SortBy == "displayNameAsc")
+                {
+                    query = _context.Users.Where(u => u.Skills.Count > 0).OrderBy(u => u.DisplayName).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                }
                 else
                 {
                     query = _context.Users.Where(u => u.Skills.Count > 0).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
                 }
+
 
                 if (request.Params.Skill != "all" && request.Params.Skill != "")
                 {

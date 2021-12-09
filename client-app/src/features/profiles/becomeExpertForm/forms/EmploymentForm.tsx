@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { Button } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
 import ValidatedTextArea from "../../../../app/common/form/ValidatedTextArea";
+import { BulletPoint } from "../../../../app/models/profile";
 
 interface Props {
   setEditMode: (editMode: boolean) => void;
@@ -24,7 +25,7 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
         companyPosition: "",
         employedFrom: new Date(),
         employedTo: new Date(),
-        jobDescription: "",
+        jobBulletPoints: [] as BulletPoint[],
         error: null,
       }}
       onSubmit={(values, { setErrors }) => {
@@ -40,10 +41,10 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
         companyName: Yup.string().required(),
         companyPosition: Yup.string().required(),
         employedFrom: Yup.date().required(),
-        jobDescription: Yup.string().required(),
+        jobBulletPoints: Yup.array().required(),
       })}
     >
-      {({ handleSubmit , isValid}) => (
+      {({ handleSubmit, isValid }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="companyName"
@@ -69,7 +70,7 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
             errorElementName="Employed To"
           />
           <ValidatedTextArea
-            name="jobDescription"
+            name="jobBulletPoints"
             label="Job Description"
             placeholder="Job Description"
             errorElementName="Job Description"

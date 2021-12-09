@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Domain
 {
@@ -7,6 +8,6 @@ namespace Domain
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Summary { get; set; }
-        public string FormattedText { get; set; }
+        public ICollection<BulletPoint> BulletPoints { get; set; }
     }
 }

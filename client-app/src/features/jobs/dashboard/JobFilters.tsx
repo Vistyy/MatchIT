@@ -72,9 +72,12 @@ export default observer(function JobFilters() {
             <LoadingComponent content="Loading..." />
           </Menu.Item>
         ) : (
-          <>
+          <div style={{ maxHeight: "500px", overflowY: "auto" }}>
             {Array.from(skillRegistry)
-              .sort(([_, s1], [__, s2]) => (s1.count > s2.count ? -1 : 1))
+              .sort(
+                ([_, s1], [__, s2]) =>
+                  s2.count - s1.count || s1.name.localeCompare(s2.name)
+              )
               .map(([id, skill]) => (
                 <Menu.Item
                   key={id}
@@ -94,7 +97,7 @@ export default observer(function JobFilters() {
                   }}
                 />
               ))}
-          </>
+          </div>
         )}
       </Menu>
     </>

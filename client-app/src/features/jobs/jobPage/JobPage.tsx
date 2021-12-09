@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { NavLink } from "react-router-dom";
-import { Button, Grid, Header, Segment } from "semantic-ui-react";
+import { Button, Grid, Header, Item, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import DeleteJobButton from "../DeleteJobButton";
@@ -36,7 +36,25 @@ export default observer(function JobPage() {
               <JobAttachmentsSegment attachments={job.attachments} />
             )}
             {isEmployer && job.jobBids.length > 0 && (
-              <JobBidsSegment jobBids={job.jobBids} />
+              <>
+                {job.acceptedJobBid ? (
+                  <Segment raised>
+                    <Item>
+                      <Item.Content>
+                        <Item.Description
+                          content={job.acceptedJobBid.description}
+                        />
+                        <Item.Meta content={job.acceptedJobBid.fee} />
+                        <Item.Header>
+                          {job.acceptedJobBid.bidder.userName}
+                        </Item.Header>
+                      </Item.Content>
+                    </Item>
+                  </Segment>
+                ) : (
+                  <JobBidsSegment jobBids={job.jobBids} />
+                )}
+              </>
             )}
             {isEmployer && <DeleteJobButton jobId={job.id} />}
             {!isEmployer && (

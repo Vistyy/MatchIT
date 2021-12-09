@@ -314,4 +314,31 @@ export default class JobStore {
       runInAction(() => (this.loading = false));
     }
   };
+
+  deleteJobBid = async (jobBidId: string) => {
+    this.loading = true;
+    try {
+      runInAction(() => {
+        this.job!.jobBids = this.job!.jobBids.filter(
+          (jobBid) => jobBid.id !== jobBidId
+        );
+        this.loading = false;
+      });
+      await agent.Jobs.deleteBid(jobBidId);
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  acceptJobBid = async (jobBidId: string) => {
+    this.loading = true;
+    try {
+      await agent.Jobs.acceptBid(this.job!.id, jobBidId);
+      runInAction(() => (this.loading = false));
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
 }

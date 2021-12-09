@@ -8,7 +8,7 @@ import CertificationForm from "../forms/CertificationForm";
 
 export default observer(function CertificationSegment() {
   const {
-    profileStore: { profile },
+    profileStore: { editedProfile },
   } = useStore();
 
   const [editCertificationMode, setEditCertificationMode] = useState(false);
@@ -23,8 +23,8 @@ export default observer(function CertificationSegment() {
           onClick={() => setEditCertificationMode(true)}
         />
       )}
-      {profile &&
-        profile.certifications.map((certificate) => (
+      {editedProfile &&
+        editedProfile.certifications.map((certificate) => (
           <CertificationElement
             key={certificate.id}
             certificate={certificate}

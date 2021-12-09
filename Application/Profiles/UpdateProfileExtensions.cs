@@ -84,7 +84,7 @@ namespace Application.Profiles
                         {
                             Id = reqEmploymentItem.Description.Id,
                             Title = reqEmploymentItem.Description.Title,
-                            FormattedText = reqEmploymentItem.Description.FormattedText
+                            BulletPoints = reqEmploymentItem.Description.BulletPoints
                         }
                     };
                     context.EmploymentItems.Add(employmentItem);
@@ -115,7 +115,7 @@ namespace Application.Profiles
                         {
                             Id = reqExperienceItem.Description.Id,
                             Title = reqExperienceItem.Description.Title,
-                            FormattedText = reqExperienceItem.Description.FormattedText
+                            BulletPoints = reqExperienceItem.Description.BulletPoints
                         }
                     };
                     context.ExperienceItems.Add(reqExperienceItem);

@@ -11,7 +11,6 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<AppUser, Profiles.Profile>()
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photo))
                 .ForMember(d => d.Reviews, o => o.MapFrom(s => s.ReviewsReceived))
                 .ForMember(d => d.IsExpert, o => o.MapFrom(s => s.Skills.Count > 0))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.RatingCount > 0 ? s.RatingSum / s.RatingCount : 0))
@@ -19,8 +18,7 @@ namespace Application.Core
 
             CreateMap<AppUser, ExpertListItemDto>()
             // .ForMember(d => d.Rating, o => o.MapFrom(s => (s.ReviewsReceived.Sum(r => r.Rating) / s.ReviewsReceived.Count)));
-            .ForMember(d => d.Rating, o => o.MapFrom(s => s.RatingCount > 0 ? s.RatingSum / s.RatingCount : 0))
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Photo));
+            .ForMember(d => d.Rating, o => o.MapFrom(s => s.RatingCount > 0 ? s.RatingSum / s.RatingCount : 0));
             // TODO - figure out how to store the rating
 
             CreateMap<Skill, ExpertSkillDto>()
@@ -30,7 +28,7 @@ namespace Application.Core
             .ForMember(d => d.Count, o => o.MapFrom(s => s.Jobs.Count));
 
             CreateMap<Job, JobListItemDto>();
-            
+
             CreateMap<Job, JobDto>();
         }
     }

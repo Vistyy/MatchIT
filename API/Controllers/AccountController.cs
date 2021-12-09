@@ -50,8 +50,6 @@ namespace API.Controllers
 
             if (user == null) return Unauthorized("Invalid email");
 
-            if (user.UserName == "bob") user.EmailConfirmed = true; // TODO - delete
-
             if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
@@ -186,7 +184,7 @@ namespace API.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = user.Photo,
+                Photo = user.Photo,
                 Token = _tokenService.CreateToken(user),
                 UserName = user.UserName,
                 IsExpert = user.Skills.Count > 0

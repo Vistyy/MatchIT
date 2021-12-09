@@ -54,7 +54,7 @@ export default observer(function NavBar() {
                 fitted="horizontally"
               >
                 <Image
-                  src={user?.image?.url || "/assets/user.png"}
+                  src={user?.photo?.url || "/assets/user.png"}
                   avatar
                   spaced="right"
                 />

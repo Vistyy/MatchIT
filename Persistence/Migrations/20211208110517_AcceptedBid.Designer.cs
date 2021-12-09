@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211208110517_AcceptedBid")]
+    partial class AcceptedBid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,25 +131,6 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.BulletPoint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("DescriptionId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DescriptionId");
-
-                    b.ToTable("BulletPoint");
-                });
-
             modelBuilder.Entity("Domain.Certification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,6 +157,9 @@ namespace Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FormattedText")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Summary")
@@ -300,9 +286,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("AcceptedJobId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("BidderId")
                         .HasColumnType("TEXT");
 
@@ -315,14 +298,17 @@ namespace Persistence.Migrations
                     b.Property<Guid>("JobId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<Guid?>("JobId1")
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("AcceptedJobId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.HasIndex("BidderId");
 
                     b.HasIndex("JobId");
+
+                    b.HasIndex("JobId1")
+                        .IsUnique();
 
                     b.ToTable("JobBids");
                 });
@@ -627,13 +613,6 @@ namespace Persistence.Migrations
                     b.Navigation("Photo");
                 });
 
-            modelBuilder.Entity("Domain.BulletPoint", b =>
-                {
-                    b.HasOne("Domain.Description", null)
-                        .WithMany("BulletPoints")
-                        .HasForeignKey("DescriptionId");
-                });
-
             modelBuilder.Entity("Domain.Certification", b =>
                 {
                     b.HasOne("Domain.AppUser", null)
@@ -686,10 +665,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.JobBid", b =>
                 {
-                    b.HasOne("Domain.Job", "AcceptedJob")
-                        .WithOne("AcceptedJobBid")
-                        .HasForeignKey("Domain.JobBid", "AcceptedJobId");
-
                     b.HasOne("Domain.AppUser", "Bidder")
                         .WithMany("JobBids")
                         .HasForeignKey("BidderId")
@@ -701,7 +676,9 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AcceptedJob");
+                    b.HasOne("Domain.Job", null)
+                        .WithOne("AcceptedJobBid")
+                        .HasForeignKey("Domain.JobBid", "JobId1");
 
                     b.Navigation("Bidder");
 
@@ -843,11 +820,6 @@ namespace Persistence.Migrations
                     b.Navigation("ReviewsGiven");
 
                     b.Navigation("ReviewsReceived");
-                });
-
-            modelBuilder.Entity("Domain.Description", b =>
-                {
-                    b.Navigation("BulletPoints");
                 });
 
             modelBuilder.Entity("Domain.Job", b =>

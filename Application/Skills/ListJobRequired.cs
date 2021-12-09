@@ -69,17 +69,7 @@ namespace Application.Skills
                         }
                         skill.Count = jobCount;
                     }
-                    skills = skills.OrderByDescending(s => s.Count).ToList();
-
-                    foreach (string paramSkill in paramSkills)
-                    {
-                        skills.Sort((x, y) =>
-                        {
-                            if (x.Name == paramSkill) return -1;
-                            return 1;
-                        });
-                    }
-
+                    skills = skills.OrderBy(s => s.Name).ToList();
                 }
                 return Result<List<JobSkillDto>>.Success(skills);
             }

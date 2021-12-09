@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +40,11 @@ namespace Application.Jobs
 
                 if (user == null) return null;
 
-                var query = _context.Jobs.Where(j => j.Employer.UserName == request.UserName).OrderByDescending(j => j.CreationTime).ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                var query = _context.Jobs
+                .Include(j => j.Employer.Photo)
+                .Where(j => j.Employer.UserName == request.UserName)
+                .OrderByDescending(j => j.CreationTime)
+                .ProjectTo<JobListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
 
                 return Result<PagedList<JobListItemDto>>.Success(await PagedList<JobListItemDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));
 

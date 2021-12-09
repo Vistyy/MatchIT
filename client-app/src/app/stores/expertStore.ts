@@ -17,7 +17,7 @@ export default class ExpertStore {
   skillFilter: string[] = [];
   filterDelay: NodeJS.Timeout = setTimeout(() => {}, 0);
   skillNames: SkillSearchItem[] = [];
-  sortExpertsBy: string = "ratingHighest";
+  sortExpertsBy: string = "displayNameAsc";
 
   constructor() {
     makeAutoObservable(this);
@@ -63,7 +63,7 @@ export default class ExpertStore {
   resetExpertArray = () => {
     this.expertArray.length = 0;
   };
-  resetSorting = () => this.changeSorting("ratingHighest");
+  resetSorting = () => this.changeSorting("displayNameAsc");
   resetPagination = () => {
     this.pagination = null;
     this.pagingParams = new PagingParams();
@@ -165,9 +165,6 @@ export default class ExpertStore {
         )
       )
         this.skillNames.push({ title: skill.name });
-    });
-    this.skillNames.sort((s1, s2) => {
-      return s1.title >= s2.title ? 1 : -1;
     });
     return this.skillNames;
   };
