@@ -43,7 +43,10 @@ export default observer(function EditProfile({ setEditMode }: Props) {
         <AccountLinksSegment />
       </Segment>
       <Segment.Group>
-        <Segment style={{ paddingBottom: "4rem" }}>
+        <Segment
+          style={{ paddingBottom: "4rem" }}
+          className="editProfile-container"
+        >
           <Button.Group style={{ float: "right", marginRight: "1rem" }}>
             <Button
               content="Cancel"

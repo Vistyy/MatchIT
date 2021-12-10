@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
-import { runInAction } from "mobx";
 import { useStore } from "../../../../app/stores/store";
 import SkillSearchInput from "../SkillSearchInput";
 
@@ -28,15 +27,9 @@ export default observer(function SkillsSegment() {
       loadAllSkills().then(getSkillNames);
   }, [getSkillNames, loadAllSkills, skillNames.length, skillRegistry.size]);
 
-  // useEffect(() => {
-  //   runInAction(() =>
-  //     skillNames.sort((s1, s2) => (s1.title >= s2.title ? 1 : -1))
-  //   );
-  // }, [skillNames, skillNames.length]);
-
   return (
     <>
-      <Header>Skills</Header>
+      <Header as="h1">Skills</Header>
       <Segment
         style={{ marginBottom: "3.5em", minHeight: "6em" }}
         className={

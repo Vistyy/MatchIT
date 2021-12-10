@@ -11,10 +11,12 @@ export default function CertificationElement({ certificate }: Props) {
   return (
     <Item>
       <Item.Content>
-        <Item.Header as="h2">{certificate.name}</Item.Header>
-        <Item.Meta>{`${format(
+        <Item.Header as="h3" style={{ display: "inline", marginRight: '0.6em' }}>
+          {certificate.name}
+        </Item.Header>
+        <Item.Meta style={{ display: "inline" }}>{`${format(
           new Date(certificate.dateAcquired),
-          "yyyy-MM-dd"
+          "dd-MM-yyyy"
         )}`}</Item.Meta>
       </Item.Content>
     </Item>

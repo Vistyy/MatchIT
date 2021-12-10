@@ -49,6 +49,7 @@ export default observer(function CertificationForm({ setEditMode }: Props) {
             name="dateAcquired"
             label="Date Acquired"
             errorElementName="Date Acquired"
+            maxDate={new Date()}
           />
           <Button
             content="Add"

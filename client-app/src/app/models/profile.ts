@@ -80,7 +80,7 @@ export interface EmploymentFormValues {
   employedTo?: Date;
   companyName: string;
   companyPosition: string;
-  jobBulletPoints: BulletPoint[];
+  jobBulletList: BulletPoint[];
 }
 
 export interface ExperienceItem {
@@ -91,7 +91,7 @@ export interface ExperienceItem {
 export interface ExperienceFormValues {
   title: string;
   summary: string;
-  bulletPoints: BulletPoint[];
+  bulletList: BulletPoint[];
 }
 
 export interface EducationItem {

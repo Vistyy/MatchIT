@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Grid, Header, Item } from "semantic-ui-react";
+import { Header, Item } from "semantic-ui-react";
 import { Certification } from "../../../app/models/profile";
 import CertificationElement from "../profileItemElements/CertificationElement";
 
@@ -12,7 +12,7 @@ export default observer(function ProfileCertification({
   certification,
 }: Props) {
   return (
-    <Grid.Row>
+    <>
       <Header as="h1">Certification</Header>
       {certification && (
         <Item.Group>
@@ -24,6 +24,6 @@ export default observer(function ProfileCertification({
           ))}
         </Item.Group>
       )}
-    </Grid.Row>
+    </>
   );
 });

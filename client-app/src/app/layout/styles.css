@@ -318,3 +318,13 @@ a:link {
     width: 20px;
   }
 }
+
+.ui.segments.profileContent-container > .segment .items > .item,
+.ui.segment.editProfile-container .items > .item {
+  margin-bottom: 1em;
+}
+
+.ui.segments.profileContent-container > .segment .items > .item:last-child,
+.ui.segment.editProfile-container .items > .item:last-child {
+  margin-bottom: 0;
+}

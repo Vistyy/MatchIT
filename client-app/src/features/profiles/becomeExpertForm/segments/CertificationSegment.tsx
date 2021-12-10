@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { Header } from "semantic-ui-react";
+import { Header, Item } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
 import AddNewButton from "../../profileItemElements/AddNewItemButton";
 import CertificationElement from "../../profileItemElements/CertificationElement";
@@ -14,7 +14,7 @@ export default observer(function CertificationSegment() {
   const [editCertificationMode, setEditCertificationMode] = useState(false);
   return (
     <>
-      <Header>Certification</Header>
+      <Header as="h1">Certification</Header>
       {editCertificationMode ? (
         <CertificationForm setEditMode={setEditCertificationMode} />
       ) : (
@@ -23,6 +23,7 @@ export default observer(function CertificationSegment() {
           onClick={() => setEditCertificationMode(true)}
         />
       )}
+      <Item.Group>
       {editedProfile &&
         editedProfile.certifications.map((certificate) => (
           <CertificationElement
@@ -30,6 +31,7 @@ export default observer(function CertificationSegment() {
             certificate={certificate}
           />
         ))}
+        </Item.Group>
     </>
   );
 });

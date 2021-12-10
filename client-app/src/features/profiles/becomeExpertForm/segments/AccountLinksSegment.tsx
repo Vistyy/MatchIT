@@ -13,7 +13,7 @@ export default observer(function AccountLinksSegment() {
 
   return (
     <>
-      <Header>Profile links</Header>
+      <Header as="h1">Profile links</Header>
       {linkEditMode ? (
         <AccountLinksForm setEditMode={setLinkEditMode} profile={profile!} />
       ) : (

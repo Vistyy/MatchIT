@@ -13,7 +13,7 @@ export default observer(function PortfolioSegment() {
 
   return (
     <>
-      <Header>Portfolio</Header>
+      <Header as="h1">Portfolio</Header>
       {editPortfolioMode ? (
         <PortfolioForm setEditMode={setEditPortfolioMode} />
       ) : (

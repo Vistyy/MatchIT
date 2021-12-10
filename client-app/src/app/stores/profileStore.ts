@@ -212,7 +212,7 @@ export default class ProfileStore {
     employedTo,
     companyName,
     companyPosition,
-    jobBulletPoints,
+    jobBulletList: jobBulletPoints,
   }: EmploymentFormValues) => {
     const employmentItem: EmploymentItem = {
       id: uuid(),
@@ -231,7 +231,7 @@ export default class ProfileStore {
   addExperienceItem = ({
     title,
     summary,
-    bulletPoints,
+    bulletList: bulletPoints,
   }: ExperienceFormValues) => {
     const experienceItem: ExperienceItem = {
       id: uuid(),

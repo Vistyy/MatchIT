@@ -1,13 +1,13 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { observer } from "mobx-react-lite";
-import { Form, Formik } from "formik";
+import { FieldArray, Form, Formik } from "formik";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
 import ValidatedDatePicker from "../../../../app/common/form/ValidatedDatePicker";
 import * as Yup from "yup";
-import { Button } from "semantic-ui-react";
+import { Button, Icon, Label, List } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
-import ValidatedTextArea from "../../../../app/common/form/ValidatedTextArea";
 import { BulletPoint } from "../../../../app/models/profile";
+import { v4 as uuid } from "uuid";
 
 interface Props {
   setEditMode: (editMode: boolean) => void;
@@ -25,7 +25,8 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
         companyPosition: "",
         employedFrom: new Date(),
         employedTo: new Date(),
-        jobBulletPoints: [] as BulletPoint[],
+        bulletPoint: "",
+        jobBulletList: [] as BulletPoint[],
         error: null,
       }}
       onSubmit={(values, { setErrors }) => {
@@ -41,10 +42,19 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
         companyName: Yup.string().required(),
         companyPosition: Yup.string().required(),
         employedFrom: Yup.date().required(),
-        jobBulletPoints: Yup.array().required(),
+        bulletPoint: Yup.string(),
+        jobBulletList: Yup.array()
+          .min(1, "The description must have at least 1 bullet point")
+          .required(),
       })}
     >
-      {({ handleSubmit, isValid }) => (
+      {({
+        handleSubmit,
+        isValid,
+        values,
+        errors: { jobBulletList: bulletListError },
+        setFieldValue,
+      }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="companyName"
@@ -69,13 +79,62 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
             optional
             errorElementName="Employed To"
           />
-          <ValidatedTextArea
-            name="jobBulletPoints"
-            label="Job Description"
-            placeholder="Job Description"
-            errorElementName="Job Description"
-            rows={5}
+          <FieldArray
+            name="jobBulletList"
+            render={(arrayHelpers) => (
+              <>
+                <ValidatedTextInput
+                  name="bulletPoint"
+                  placeholder="Description of the position"
+                  label="Description of the position"
+                  errorElementName="Description of the position"
+                />
+                {bulletListError?.toString() ? (
+                  <Label basic color="red">
+                    {bulletListError.toString()}
+                  </Label>
+                ) : null}
+                <List bulleted>
+                  {values.jobBulletList.length > 0 &&
+                    values.jobBulletList.map((bulletPoint, index) => (
+                      <List.Item key={bulletPoint.id}>
+                        {bulletPoint.text}
+                        <Icon
+                          name="close"
+                          link
+                          onClick={() => arrayHelpers.remove(index)}
+                        />
+                      </List.Item>
+                    ))}
+                </List>
+                {values.bulletPoint.length > 0 && (
+                  <Button
+                    type="submit"
+                    content="Add Bullet Point"
+                    onKeyPress={(e: KeyboardEvent) => {
+                      e.preventDefault();
+                      if (e.key === "Enter") {
+                        arrayHelpers.push({
+                          id: uuid(),
+                          text: values.bulletPoint,
+                        } as BulletPoint);
+                        setFieldValue("bulletPoint", "");
+                      }
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      arrayHelpers.push({
+                        id: uuid(),
+                        text: values.bulletPoint,
+                      } as BulletPoint);
+                      setFieldValue("bulletPoint", "");
+                    }}
+                  />
+                )}
+              </>
+            )}
           />
+
           <Button
             content="Add"
             size="big"

@@ -1,12 +1,12 @@
-import { Form, Formik } from "formik";
+import { FieldArray, Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useStore } from "../../../../app/stores/store";
 import * as Yup from "yup";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
-import { Button } from "semantic-ui-react";
-import ValidatedTextArea from "../../../../app/common/form/ValidatedTextArea";
+import { Button, Icon, Label, List } from "semantic-ui-react";
 import { BulletPoint } from "../../../../app/models/profile";
+import { v4 as uuid } from "uuid";
 
 interface Props {
   setEditMode: (editMode: boolean) => void;
@@ -22,7 +22,8 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
       initialValues={{
         title: "",
         summary: "",
-        bulletPoints: [] as BulletPoint[],
+        bulletPoint: "",
+        bulletList: [] as BulletPoint[],
         error: null,
       }}
       onSubmit={(values, { setErrors }) => {
@@ -37,10 +38,12 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
       validationSchema={Yup.object({
         title: Yup.string().required(),
         summary: Yup.string().required(),
-        bulletPoints: Yup.string().required(),
+        bulletList: Yup.array()
+          .min(1, "The description must have at least 1 bullet point")
+          .required(),
       })}
     >
-      {({ handleSubmit, isValid }) => (
+      {({ handleSubmit, isValid, values, errors: {bulletList: bulletListError}, setFieldValue }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="title"
@@ -54,12 +57,60 @@ export default observer(function ExperienceForm({ setEditMode }: Props) {
             label="Summary"
             errorElementName="Summary"
           />
-          <ValidatedTextArea
-            name="formattedText"
-            label="Description"
-            placeholder="Description"
-            errorElementName="Description"
-            rows={5}
+          <FieldArray
+            name="bulletList"
+            render={(arrayHelpers) => (
+              <>
+                <ValidatedTextInput
+                  name="bulletPoint"
+                  placeholder="Description of the position"
+                  label="Description of the position"
+                  errorElementName="Description of the position"
+                />
+                {bulletListError?.toString() ? (
+                  <Label basic color="red">
+                    {bulletListError.toString()}
+                  </Label>
+                ) : null}
+                <List bulleted>
+                  {values.bulletList.length > 0 &&
+                    values.bulletList.map((bulletPoint, index) => (
+                      <List.Item key={bulletPoint.id}>
+                        {bulletPoint.text}
+                        <Icon
+                          name="close"
+                          link
+                          onClick={() => arrayHelpers.remove(index)}
+                        />
+                      </List.Item>
+                    ))}
+                </List>
+                {values.bulletPoint.length > 0 && (
+                  <Button
+                    type="submit"
+                    content="Add Bullet Point"
+                    onKeyPress={(e: KeyboardEvent) => {
+                      e.preventDefault();
+                      if (e.key === "Enter") {
+                        arrayHelpers.push({
+                          id: uuid(),
+                          text: values.bulletPoint,
+                        } as BulletPoint);
+                        setFieldValue("bulletPoint", "");
+                      }
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      arrayHelpers.push({
+                        id: uuid(),
+                        text: values.bulletPoint,
+                      } as BulletPoint);
+                      setFieldValue("bulletPoint", "");
+                    }}
+                  />
+                )}
+              </>
+            )}
           />
           <Button
             content="Add"

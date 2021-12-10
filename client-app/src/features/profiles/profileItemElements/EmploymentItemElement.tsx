@@ -17,10 +17,12 @@ export default function EmploymentItemElement({ employmentItem }: Props) {
         </Item.Extra>
         <Item.Meta>{`${format(
           new Date(employmentItem.employedFrom),
-          "yyyy-MM-dd"
+          "dd-MM-yyyy"
         )} - ${
           employmentItem.employedTo
-            ? format(new Date(employmentItem.employedTo), "yyyy-MM-dd")
+            ? new Date(employmentItem.employedTo).getTime() < Date.now()
+              ? format(new Date(employmentItem.employedTo), "dd-MM-yyyy")
+              : "Currently"
             : "Currently"
         }`}</Item.Meta>
         <Item.Description>

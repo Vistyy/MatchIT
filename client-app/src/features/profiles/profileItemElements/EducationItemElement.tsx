@@ -16,14 +16,14 @@ export default function EducationItemElement({ educationItem }: Props) {
         </Item.Header>
         <Item.Meta>{`${format(
           new Date(educationItem.studyingFrom),
-          "yyyy-MM-dd"
+          "dd-MM-yyyy"
         )} - ${
           educationItem.studyingTo
             ? new Date(educationItem.studyingTo).getTime() < Date.now()
-              ? format(new Date(educationItem.studyingTo), "yyyy-MM-dd")
+              ? format(new Date(educationItem.studyingTo), "dd-MM-yyyy")
               : `Currently (${format(
                   new Date(educationItem.studyingTo),
-                  "yyyy-MM-dd"
+                  "dd-MM-yyyy"
                 )})`
             : "Currently"
         }`}</Item.Meta>

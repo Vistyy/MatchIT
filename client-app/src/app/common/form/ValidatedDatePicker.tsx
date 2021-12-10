@@ -12,6 +12,7 @@ interface Props {
   errorElementName: string;
   label?: string;
   optional?: boolean;
+  maxDate?: Date;
 }
 
 export default function ValidatedDatePicker(props: Props) {
