@@ -1,5 +1,6 @@
+import { min } from "lodash";
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { Grid, Header, Loader } from "semantic-ui-react";
 import { PagingParams } from "../../../app/models/pagination";
@@ -22,6 +23,7 @@ export default observer(function JobDashboard() {
   } = jobStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(false);
+  let timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   function handleGetNext() {
     setLoadingNext(true);
@@ -34,14 +36,19 @@ export default observer(function JobDashboard() {
   }, [resetState]);
 
   useEffect(() => {
-    if (
-      jobArray.length <= 0 &&
-      !loadingJobs &&
-      (!loadingInitial || loadingSkills)
-    ) {
+    if (jobArray.length === 0 && !loadingJobs && !loadingInitial) {
       loadJobs();
       setLoadingInitial(true);
+    } else if (jobArray.length === 0 && !loadingJobs && loadingInitial) {
+      timerRef.current = setTimeout(() => {
+        loadJobs();
+      }, 10000);
+    } else {
+      clearTimeout(timerRef.current!);
     }
+    return () => {
+      clearTimeout(timerRef.current!);
+    };
   }, [jobArray.length, loadJobs, loadingInitial, loadingJobs, loadingSkills]);
 
   return (

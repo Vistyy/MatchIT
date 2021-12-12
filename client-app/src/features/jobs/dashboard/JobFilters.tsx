@@ -68,11 +68,11 @@ export default observer(function JobFilters() {
           onClick={() => clearFilter()}
         />
         {loadingSkills ? (
-          <Menu.Item style={{ height: "100px" }}>
+          <Menu.Item style={{ minHeight: "15em" }}>
             <LoadingComponent content="Loading..." />
           </Menu.Item>
         ) : (
-          <div style={{ maxHeight: "500px", overflowY: "auto" }}>
+          <div style={{ maxHeight: "20em", overflowY: "auto" }}>
             {Array.from(skillRegistry)
               .sort(
                 ([_, s1], [__, s2]) =>

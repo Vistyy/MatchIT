@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, Grid, Header, Loader } from "semantic-ui-react";
 import { PagingParams } from "../../../app/models/pagination";
 import { useStore } from "../../../app/stores/store";
@@ -63,7 +63,7 @@ export default observer(function UserJobsPage() {
             ) : (
               <>
                 <Header content="You have no jobs yet" />
-                <Button as={NavLink} to="/addJob" content="Add New Job Offer" />
+                <Button as={Link} to="/addJob" content="Add New Job Offer" />
               </>
             )}
           </InfiniteScroll>

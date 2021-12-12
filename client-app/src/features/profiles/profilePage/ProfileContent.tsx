@@ -23,27 +23,29 @@ export default observer(function ProfileContent() {
             {profile && profile.isExpert && (
               <>
                 {profile.portfolio && profile.portfolio.length > 0 && (
-                    <ProfilePortfolio portfolio={profile.portfolio} />
+                  <ProfilePortfolio portfolio={profile.portfolio} />
                 )}
                 {profile.employment && profile.employment.length > 0 && (
-                    <ProfileEmployment employment={profile.employment} />
+                  <ProfileEmployment employment={profile.employment} />
                 )}
                 {profile.education && profile.education.length > 0 && (
-                    <ProfileEducation education={profile.education} />
+                  <ProfileEducation education={profile.education} />
                 )}
                 {profile.experience && profile.experience.length > 0 && (
-                    <ProfileExperience experience={profile.experience} />
+                  <ProfileExperience experience={profile.experience} />
                 )}
-                {profile.certifications && profile.certifications.length > 0 && (
+                {profile.certifications &&
+                  profile.certifications.length > 0 && (
                     <ProfileCertification
                       certification={profile.certifications}
                     />
-                )}
+                  )}
                 {isCurrentUser && (
                   <Button
                     content="Edit Profile"
                     style={{ position: "absolute", top: "5px", right: "5px" }}
                     onClick={() => setEditMode(true)}
+                    className="positive--custom--inverted"
                   />
                 )}
               </>

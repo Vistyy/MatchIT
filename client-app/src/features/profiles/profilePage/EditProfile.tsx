@@ -47,7 +47,7 @@ export default observer(function EditProfile({ setEditMode }: Props) {
           style={{ paddingBottom: "4rem" }}
           className="editProfile-container"
         >
-          <Button.Group style={{ float: "right", marginRight: "1rem" }}>
+          <div style={{ display: 'flex', float: "right", marginRight: "1rem" }}>
             <Button
               content="Cancel"
               style={{ marginRight: "15px" }}
@@ -72,14 +72,14 @@ export default observer(function EditProfile({ setEditMode }: Props) {
                 loading={loading || uploading || updatingProfile}
               />
             </div>
-          </Button.Group>
+          </div>
           <SkillsSegment />
           <PortfolioSegment />
           <EmploymentSegment />
           <ExperienceSegment />
           <EducationSegment />
           <CertificationSegment />
-          <Button.Group style={{ float: "right", marginRight: "1rem" }}>
+          <div style={{ display: 'flex', float: "right", marginRight: "1rem" }}>
             <Button
               content="Cancel"
               style={{ marginRight: "15px" }}
@@ -104,7 +104,7 @@ export default observer(function EditProfile({ setEditMode }: Props) {
                 loading={loading || uploading || updatingProfile}
               />
             </div>
-          </Button.Group>
+          </div>
         </Segment>
       </Segment.Group>
     </>

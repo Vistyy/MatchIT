@@ -1,7 +1,8 @@
 import { useField } from "formik";
 import _ from "lodash";
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Form, Label } from "semantic-ui-react";
+import { JsxAttribute } from "typescript";
 
 interface Props {
   placeholder: string;

@@ -76,9 +76,13 @@ export default observer(function ProfileHeader() {
                 </Item.Image>
                 <Item.Content>
                   <Item.Header as="h1" content={profile.displayName} />
-                  <Item.Extra>
+                  <Item.Extra className="profileSkills-skillContainer">
                     {profile.skills.map((skill) => (
-                      <Label key={skill.id} content={skill.name} />
+                      <Label
+                        key={skill.id}
+                        content={skill.name}
+                        className="profileSkills-skillLabel"
+                      />
                     ))}
                   </Item.Extra>
                   <Item.Description>{profile.bio}</Item.Description>
@@ -103,30 +107,49 @@ export default observer(function ProfileHeader() {
               </Menu.Item>
             )}
           </Grid.Column>
-          <Grid.Column width="4">
+          <Grid.Column width="1" />
+          <Grid.Column width="3">
             {!profile.cv ? (
               <>
                 {!addCVMode ? (
                   <Button
+                    className="positive--custom--inverted"
                     content="Add CV"
-                    floated="right"
                     onClick={() => setAddCVMode(true)}
+                    floated="right"
+                    style={{ marginBottom: "1.2em" }}
                   />
                 ) : (
                   <>
                     <Button
+                      className="positive--custom--inverted"
                       content="Cancel"
                       onClick={() => setAddCVMode(false)}
+                      floated="right"
+                      style={{ marginBottom: "1.2em" }}
                     />
-                    <FileUploadWidget uploadFile={addCV} />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                        maxWidth: "100%",
+                      }}
+                      // className="ui card"
+                    >
+                      <FileUploadWidget uploadFile={addCV} />
+                    </div>
                   </>
                 )}
               </>
             ) : (
               <>
                 <Button
+                  className="positive--custom--inverted"
                   content="Change CV"
                   onClick={() => setAddCVMode(true)}
+                  floated="right"
+                  style={{ marginBottom: "1.2em" }}
                 />
                 {addCVMode ? (
                   <>

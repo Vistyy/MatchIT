@@ -31,7 +31,7 @@ export default observer(function SkillsSegment() {
     <>
       <Header as="h1">Skills</Header>
       <Segment
-        style={{ marginBottom: "3.5em", minHeight: "6em" }}
+        style={{ marginBottom: "2.5em", minHeight: "6em" }}
         className={
           editedProfile?.skills.length === 0 && removedSkill
             ? "becomeExpert-skillsSegment__noSkills"

@@ -20,9 +20,9 @@ export default observer(function FileUploadWidgetDropzone({
     border: "dashed 3px #eee",
     borderColor: "#eee",
     borderRadius: "5px",
-    paddingTop: "30px",
+    padding: "0.7em 0.7em 0.1em 0.7em",
     textAlign: "center" as "center",
-    height: 200,
+    height: '9em',
   };
   const dzActive = {
     borderColor: "green",
@@ -51,8 +51,8 @@ export default observer(function FileUploadWidgetDropzone({
       <input {...getInputProps()} />
       {!uploading ? (
         <>
-          <Icon name="upload" size="huge" />
-          <Header content={`Drop files here (max. 1)`} />
+          <Icon name="upload" size="big" />
+          <Header content={`Drop files here \n(max. 1)`} />
         </>
       ) : (
         <LoadingComponent />

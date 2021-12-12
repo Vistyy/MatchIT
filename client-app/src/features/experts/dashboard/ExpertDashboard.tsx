@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { Grid, Header, Loader } from "semantic-ui-react";
 import { PagingParams } from "../../../app/models/pagination";
@@ -17,10 +17,12 @@ export default observer(function ExpertDashboard() {
     setPagingParams,
     pagination,
     loadingExperts,
-    resetState, loadingSkills
+    resetState,
+    loadingSkills,
   } = expertStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(false);
+  let timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   function handleGetNext() {
     setLoadingNext(true);
@@ -33,10 +35,19 @@ export default observer(function ExpertDashboard() {
   }, [resetState]);
 
   useEffect(() => {
-    if (expertArray.length === 0 && !loadingExperts && (!loadingInitial || loadingSkills)) {
+    if (expertArray.length === 0 && !loadingExperts && !loadingInitial) {
       loadExperts();
       setLoadingInitial(true);
+    } else if (expertArray.length === 0 && !loadingExperts && loadingInitial) {
+      timerRef.current = setTimeout(() => {
+        loadExperts();
+      }, 10000);
+    } else {
+      clearTimeout(timerRef.current!);
     }
+    return () => {
+      clearTimeout(timerRef.current!);
+    };
   }, [expertArray.length, loadExperts, loadingExperts, loadingInitial, loadingSkills]);
 
   return (

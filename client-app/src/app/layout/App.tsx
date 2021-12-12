@@ -22,6 +22,7 @@ import JobDashboard from "../../features/jobs/dashboard/JobDashboard";
 import JobPage from "../../features/jobs/jobPage/JobPage";
 import AddJob from "../../features/jobs/addJob/AddJob";
 import UserJobList from "../../features/jobs/userJobList/UserJobsPage";
+import HomePage from "../../features/home/HomePage";
 
 function App() {
   const { commonStore, userStore } = useStore();

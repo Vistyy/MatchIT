@@ -21,7 +21,7 @@ export default function EducationItemElement({ educationItem }: Props) {
           educationItem.studyingTo
             ? new Date(educationItem.studyingTo).getTime() < Date.now()
               ? format(new Date(educationItem.studyingTo), "dd-MM-yyyy")
-              : `Currently (${format(
+              : `Currently (Expected ${format(
                   new Date(educationItem.studyingTo),
                   "dd-MM-yyyy"
                 )})`

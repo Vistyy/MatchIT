@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, Grid, Header, Item, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
@@ -72,7 +72,7 @@ export default observer(function JobPage() {
                     <Header content="Want to make an offer?" />
                     <Button
                       content="Become an Expert"
-                      as={NavLink}
+                      as={Link}
                       to="/becomeExpert"
                     />
                   </>

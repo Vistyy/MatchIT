@@ -1,10 +1,10 @@
-import React, { KeyboardEvent } from "react";
+import React, { KeyboardEvent, MouseEvent, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { FieldArray, Form, Formik } from "formik";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
 import ValidatedDatePicker from "../../../../app/common/form/ValidatedDatePicker";
 import * as Yup from "yup";
-import { Button, Icon, Label, List } from "semantic-ui-react";
+import { Button, Icon, Label, List, Segment } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
 import { BulletPoint } from "../../../../app/models/profile";
 import { v4 as uuid } from "uuid";
@@ -17,6 +17,8 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
   const {
     profileStore: { addEmploymentItem },
   } = useStore();
+  const [hoverListItem, setHoverListItem] = useState(false);
+  const [target, setTarget] = useState("");
 
   return (
     <Formik
@@ -83,54 +85,82 @@ export default observer(function EmploymentForm({ setEditMode }: Props) {
             name="jobBulletList"
             render={(arrayHelpers) => (
               <>
-                <ValidatedTextInput
-                  name="bulletPoint"
-                  placeholder="Description of the position"
-                  label="Description of the position"
-                  errorElementName="Description of the position"
-                />
+                <label style={{ fontWeight: 700, fontSize: ".92857143em" }}>
+                  Description of the position
+                </label>
+
+                <Segment>
+                  <List>
+                    {values.jobBulletList.length > 0 &&
+                      values.jobBulletList.map((bulletPoint, index) => (
+                        <List.Item
+                          id={"bulletPoint" + bulletPoint.id}
+                          key={bulletPoint.id}
+                          onMouseEnter={(
+                            e: MouseEvent<HTMLDivElement, MouseEvent>
+                          ) => {
+                            setTarget(e.currentTarget.id);
+                            setHoverListItem(true);
+                          }}
+                          onMouseLeave={() => setHoverListItem(false)}
+                          onClick={() => arrayHelpers.remove(index)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <List.Icon
+                            verticalAlign="middle"
+                            name={
+                              hoverListItem &&
+                              target === `bulletPoint${bulletPoint.id}`
+                                ? "close"
+                                : "circle"
+                            }
+                            size={
+                              hoverListItem &&
+                              target === `bulletPoint${bulletPoint.id}`
+                                ? "small"
+                                : "mini"
+                            }
+                          />
+                          <List.Content>{bulletPoint.text}</List.Content>
+                        </List.Item>
+                      ))}
+                  </List>
+                </Segment>
                 {bulletListError?.toString() ? (
                   <Label basic color="red">
                     {bulletListError.toString()}
                   </Label>
                 ) : null}
-                <List bulleted>
-                  {values.jobBulletList.length > 0 &&
-                    values.jobBulletList.map((bulletPoint, index) => (
-                      <List.Item key={bulletPoint.id}>
-                        {bulletPoint.text}
-                        <Icon
-                          name="close"
-                          link
-                          onClick={() => arrayHelpers.remove(index)}
-                        />
-                      </List.Item>
-                    ))}
-                </List>
-                {values.bulletPoint.length > 0 && (
-                  <Button
-                    type="submit"
-                    content="Add Bullet Point"
-                    onKeyPress={(e: KeyboardEvent) => {
-                      e.preventDefault();
-                      if (e.key === "Enter") {
-                        arrayHelpers.push({
-                          id: uuid(),
-                          text: values.bulletPoint,
-                        } as BulletPoint);
-                        setFieldValue("bulletPoint", "");
-                      }
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
+                <ValidatedTextInput
+                  name="bulletPoint"
+                  placeholder="Add a bullet point to the description"
+                  errorElementName="Description of the position"
+                />
+                <Button
+                  className="positive--custom--inverted"
+                  disabled={values.bulletPoint.length === 0}
+                  type="submit"
+                  content="Add Bullet Point"
+                  onKeyPress={(e: KeyboardEvent) => {
+                    e.preventDefault();
+                    if (e.key === "Enter") {
                       arrayHelpers.push({
                         id: uuid(),
                         text: values.bulletPoint,
                       } as BulletPoint);
                       setFieldValue("bulletPoint", "");
-                    }}
-                  />
-                )}
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    arrayHelpers.push({
+                      id: uuid(),
+                      text: values.bulletPoint,
+                    } as BulletPoint);
+                    setFieldValue("bulletPoint", "");
+                  }}
+                  style={{ display: "block", marginBottom: "1em" }}
+                />
               </>
             )}
           />

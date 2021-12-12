@@ -42,6 +42,7 @@ export default function ValidatedDatePicker(props: Props) {
       />
       {props.optional && (
         <Checkbox
+          style={{ marginLeft: "1em" }}
           label={`Currently ${props.label?.split(" ")[0].toLocaleLowerCase()}`}
           onChange={(e, { checked }) => {
             setDisableCheckbox(!!checked);

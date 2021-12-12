@@ -39,7 +39,7 @@ export default observer(function JobListItem({ job }: Props) {
           </Item>
         </Item.Group>
       </Segment>
-      <Segment>
+      <Segment className="skillList-container">
         {job.requiredSkills.map((skill) => (
           <Button
             className="skillList-skillButton"
