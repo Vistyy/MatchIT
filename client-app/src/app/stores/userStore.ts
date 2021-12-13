@@ -38,10 +38,11 @@ export default class UserStore {
     store.commonStore.setToken(null);
     this.user = null;
     store.profileStore.profile = null;
-    history.push("/");
     store.expertStore.resetState();
     store.profileStore.resetState();
     store.fileStore.resetState();
+    store.jobStore.resetState();
+    history.push("/");
   };
 
   getUser = async () => {
@@ -66,7 +67,7 @@ export default class UserStore {
   };
 
   setImage = (image: Photo) => {
-    if (this.user) this.user.image = image;
+    if (this.user) this.user.photo = image;
   };
 
   setDisplayName = (name: string) => {

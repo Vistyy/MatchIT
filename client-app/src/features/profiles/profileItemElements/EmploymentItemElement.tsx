@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import React from "react";
-import { Item } from "semantic-ui-react";
+import { Item, List } from "semantic-ui-react";
 import { EmploymentItem } from "../../../app/models/profile";
 
 interface Props {
@@ -17,14 +17,20 @@ export default function EmploymentItemElement({ employmentItem }: Props) {
         </Item.Extra>
         <Item.Meta>{`${format(
           new Date(employmentItem.employedFrom),
-          "yyyy-MM-dd"
+          "dd-MM-yyyy"
         )} - ${
           employmentItem.employedTo
-            ? format(new Date(employmentItem.employedTo), "yyyy-MM-dd")
+            ? new Date(employmentItem.employedTo).getTime() < Date.now()
+              ? format(new Date(employmentItem.employedTo), "dd-MM-yyyy")
+              : "Currently"
             : "Currently"
         }`}</Item.Meta>
         <Item.Description>
-          <pre>{`${employmentItem.description.formattedText}`}</pre>
+          <List bulleted>
+            {employmentItem.description.bulletPoints.map((bulletPoint) => (
+              <List.Item key={bulletPoint.id}>{bulletPoint.text}</List.Item>
+            ))}
+          </List>
         </Item.Description>
       </Item.Content>
     </Item>

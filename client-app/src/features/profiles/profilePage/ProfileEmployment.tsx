@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Grid, Header, Item } from "semantic-ui-react";
+import { Header, Item } from "semantic-ui-react";
 import { EmploymentItem } from "../../../app/models/profile";
 import EmploymentItemElement from "../profileItemElements/EmploymentItemElement";
 
@@ -10,7 +10,7 @@ interface Props {
 
 export default observer(function ProfileEmployment({ employment }: Props) {
   return (
-    <Grid.Row>
+    <>
       <Header as="h1">Employment</Header>
       {employment && (
         <Item.Group>
@@ -22,6 +22,6 @@ export default observer(function ProfileEmployment({ employment }: Props) {
           ))}
         </Item.Group>
       )}
-    </Grid.Row>
+    </>
   );
 });

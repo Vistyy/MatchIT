@@ -18,33 +18,39 @@ export default observer(function ProfileContent() {
   return (
     <>
       {!editMode ? (
-        <Segment.Group>
-          {profile && profile.isExpert && (
-            <>
-              <Segment>
-                <ProfileEmployment employment={profile.employment} />
-              </Segment>
-              <Segment>
-                <ProfilePortfolio portfolio={profile.portfolio} />
-              </Segment>
-              <Segment>
-                <ProfileEducation education={profile.education} />
-              </Segment>
-              <Segment>
-                <ProfileCertification certification={profile.certifications} />
-              </Segment>
-              <Segment>
-                <ProfileExperience experience={profile.experience} />
-              </Segment>
-              {isCurrentUser && (
-                <Button
-                  content="Edit Profile"
-                  style={{ position: "absolute", top: "5px", right: "5px" }}
-                  onClick={() => setEditMode(true)}
-                />
-              )}
-            </>
-          )}
+        <Segment.Group className="profileContent-container">
+          <Segment>
+            {profile && profile.isExpert && (
+              <>
+                {profile.portfolio && profile.portfolio.length > 0 && (
+                  <ProfilePortfolio portfolio={profile.portfolio} />
+                )}
+                {profile.employment && profile.employment.length > 0 && (
+                  <ProfileEmployment employment={profile.employment} />
+                )}
+                {profile.education && profile.education.length > 0 && (
+                  <ProfileEducation education={profile.education} />
+                )}
+                {profile.experience && profile.experience.length > 0 && (
+                  <ProfileExperience experience={profile.experience} />
+                )}
+                {profile.certifications &&
+                  profile.certifications.length > 0 && (
+                    <ProfileCertification
+                      certification={profile.certifications}
+                    />
+                  )}
+                {isCurrentUser && (
+                  <Button
+                    content="Edit Profile"
+                    style={{ position: "absolute", top: "5px", right: "5px" }}
+                    onClick={() => setEditMode(true)}
+                    className="positive--custom--inverted"
+                  />
+                )}
+              </>
+            )}
+          </Segment>
         </Segment.Group>
       ) : (
         <>

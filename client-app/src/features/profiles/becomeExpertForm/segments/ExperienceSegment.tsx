@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { Header } from "semantic-ui-react";
+import { Header, Item } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
 import AddNewButton from "../../profileItemElements/AddNewItemButton";
 import ExperienceItemElement from "../../profileItemElements/ExperienceItemElement";
@@ -8,13 +8,13 @@ import ExperienceForm from "../forms/ExperienceForm";
 
 export default observer(function ExperienceSegment() {
   const {
-    profileStore: { profile },
+    profileStore: { editedProfile },
   } = useStore();
 
   const [editExperienceMode, setEditExperienceMode] = useState(false);
   return (
     <>
-      <Header>Experience</Header>
+      <Header as="h1">Experience</Header>
       {editExperienceMode ? (
         <ExperienceForm setEditMode={setEditExperienceMode} />
       ) : (
@@ -23,13 +23,15 @@ export default observer(function ExperienceSegment() {
           onClick={() => setEditExperienceMode(true)}
         />
       )}
-      {profile &&
-        profile.experience.map((experienceItem) => (
-          <ExperienceItemElement
-            key={experienceItem.id}
-            experienceItem={experienceItem}
-          />
-        ))}
+      <Item.Group>
+        {editedProfile &&
+          editedProfile.experience.map((experienceItem) => (
+            <ExperienceItemElement
+              key={experienceItem.id}
+              experienceItem={experienceItem}
+            />
+          ))}
+      </Item.Group>
     </>
   );
 });

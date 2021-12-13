@@ -19,5 +19,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new ListAll.Query { }));
         }
+        [HttpGet("job-required")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetJobSkills([FromQuery] SkillParams param)
+        {
+            return HandleResult(await Mediator.Send(new ListJobRequired.Query {Params = param}));
+        }
     }
 }

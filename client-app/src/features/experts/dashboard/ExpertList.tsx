@@ -1,16 +1,17 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useStore } from "../../../app/stores/store";
+import { Profile } from "../../../app/models/profile";
 import ExpertListItem from "./ExpertListItem";
 
-export default observer(function ExpertList() {
-  const { expertStore } = useStore();
-  const { expertRegistry } = expertStore;
+interface Props {
+  expertArray: Profile[];
+}
 
+export default observer(function ExpertList({ expertArray }: Props) {
   return (
     <>
-      {Array.from(expertRegistry).map(([id, expert]) => (
-        <ExpertListItem key={id} expert={expert} />
+      {expertArray.slice().map((expert) => (
+        <ExpertListItem key={expert.userName} expert={expert} />
       ))}
     </>
   );

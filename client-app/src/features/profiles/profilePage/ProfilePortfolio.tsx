@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Grid, Header } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { PortfolioItem } from "../../../app/models/profile";
 import PortfolioItemElement from "../profileItemElements/PortfolioItemElement";
 
@@ -10,7 +10,7 @@ interface Props {
 
 export default observer(function ProfilePortfolio({ portfolio }: Props) {
   return (
-    <Grid.Row>
+    <>
       <Header as="h1">Portfolio</Header>
       {portfolio.map((portfolioItem) => (
         <PortfolioItemElement
@@ -18,6 +18,6 @@ export default observer(function ProfilePortfolio({ portfolio }: Props) {
           portfolioItem={portfolioItem}
         />
       ))}
-    </Grid.Row>
+    </>
   );
 });

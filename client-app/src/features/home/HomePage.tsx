@@ -18,11 +18,11 @@ export default observer(function HomePage() {
         </Header>
         <>
           <Header as="h2" inverted content="Welcome to MatchIT" />
-          <Button as={Link} to="/dashboard" size="huge" inverted>
-            Hire a freelancer
+          <Button as={Link} to="/experts" size="huge" inverted>
+            Search for an expert
           </Button>
-          <Button as={Link} to="/" size="huge" inverted>
-            Become a freelancer
+          <Button as={Link} to="/jobs" size="huge" inverted>
+            Search for a job opportunity
           </Button>
         </>
       </Container>

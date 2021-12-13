@@ -8,14 +8,22 @@ import ProfileContent from "./ProfileContent";
 import ProfileHeader from "./ProfileHeader";
 
 export default observer(function ProfilePage() {
-  const { username } = useParams<{ username: string }>();
-  const { profileStore } = useStore();
-  const { loadingProfile, loadProfile, profile, resetState } = profileStore;
+  const { userName } = useParams<{ userName: string }>();
+  const {
+    profileStore: { loadingProfile, loadProfile, profile, resetState },
+  } = useStore();
 
   useEffect(() => {
     resetState();
-    loadProfile(username);
-  }, [loadProfile, resetState, username]);
+    loadProfile(userName);
+  }, [loadProfile, resetState, userName]);
+
+  useEffect(() => {
+    document.title = "Profile - MatchIT";
+    if (profile?.displayName) {
+      document.title = `${profile?.displayName}'s Profile - MatchIT`;
+    }
+  }, [profile?.displayName]);
 
   if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
 
@@ -24,7 +32,7 @@ export default observer(function ProfilePage() {
       <Grid.Column width="16">
         {profile && (
           <>
-            <ProfileHeader profile={profile} />
+            <ProfileHeader />
             <ProfileContent />
           </>
         )}

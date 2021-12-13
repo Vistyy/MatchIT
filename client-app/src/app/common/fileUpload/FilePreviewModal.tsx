@@ -30,11 +30,12 @@ export default observer(function FilePreviewModal() {
         setPageNumber(1);
       }}
       closeIcon
+      // size={fileStore.modal.size}
     >
       <Modal.Content>
         {fileStore.modal.file ? (
           fileStore.modal.file.resourceType.startsWith("image") ? (
-            <Image src={fileStore.modal.file.url} />
+            <Image src={fileStore.modal.file.url} size="huge" />
           ) : (
             <Document
               file={fileStore.modal.file.url}

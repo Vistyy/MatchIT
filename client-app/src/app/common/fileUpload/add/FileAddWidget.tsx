@@ -1,12 +1,17 @@
 import { observer } from "mobx-react-lite";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Card, Checkbox, Grid, Icon, Image } from "semantic-ui-react";
-import { useStore } from "../../stores/store";
-import FileWidgetDropzone from "./FileWidgetDropzone";
+import { useStore } from "../../../stores/store";
 import { Document, Page } from "react-pdf/dist/umd/entry.webpack";
 import "react-pdf/dist/umd/Page/AnnotationLayer.css";
+import { runInAction } from "mobx";
+import FileAddWidgetDropzone from "./FileAddWidgetDropzone";
 
-export default observer(function FileAddWidget() {
+interface Props {
+  maxFiles?: number;
+}
+
+export default observer(function FileAddWidget({ maxFiles = 5 }: Props) {
   const {
     fileStore: { temporaryFiles, addFiles, deleteFiles, openFilePreviewModal },
   } = useStore();
@@ -34,19 +39,27 @@ export default observer(function FileAddWidget() {
     setFilesToDelete([]);
   }
 
-  // useEffect(() => {
-  //   return () => {
-  //     Array.from(temporaryFiles.values()).forEach((file: any) =>
-  //       URL.revokeObjectURL(file.preview)
-  //     );
-  //   };
-  // }, [temporaryFiles]);
+  useEffect(() => {
+    return () => {
+      Array.from(temporaryFiles.values()).forEach((file: any) =>
+        URL.revokeObjectURL(file.preview)
+      );
+    };
+  }, [temporaryFiles]);
+
+  useEffect(() => {
+    runInAction(() => temporaryFiles.clear());
+  }, [temporaryFiles]);
 
   return (
     <>
       <Grid.Row>
         <Grid.Column width={4}>
-          <FileWidgetDropzone addFiles={addFiles} />
+          <FileAddWidgetDropzone
+            files={temporaryFiles}
+            addFiles={addFiles}
+            maxFiles={maxFiles}
+          />
         </Grid.Column>
         <Grid.Column width={3}>
           {temporaryFiles && temporaryFiles.size > 0 && deleteMode > 0 && (

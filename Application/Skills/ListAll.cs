@@ -15,11 +15,11 @@ namespace Application.Skills
 {
     public class ListAll
     {
-        public class Query : IRequest<Result<List<SkillDto>>>
+        public class Query : IRequest<Result<List<ExpertSkillDto>>>
         {
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<SkillDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<ExpertSkillDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -30,13 +30,13 @@ namespace Application.Skills
                 _mapper = mapper;
             }
 
-            public async Task<Result<List<SkillDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<ExpertSkillDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Skills.ProjectTo<SkillDto>(_mapper.ConfigurationProvider);
+                var query = _context.Skills.ProjectTo<ExpertSkillDto>(_mapper.ConfigurationProvider);
 
-                var skills = await query.ToListAsync();
+                var skills = await query.OrderBy(s => s.Name).ToListAsync();
 
-                return Result<List<SkillDto>>.Success(skills);
+                return Result<List<ExpertSkillDto>>.Success(skills);
             }
         }
     }

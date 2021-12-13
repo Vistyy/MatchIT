@@ -10,11 +10,13 @@ import { runInAction } from "mobx";
 interface Props {
   source: SkillSearchItem[];
   loadingSkills: boolean;
+  setRemovedSkill: (removedSkill: boolean) => void;
 }
 
 export default observer(function SkillSearchInput({
   source,
   loadingSkills,
+  setRemovedSkill,
 }: Props) {
   const {
     profileStore: { profile, addSkill, removeSkill },
@@ -94,6 +96,7 @@ export default observer(function SkillSearchInput({
       value={value}
       minCharacters={0}
       selectFirstResult
+      onBlur={() => setRemovedSkill(true)}
     />
   );
 });

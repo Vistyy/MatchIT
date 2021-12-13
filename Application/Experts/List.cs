@@ -22,18 +22,29 @@ namespace Application.Experts
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
-                _userAccessor = userAccessor;
             }
 
             public async Task<Result<PagedList<ExpertListItemDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Users.Where(u => u.Skills.Count > 0).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                var query = Enumerable.Empty<ExpertListItemDto>().AsQueryable();
+                if (request.Params.SortBy == "ratingHighest")
+                {
+                    query = _context.Users.Where(u => u.Skills.Count > 0).OrderByDescending(u => u.RatingCount / u.RatingSum).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                }
+                else if (request.Params.SortBy == "displayNameAsc")
+                {
+                    query = _context.Users.Where(u => u.Skills.Count > 0).OrderBy(u => u.DisplayName).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                }
+                else
+                {
+                    query = _context.Users.Where(u => u.Skills.Count > 0).ProjectTo<ExpertListItemDto>(_mapper.ConfigurationProvider).AsQueryable();
+                }
+
 
                 if (request.Params.Skill != "all" && request.Params.Skill != "")
                 {

@@ -6,7 +6,7 @@ namespace Application.Experts
 {
     public class Expert
     {
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public string DisplayName { get; set; }
         public string Bio { get; set; }
         public Photo Photo { get; set; }

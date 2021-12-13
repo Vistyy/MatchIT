@@ -42,6 +42,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CVId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -58,6 +61,12 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("GithubProfileUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LinkedInProfileUrl")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Location")
                         .HasColumnType("TEXT");
@@ -88,7 +97,10 @@ namespace Persistence.Migrations
                     b.Property<string>("PhotoId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Rating")
+                    b.Property<int>("RatingCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RatingSum")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
@@ -103,6 +115,8 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CVId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -113,6 +127,25 @@ namespace Persistence.Migrations
                     b.HasIndex("PhotoId");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Domain.BulletPoint", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DescriptionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DescriptionId");
+
+                    b.ToTable("BulletPoint");
                 });
 
             modelBuilder.Entity("Domain.Certification", b =>
@@ -141,9 +174,6 @@ namespace Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FormattedText")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Summary")
@@ -254,6 +284,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmployerId");
@@ -267,19 +300,31 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("AcceptedJobId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("BidderId")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Fee")
+                        .HasColumnType("REAL");
 
                     b.Property<Guid>("JobId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AcceptedJobId")
+                        .IsUnique();
+
                     b.HasIndex("BidderId");
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("JobBid");
+                    b.ToTable("JobBids");
                 });
 
             modelBuilder.Entity("Domain.Photo", b =>
@@ -569,11 +614,24 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
+                    b.HasOne("Domain.UserFile", "CV")
+                        .WithMany()
+                        .HasForeignKey("CVId");
+
                     b.HasOne("Domain.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId");
 
+                    b.Navigation("CV");
+
                     b.Navigation("Photo");
+                });
+
+            modelBuilder.Entity("Domain.BulletPoint", b =>
+                {
+                    b.HasOne("Domain.Description", null)
+                        .WithMany("BulletPoints")
+                        .HasForeignKey("DescriptionId");
                 });
 
             modelBuilder.Entity("Domain.Certification", b =>
@@ -620,22 +678,30 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.AppUser", "Employer")
                         .WithMany("PostedJobs")
-                        .HasForeignKey("EmployerId");
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Employer");
                 });
 
             modelBuilder.Entity("Domain.JobBid", b =>
                 {
+                    b.HasOne("Domain.Job", "AcceptedJob")
+                        .WithOne("AcceptedJobBid")
+                        .HasForeignKey("Domain.JobBid", "AcceptedJobId");
+
                     b.HasOne("Domain.AppUser", "Bidder")
                         .WithMany("JobBids")
-                        .HasForeignKey("BidderId");
+                        .HasForeignKey("BidderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Job", "Job")
                         .WithMany("JobBids")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AcceptedJob");
 
                     b.Navigation("Bidder");
 
@@ -675,13 +741,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.UserFile", b =>
                 {
-                    b.HasOne("Domain.Job", null)
+                    b.HasOne("Domain.Job", "Job")
                         .WithMany("Attachments")
-                        .HasForeignKey("JobId");
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Domain.PortfolioItem", null)
+                    b.HasOne("Domain.PortfolioItem", "PortfolioItem")
                         .WithMany("Attachments")
-                        .HasForeignKey("PortfolioItemId");
+                        .HasForeignKey("PortfolioItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Job");
+
+                    b.Navigation("PortfolioItem");
                 });
 
             modelBuilder.Entity("JobSkill", b =>
@@ -773,8 +845,15 @@ namespace Persistence.Migrations
                     b.Navigation("ReviewsReceived");
                 });
 
+            modelBuilder.Entity("Domain.Description", b =>
+                {
+                    b.Navigation("BulletPoints");
+                });
+
             modelBuilder.Entity("Domain.Job", b =>
                 {
+                    b.Navigation("AcceptedJobBid");
+
                     b.Navigation("Attachments");
 
                     b.Navigation("JobBids");

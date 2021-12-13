@@ -8,7 +8,7 @@ namespace Application.Core.Validators
     {
         public PortfolioValidator()
         {
-            // TODO
+            RuleFor(p => p.Attachments).NotEmpty();
         }
     }
 }

@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Header, Label, Segment } from "semantic-ui-react";
-import { runInAction } from "mobx";
 import { useStore } from "../../../../app/stores/store";
 import SkillSearchInput from "../SkillSearchInput";
 
@@ -9,10 +8,15 @@ export default observer(function SkillsSegment() {
   const { expertStore, profileStore } = useStore();
   const [removedSkill, setRemovedSkill] = useState(false);
 
-  const { loadAllSkills, skillNames, skillRegistry, getSkillNames, loading } =
-    expertStore;
+  const {
+    loadAllSkills,
+    skillNames,
+    skillRegistry,
+    getSkillNames,
+    loadingSkills,
+  } = expertStore;
 
-  const { profile, removeSkill } = profileStore;
+  const { editedProfile, removeSkill } = profileStore;
 
   useEffect(() => {
     loadAllSkills().then(getSkillNames);
@@ -23,25 +27,19 @@ export default observer(function SkillsSegment() {
       loadAllSkills().then(getSkillNames);
   }, [getSkillNames, loadAllSkills, skillNames.length, skillRegistry.size]);
 
-  useEffect(() => {
-    runInAction(() =>
-      skillNames.sort((s1, s2) => (s1.title >= s2.title ? 1 : -1))
-    );
-  }, [skillNames, skillNames.length]);
-
   return (
     <>
-      <Header>Skills</Header>
+      <Header as="h1">Skills</Header>
       <Segment
-        style={{ marginBottom: "3.5em", minHeight: "6em" }}
+        style={{ marginBottom: "2.5em", minHeight: "6em" }}
         className={
-          profile?.skills.length === 0 && removedSkill
+          editedProfile?.skills.length === 0 && removedSkill
             ? "becomeExpert-skillsSegment__noSkills"
             : ""
         }
       >
-        {profile &&
-          profile.skills.map((skill) => (
+        {editedProfile &&
+          editedProfile.skills.map((skill) => (
             <Label
               className="becomeExpert--skillLabel__hover asAButton"
               onClick={() => {
@@ -53,7 +51,7 @@ export default observer(function SkillsSegment() {
               {skill.name}
             </Label>
           ))}
-        {profile?.skills.length === 0 && removedSkill && (
+        {editedProfile?.skills.length === 0 && removedSkill && (
           <Label
             style={{ position: "absolute", zIndex: 2, top: "110%", left: "0" }}
             content="You must select at least one skill"
@@ -62,7 +60,11 @@ export default observer(function SkillsSegment() {
           />
         )}
       </Segment>
-      <SkillSearchInput source={skillNames} loadingSkills={loading} />
+      <SkillSearchInput
+        source={skillNames}
+        loadingSkills={loadingSkills}
+        setRemovedSkill={setRemovedSkill}
+      />
     </>
   );
 });

@@ -11,7 +11,7 @@ namespace Application.Core.Validators
             RuleFor(p => p.EmployedFrom).NotEmpty();
             RuleFor(p => p.Description.Title).NotEmpty();
             RuleFor(p => p.Description.Summary).NotEmpty();
-            RuleFor(p => p.Description.FormattedText).NotEmpty();
+            RuleFor(p => p.Description.BulletPoints).NotEmpty();
         }
     }
 }

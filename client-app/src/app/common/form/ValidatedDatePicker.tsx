@@ -9,8 +9,10 @@ interface Props {
   dayPlaceholder?: string;
   monthPlaceholder?: string;
   yearPlaceholder?: string;
+  errorElementName: string;
   label?: string;
   optional?: boolean;
+  maxDate?: Date;
 }
 
 export default function ValidatedDatePicker(props: Props) {
@@ -23,7 +25,7 @@ export default function ValidatedDatePicker(props: Props) {
       <label>{props.label}</label>
       <DatePicker
         {..._.omit(field, "onBlur")}
-        {...props}
+        {..._.omit(props, "errorElementName")}
         format="dd/MM/yyyy"
         value={(field.value && new Date(field.value)) || null}
         onChange={(val: Date) => {
@@ -40,6 +42,7 @@ export default function ValidatedDatePicker(props: Props) {
       />
       {props.optional && (
         <Checkbox
+          style={{ marginLeft: "1em" }}
           label={`Currently ${props.label?.split(" ")[0].toLocaleLowerCase()}`}
           onChange={(e, { checked }) => {
             setDisableCheckbox(!!checked);
@@ -51,7 +54,9 @@ export default function ValidatedDatePicker(props: Props) {
       )}
       {meta.touched && meta.error ? (
         <Label basic color="red">
-          {`${props.label} is a required field`}
+          {meta.error.includes("Invalid Date")
+            ? `${props.errorElementName} is required`
+            : `${meta.error.replace(props.name, props.errorElementName)}`}
         </Label>
       ) : null}
     </Form.Field>

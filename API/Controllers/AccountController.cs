@@ -50,8 +50,6 @@ namespace API.Controllers
 
             if (user == null) return Unauthorized("Invalid email");
 
-            if (user.UserName == "bob") user.EmailConfirmed = true; // TODO - delete
-
             if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
@@ -74,9 +72,9 @@ namespace API.Controllers
                 ModelState.AddModelError("email", "Email taken");
                 return ValidationProblem();
             }
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
             {
-                ModelState.AddModelError("username", "Username taken");
+                ModelState.AddModelError("userName", "Username taken");
                 return ValidationProblem();
             }
 
@@ -84,7 +82,7 @@ namespace API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.UserName
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -186,9 +184,9 @@ namespace API.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = user.Photo,
+                Photo = user.Photo,
                 Token = _tokenService.CreateToken(user),
-                Username = user.UserName,
+                UserName = user.UserName,
                 IsExpert = user.Skills.Count > 0
             };
         }

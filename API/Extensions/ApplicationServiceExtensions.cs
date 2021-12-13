@@ -24,10 +24,11 @@ namespace API.Extensions
                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
            });
 
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
-                opt.EnableSensitiveDataLogging();
             });
 
             services.AddCors(opt =>

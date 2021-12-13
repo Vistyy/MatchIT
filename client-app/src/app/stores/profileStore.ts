@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import {
+  AccountLinksFormValues,
   Certification,
   CertificationFormValues,
   EducationFormValues,
@@ -21,7 +22,10 @@ import { v4 as uuid } from "uuid";
 
 export default class ProfileStore {
   profile: Profile | null = null;
+  editedProfile: Profile | null = null;
   loadingProfile = false;
+  updatingProfile = false;
+  loadingLinks = false;
   uploading = false;
   loading = false;
 
@@ -30,20 +34,25 @@ export default class ProfileStore {
   }
 
   get isCurrentUser() {
-    if (store.userStore.user?.username === this.profile?.username) {
-      return store.userStore.user?.username === this.profile?.username;
+    if (store.userStore.user?.userName === this.profile?.userName) {
+      return store.userStore.user?.userName === this.profile?.userName;
     }
     return false;
   }
 
   resetState = () => {
     this.profile = null;
+    this.editedProfile = null;
   };
 
-  loadProfile = async (username: string) => {
+  startProfileEditing = () => {
+    this.editedProfile = {...this.profile!};
+  }
+
+  loadProfile = async (userName: string) => {
     this.loadingProfile = true;
     try {
-      const profile = await agent.Profiles.get(username);
+      const profile = await agent.Profiles.get(userName);
       runInAction(() => {
         this.profile = profile;
         this.loadingProfile = false;
@@ -54,15 +63,15 @@ export default class ProfileStore {
     }
   };
 
-  uploadPhoto = async (file: Blob) => {
+  uploadProfilePhoto = async (file: Blob) => {
     this.uploading = true;
     try {
-      const response = await agent.Profiles.uploadPhoto(file);
+      const response = await agent.Profiles.uploadProfilePhoto(file);
       const photo = response.data;
       runInAction(() => {
         if (this.profile && store.userStore.user) {
           store.userStore.setImage(photo);
-          this.profile.image = photo;
+          this.profile.photo = photo;
         }
         this.uploading = false;
       });
@@ -78,7 +87,7 @@ export default class ProfileStore {
       await agent.Profiles.deletePhoto(photo.id);
       runInAction(() => {
         if (this.profile) {
-          this.profile.image = undefined;
+          this.profile.photo = undefined;
           this.loading = false;
         }
       });
@@ -88,16 +97,25 @@ export default class ProfileStore {
     }
   };
 
-  uploadFile = async (file: UserFile) => {
+  addCV = async (file: any) => {
     this.uploading = true;
     try {
-      const blob = await fetch(file.url).then((r) => r.blob());
-      const response = await agent.Profiles.uploadFile(blob);
-      const uploadedFile = response.data;
-      return uploadedFile;
+      const cv: UserFile = {
+        id: uuid(),
+        resourceType: file.type,
+        url: file.preview,
+      };
+      const response = await store.fileStore.uploadFile(cv);
+      cv.id = response!.id;
+      cv.url = response!.url;
+      await agent.Profiles.addCV(cv);
+      runInAction(() => {
+        this.profile!.cv = cv;
+        this.uploading = false;
+      });
     } catch (error) {
       console.log(error);
-      runInAction(() => (this.loading = false));
+      runInAction(() => (this.uploading = false));
     }
   };
 
@@ -105,17 +123,18 @@ export default class ProfileStore {
     this.loading = true;
     try {
       await Promise.all(
-        portfolioItems.map(async (item, itemIndex) => {
+        portfolioItems.map(async (item) => {
           await Promise.all(
-            item.attachments.map(async (attachment, attachmentIndex) => {
+            item.attachments.map(async (attachment) => {
               if (attachment.url.startsWith("blob:")) {
-                const response = await this.uploadFile(attachment);
-                attachment.url = response!.url;
+                const response = await store.fileStore.uploadFile(attachment);
+                attachment = response!;
               }
             })
           );
         })
       );
+      runInAction(() => (this.loading = false));
       return portfolioItems;
     } catch (error) {
       console.log(error);
@@ -123,17 +142,38 @@ export default class ProfileStore {
     }
   };
 
-  updateProfile = async (profile: Partial<Profile>) => {
-    this.loading = true;
+  updateProfile = async (editedProfile: Partial<Profile>) => {
+    this.updatingProfile = true;
     try {
       const uploadedPortfolio = await this.uploadTempPortfolioFiles(
-        profile.portfolio!
+        editedProfile.portfolio!
       );
-      runInAction(() => (profile.portfolio = uploadedPortfolio));
-      await agent.Profiles.updateProfile(profile);
+      runInAction(() => (editedProfile.portfolio = uploadedPortfolio));
+      await agent.Profiles.updateProfile(editedProfile);
+      runInAction(() => {
+        this.profile = { ...this.profile, ...(editedProfile as Profile) };
+        this.updatingProfile = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.updatingProfile = false));
+    }
+  };
+
+  addAccountLinks = async ({
+    githubProfileUrl,
+    linkedInProfileUrl,
+  }: AccountLinksFormValues) => {
+    this.loadingLinks = true;
+    try {
+      const profile: Partial<Profile> = {
+        githubProfileUrl,
+        linkedInProfileUrl,
+      };
+      await agent.Profiles.addAccountLinks(profile);
       runInAction(() => {
         this.profile = { ...this.profile, ...(profile as Profile) };
-        this.loading = false;
+        this.loadingLinks = false;
       });
     } catch (error) {
       console.log(error);
@@ -142,19 +182,20 @@ export default class ProfileStore {
   };
 
   addSkill = (skill: Skill) => {
-    if (this.profile) {
-      this.profile.skills.push(skill);
+    if (this.editedProfile) {
+      this.editedProfile.skills.push(skill);
     }
   };
 
   removeSkill = (skill: Skill) => {
-    if (this.profile) {
-      this.profile.skills = this.profile.skills.filter((s) => s !== skill);
+    if (this.editedProfile) {
+      this.editedProfile.skills = this.editedProfile.skills.filter((s) => s !== skill);
     }
     store.expertStore.skillNames.push({
       title: skill.name,
     } as SkillSearchItem);
   };
+
   addPortfolioItem = (files: Map<string, any>, description: string) => {
     const portfolioFiles: UserFile[] = [];
     files.forEach((file) => portfolioFiles.push(file));
@@ -163,7 +204,7 @@ export default class ProfileStore {
       attachments: portfolioFiles,
       description: description,
     };
-    this.profile?.portfolio.push({ ...portfolioItem });
+    this.editedProfile?.portfolio.push({ ...portfolioItem });
   };
 
   addEmploymentItem = ({
@@ -171,7 +212,7 @@ export default class ProfileStore {
     employedTo,
     companyName,
     companyPosition,
-    jobDescription,
+    jobBulletList: jobBulletPoints,
   }: EmploymentFormValues) => {
     const employmentItem: EmploymentItem = {
       id: uuid(),
@@ -181,22 +222,22 @@ export default class ProfileStore {
         id: uuid(),
         title: companyName,
         summary: companyPosition,
-        formattedText: jobDescription,
+        bulletPoints: jobBulletPoints,
       },
     };
-    this.profile?.employment.push(employmentItem);
+    this.editedProfile?.employment.push(employmentItem);
   };
 
   addExperienceItem = ({
     title,
     summary,
-    formattedText,
+    bulletList: bulletPoints,
   }: ExperienceFormValues) => {
     const experienceItem: ExperienceItem = {
       id: uuid(),
-      description: { id: uuid(), title, summary, formattedText },
+      description: { id: uuid(), title, summary, bulletPoints: bulletPoints },
     };
-    this.profile?.experience.push(experienceItem);
+    this.editedProfile?.experience.push(experienceItem);
   };
 
   addEducationItem = ({
@@ -214,7 +255,7 @@ export default class ProfileStore {
       studyingFrom,
       studyingTo,
     };
-    this.profile?.education.push(educationItem);
+    this.editedProfile?.education.push(educationItem);
   };
 
   addCertification = ({
@@ -226,6 +267,6 @@ export default class ProfileStore {
       name: certificateName,
       dateAcquired,
     };
-    this.profile?.certifications.push(certification);
+    this.editedProfile?.certifications.push(certification);
   };
 }

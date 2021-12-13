@@ -1,5 +1,5 @@
 import React from "react";
-import { Item } from "semantic-ui-react";
+import { Item, List } from "semantic-ui-react";
 import { ExperienceItem } from "../../../app/models/profile";
 
 interface Props {
@@ -15,7 +15,11 @@ export default function ExperienceItemElement({ experienceItem }: Props) {
           {experienceItem.description.summary}
         </Item.Extra>
         <Item.Description>
-          <pre>{`${experienceItem.description.formattedText}`}</pre>
+          <List bulleted>
+            {experienceItem.description.bulletPoints.map((bulletPoint) => (
+              <List.Item key={bulletPoint.id}>{bulletPoint.text}</List.Item>
+            ))}
+          </List>
         </Item.Description>
       </Item.Content>
     </Item>

@@ -1,9 +1,12 @@
+import { Job, JobBid } from "./job";
 import { User } from "./user";
 
 export interface Profile {
-  username: string;
+  userName: string;
   displayName: string;
-  image?: Photo;
+  photo?: Photo;
+  githubProfileUrl: string;
+  linkedInProfileUrl: string;
   bio?: string;
   location: string;
   dateJoined: Date;
@@ -11,6 +14,7 @@ export interface Profile {
   reviews: Review[];
   skills: Skill[];
   rating: number;
+  cv: UserFile;
   portfolio: PortfolioItem[];
   employment: EmploymentItem[];
   experience: ExperienceItem[];
@@ -22,25 +26,15 @@ export interface Profile {
 
 export class Profile implements Profile {
   constructor(user: User) {
-    this.username = user.username;
+    this.userName = user.userName;
     this.displayName = user.displayName;
-    this.image = user.image;
+    this.photo = user.photo;
   }
 }
 
 export interface Photo {
   id: string;
   url: string;
-}
-
-export interface Job {
-  id: string;
-  employer: string;
-  requiredSkills: Skill[];
-  additionalAttachments: string[];
-  creationTime: Date;
-  isActive: boolean;
-  jobBids: JobBid[];
 }
 
 export interface Review {
@@ -53,19 +47,19 @@ export interface Review {
 export interface Skill {
   id: number;
   name: string;
-  expertCount: number;
-}
-
-export interface JobBid {
-  id: string;
-  bidder: string;
+  count: number;
 }
 
 export interface Description {
   id: string;
   title: string;
   summary: string;
-  formattedText: string;
+  bulletPoints: BulletPoint[];
+}
+
+export interface BulletPoint {
+  id: string;
+  text: string;
 }
 
 export interface PortfolioItem {
@@ -86,7 +80,7 @@ export interface EmploymentFormValues {
   employedTo?: Date;
   companyName: string;
   companyPosition: string;
-  jobDescription: string;
+  jobBulletList: BulletPoint[];
 }
 
 export interface ExperienceItem {
@@ -97,7 +91,7 @@ export interface ExperienceItem {
 export interface ExperienceFormValues {
   title: string;
   summary: string;
-  formattedText: string;
+  bulletList: BulletPoint[];
 }
 
 export interface EducationItem {
@@ -132,4 +126,9 @@ export interface UserFile {
   id: string;
   url: string;
   resourceType: string;
+}
+
+export interface AccountLinksFormValues {
+  githubProfileUrl: string;
+  linkedInProfileUrl: string;
 }

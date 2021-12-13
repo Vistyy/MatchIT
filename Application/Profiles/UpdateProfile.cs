@@ -61,18 +61,14 @@ namespace Application.Profiles
                 .Include(u => u.Certifications)
                 .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
-                UpdateProfileExtensions.UpdateSkills(user, request.Skills);
-                UpdateProfileExtensions.UpdatePortfolio(user, _context, request.Portfolio);
-                UpdateProfileExtensions.UpdateEmployment(user, _context, request.Employment);
-                UpdateProfileExtensions.UpdateExperience(user, _context, request.Experience);
-                UpdateProfileExtensions.UpdateEducation(user, _context, request.Education);
-                UpdateProfileExtensions.UpdateCertifications(user, _context, request.Certifications);
-                // user.Skills = request.Skills;
-                // user.Portfolio = request.Portfolio ?? user.Portfolio;
-                // user.Employment = request.Employment ?? user.Employment;
-                // user.Experience = request.Experience ?? user.Experience;
-                // user.Education = request.Education ?? user.Education;
-                // user.Certifications = request.Certifications ?? user.Certifications;
+                if(user == null) return null;
+
+                if (request.Skills != null && request.Skills.Count > 0) UpdateProfileExtensions.UpdateSkills(user, request.Skills);
+                if (request.Portfolio != null && request.Portfolio.Count > 0) UpdateProfileExtensions.UpdatePortfolio(user, _context, request.Portfolio);
+                if (request.Employment != null && request.Employment.Count > 0) UpdateProfileExtensions.UpdateEmployment(user, _context, request.Employment);
+                if (request.Experience != null && request.Experience.Count > 0) UpdateProfileExtensions.UpdateExperience(user, _context, request.Experience);
+                if (request.Education != null && request.Education.Count > 0) UpdateProfileExtensions.UpdateEducation(user, _context, request.Education);
+                if (request.Certifications != null && request.Certifications.Count > 0) UpdateProfileExtensions.UpdateCertifications(user, _context, request.Certifications);
 
                 _context.Entry(user).State = EntityState.Modified;
 

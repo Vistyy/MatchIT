@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
+import { Job, JobBid } from "../models/job";
 import { PaginatedResult } from "../models/pagination";
 import { Photo, Profile, Skill, UserFile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
@@ -100,8 +101,8 @@ const Account = {
 };
 
 const Profiles = {
-  get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
-  uploadPhoto: (file: Blob) => {
+  get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`),
+  uploadProfilePhoto: (file: Blob) => {
     let formData = new FormData();
     formData.append("File", file);
     return axios.post<Photo>("photos", formData, {
@@ -109,6 +110,14 @@ const Profiles = {
     });
   },
   deletePhoto: (id: string) => requests.del(`/photos/${id}`),
+  updateProfile: (profile: Partial<Profile>) =>
+    requests.put(`/profiles`, profile),
+  addCV: (cv: UserFile) => requests.put("/profiles/cv", cv),
+  addAccountLinks: (profile: Partial<Profile>) =>
+    requests.put("/profiles/accountLinks", profile),
+};
+
+const Files = {
   uploadFile: (file: Blob) => {
     let formData = new FormData();
     formData.append("File", file);
@@ -116,14 +125,9 @@ const Profiles = {
       headers: { "Content-type": "multipart/form-data" },
     });
   },
-  // updateProfile: (profile: Partial<Profile>) =>
-  //   requests.put(`/profiles`, profile),
-  updateProfile: (profile: Partial<Profile>) =>
-    requests.put(`/profiles`, profile),
 };
 
 const Experts = {
-  get: (username: string) => requests.get<Profile>(`/experts/${username}`),
   list: (params: URLSearchParams) =>
     axios
       .get<PaginatedResult<Profile[]>>("/experts", { params })
@@ -134,6 +138,25 @@ const Skills = {
   listUsed: (params: URLSearchParams) =>
     axios.get<Skill[]>("/skills", { params }).then(responseBody),
   listAll: () => requests.get<Skill[]>("/skills/all"),
+  listJobRequired: (params: URLSearchParams) =>
+    axios.get<Skill[]>("/skills/job-required", { params }).then(responseBody),
+};
+
+const Jobs = {
+  get: (id: string) => requests.get<Job>(`/jobs/${id}`),
+  list: (params: URLSearchParams) =>
+    axios.get<PaginatedResult<Job[]>>("/jobs", { params }).then(responseBody),
+  listUser: (userName: string, params: URLSearchParams) =>
+    axios
+      .get<PaginatedResult<Job[]>>(`/jobs/user/${userName}`, { params })
+      .then(responseBody),
+  add: (job: Partial<Job>) => requests.post("/jobs", job),
+  delete: (id: string) => requests.del(`/jobs/${id}`),
+  addBid: (jobId: string, jobBid: Partial<JobBid>) =>
+    requests.post(`/jobs/${jobId}/bid`, jobBid),
+  deleteBid: (jobBidId: string) => requests.del(`/jobs/bids/${jobBidId}`),
+  acceptBid: (jobId: string, jobBidId: string) =>
+    requests.del(`/jobs/${jobId}/${jobBidId}`,),
 };
 
 const agent = {
@@ -141,6 +164,8 @@ const agent = {
   Profiles,
   Experts,
   Skills,
+  Jobs,
+  Files,
 };
 
 export default agent;

@@ -7,14 +7,13 @@ import PortfolioItemElement from "../../profileItemElements/PortfolioItemElement
 import PortfolioForm from "../forms/PortfolioForm";
 
 export default observer(function PortfolioSegment() {
-  const { profileStore } = useStore();
-  const { profile } = profileStore;
+  const { profileStore: {editedProfile} } = useStore();
 
   const [editPortfolioMode, setEditPortfolioMode] = useState(false);
 
   return (
     <>
-      <Header>Portfolio</Header>
+      <Header as="h1">Portfolio</Header>
       {editPortfolioMode ? (
         <PortfolioForm setEditMode={setEditPortfolioMode} />
       ) : (
@@ -23,8 +22,8 @@ export default observer(function PortfolioSegment() {
           onClick={() => setEditPortfolioMode(true)}
         />
       )}
-      {profile &&
-        profile.portfolio.map((portfolioItem) => (
+      {editedProfile &&
+        editedProfile.portfolio.map((portfolioItem) => (
           <PortfolioItemElement
             key={portfolioItem.id}
             portfolioItem={portfolioItem}

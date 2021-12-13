@@ -9,5 +9,9 @@ namespace Domain
         public AppUser Bidder { get; set; }
         public Guid JobId { get; set; }
         public Job Job { get; set; }
+        public string Description { get; set; }
+        public double Fee { get; set; }
+        public Guid? AcceptedJobId { get; set; }
+        public Job AcceptedJob { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Grid, Header, Item } from "semantic-ui-react";
+import { Header, Item } from "semantic-ui-react";
 import { EducationItem } from "../../../app/models/profile";
 import EducationItemElement from "../profileItemElements/EducationItemElement";
 
@@ -10,7 +10,7 @@ interface Props {
 
 export default observer(function ProfileEducation({ education }: Props) {
   return (
-    <Grid.Row>
+    <>
       <Header as="h1">Education</Header>
       {education && (
         <Item.Group>
@@ -22,6 +22,6 @@ export default observer(function ProfileEducation({ education }: Props) {
           ))}
         </Item.Group>
       )}
-    </Grid.Row>
+    </>
   );
 });

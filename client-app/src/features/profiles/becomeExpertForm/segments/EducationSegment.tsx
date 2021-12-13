@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { Header } from "semantic-ui-react";
+import { Header, Item } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
 import AddNewButton from "../../profileItemElements/AddNewItemButton";
 import EducationItemElement from "../../profileItemElements/EducationItemElement";
@@ -8,12 +8,12 @@ import EducationForm from "../forms/EducationForm";
 
 export default observer(function EducationSegment() {
   const {
-    profileStore: { profile },
+    profileStore: { editedProfile },
   } = useStore();
   const [editEducationMode, setEditEducationMode] = useState(false);
   return (
     <>
-      <Header>Education</Header>
+      <Header as="h1">Education</Header>
       {editEducationMode ? (
         <EducationForm setEditMode={setEditEducationMode} />
       ) : (
@@ -22,13 +22,15 @@ export default observer(function EducationSegment() {
           onClick={() => setEditEducationMode(true)}
         />
       )}
-      {profile &&
-        profile.education.map((educationItem) => (
-          <EducationItemElement
-            key={educationItem.id}
-            educationItem={educationItem}
-          />
-        ))}
+      <Item.Group>
+        {editedProfile &&
+          editedProfile.education.map((educationItem) => (
+            <EducationItemElement
+              key={educationItem.id}
+              educationItem={educationItem}
+            />
+          ))}
+      </Item.Group>
     </>
   );
 });

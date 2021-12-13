@@ -14,7 +14,7 @@ export default observer(function ExpertFilters() {
       skillFilter,
       filterDelay,
       clearFilter,
-      loading,
+      loadingSkills,
     },
   } = useStore();
 
@@ -67,32 +67,50 @@ export default observer(function ExpertFilters() {
           }}
           onClick={() => clearFilter()}
         />
-        {loading ? (
-          <Menu.Item style={{ height: "100px" }}>
+        {loadingSkills ? (
+          <Menu.Item style={{ minHeight: "15em" }}>
             <LoadingComponent content="Loading..." />
           </Menu.Item>
         ) : (
-          <>
-            {Array.from(skillRegistry).map(([id, skill]) => (
-              <Menu.Item
-                key={id}
-                content={`${skill.name} (${skill.expertCount})`}
-                active={Array.from(skillPredicate.values())[0]
-                  .split(",")
-                  .includes(skill.name)}
-                disabled={
-                  skill.expertCount === 0 &&
-                  !Array.from(skillPredicate.values())[0]
-                    .split(",")
-                    .includes(skill.name)
+          <div style={{ maxHeight: "20em", overflowY: "auto" }}>
+            {Array.from(skillRegistry)
+              .sort(
+                ([_, s1], [__, s2]) =>
+                  s2.count - s1.count || s1.name.localeCompare(s2.name)
+              )
+              .sort(([_, s1], [__, s2]) => {
+                if (
+                  Array.from(skillPredicate.values())[0].split(",").includes(s1.name)
+                )
+                  return -1;
+                else if (
+                  Array.from(skillPredicate.values())[0].split(",").includes(s1.name)
+                )
+                  return 1;
+                else {
+                  return 0;
                 }
-                onClick={() => {
-                  clearTimeout(filterDelay);
-                  setSkillPredicate(skill.name);
-                }}
-              />
-            ))}
-          </>
+              })
+              .map(([id, skill]) => (
+                <Menu.Item
+                  key={id}
+                  content={`${skill.name} (${skill.count})`}
+                  active={Array.from(skillPredicate.values())[0]
+                    .split(",")
+                    .includes(skill.name)}
+                  disabled={
+                    skill.count === 0 &&
+                    !Array.from(skillPredicate.values())[0]
+                      .split(",")
+                      .includes(skill.name)
+                  }
+                  onClick={() => {
+                    clearTimeout(filterDelay);
+                    setSkillPredicate(skill.name);
+                  }}
+                />
+              ))}
+          </div>
         )}
       </Menu>
     </>

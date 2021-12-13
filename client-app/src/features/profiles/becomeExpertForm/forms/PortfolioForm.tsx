@@ -1,8 +1,7 @@
-import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { Button, Grid, Input } from "semantic-ui-react";
-import FileAddWidget from "../../../../app/common/fileUpload/FileAddWidget";
+import FileAddWidget from "../../../../app/common/fileUpload/add/FileAddWidget";
 import { useStore } from "../../../../app/stores/store";
 
 interface Props {
@@ -11,7 +10,7 @@ interface Props {
 
 export default observer(function PortfolioForm({ setEditMode }: Props) {
   const {
-    fileStore: { temporaryFiles },
+    fileStore: { temporaryFiles, resetState },
     profileStore: { addPortfolioItem },
   } = useStore();
   const [portfolioItemDescription, setPortfolioItemDescription] =
@@ -25,12 +24,12 @@ export default observer(function PortfolioForm({ setEditMode }: Props) {
 
   function handleAddPortfolioItem() {
     addPortfolioItem(temporaryFiles, portfolioItemDescription);
-    runInAction(() => temporaryFiles.clear());
+    resetState();
     setEditMode(false);
   }
 
   return (
-    <Grid>
+    <Grid style={{ margin: "0" }}>
       <FileAddWidget />
       <Grid.Row>
         <Input
@@ -46,9 +45,15 @@ export default observer(function PortfolioForm({ setEditMode }: Props) {
           content="Add"
           size="big"
           disabled={temporaryFiles.size < 1}
-          className='positive--custom becomeExpert-addButton'
+          className="positive--custom becomeExpert-addButton"
           style={{ fontSize: "1.35em" }}
           onClick={handleAddPortfolioItem}
+        />
+        <Button
+          content="Cancel"
+          size="big"
+          style={{ fontSize: "1.35em" }}
+          onClick={() => setEditMode(false)}
         />
       </Grid.Row>
     </Grid>

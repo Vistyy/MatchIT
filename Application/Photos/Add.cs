@@ -35,8 +35,11 @@ namespace Application.Photos
                 var user = await _context.Users.Include(p => p.Photo).FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
                 if (user == null) return null;
+
+                if (user.Photo != null) await _photoAccessor.DeletePhoto(user.Photo.Url);
+
                 var photoUploadResult = await _photoAccessor.AddPhoto(request.File);
-                
+
                 var photo = new Photo
                 {
                     Url = photoUploadResult.Url,
@@ -44,11 +47,11 @@ namespace Application.Photos
                 };
 
                 user.Photo = photo;
-                
-                var result = await _context.SaveChangesAsync() >0;
 
-                if(result) return Result<Photo>.Success(photo);
-                
+                var result = await _context.SaveChangesAsync() > 0;
+
+                if (result) return Result<Photo>.Success(photo);
+
                 return Result<Photo>.Failure("Problem adding photo");
             }
         }

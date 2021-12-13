@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, Container, Dropdown, Image, Menu } from "semantic-ui-react";
 import LoginForm from "../../features/users/LoginForm";
 import RegisterForm from "../../features/users/RegisterForm";
@@ -14,22 +14,34 @@ export default observer(function NavBar() {
   return (
     <Menu inverted fixed="top" className="navbar--menu">
       <Container>
-        <Menu.Item as={NavLink} exact to="/" header>
+        <Menu.Item as={Link} to="/" header>
           <img src="/assets/logo.svg" alt="logo" />
           MatchIT
         </Menu.Item>
         <>
-          <Menu.Item as={NavLink} to="/becomeExpert" name="First link" />
-          <Menu.Item as={NavLink} to="/" name="Second link" />
+          <Menu.Item as={Link} to="/" name="Experts" />
+          <Menu.Item as={Link} to="/jobs" name="Jobs" />
           {isLoggedIn() ? (
             <Menu.Menu fixed="top" position="right">
-              {user && !user.isExpert && (
+              {user && (
                 <Menu.Item position="right">
                   <Button
-                    as={NavLink}
+                    as={Link}
+                    to="/addJob"
+                    content="Add New Job Offer"
+                    inverted
+                    className="positive--custom--inverted"
+                  />
+                </Menu.Item>
+              )}
+              {user && !user.isExpert && (
+                <Menu.Item position="right" style={{ paddingLeft: "0" }}>
+                  <Button
+                    as={Link}
                     to="/becomeExpert"
                     content="Become an expert"
                     inverted
+                    className="positive--custom--inverted"
                   />
                 </Menu.Item>
               )}
@@ -44,7 +56,7 @@ export default observer(function NavBar() {
                 fitted="horizontally"
               >
                 <Image
-                  src={user?.image?.url || "/assets/user.png"}
+                  src={user?.photo?.url || "/assets/user.png"}
                   avatar
                   spaced="right"
                 />
@@ -57,9 +69,15 @@ export default observer(function NavBar() {
                   <Dropdown.Menu style={{ marginTop: "0.35em" }}>
                     <Dropdown.Item
                       as={Link}
-                      to={`/profiles/${user?.username}`}
+                      to={`/profiles/${user?.userName}`}
                       text="My Profile"
                       icon="user"
+                    />
+                    <Dropdown.Item
+                      as={Link}
+                      to={`/jobs/user/${user?.userName}`}
+                      text="My Jobs"
+                      icon="suitcase"
                     />
                     <Dropdown.Item
                       onClick={logout}
@@ -77,6 +95,8 @@ export default observer(function NavBar() {
                   onClick={() => modalStore.openModal(<LoginForm />)}
                   size="huge"
                   inverted
+                  style={{ marginRight: "1em" }}
+                  className="positive--custom--inverted"
                 >
                   Login
                 </Button>
@@ -84,6 +104,7 @@ export default observer(function NavBar() {
                   onClick={() => modalStore.openModal(<RegisterForm />)}
                   size="huge"
                   inverted
+                  className="positive--custom--inverted"
                 >
                   Register
                 </Button>

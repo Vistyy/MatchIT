@@ -31,27 +31,36 @@ export default observer(function CertificationForm({ setEditMode }: Props) {
         }
         setEditMode(false);
       }}
+      onReset={(values, { resetForm }) => resetForm()}
       validationSchema={Yup.object({
         certificateName: Yup.string().required(),
         dateAcquired: Yup.date().required(),
       })}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, isValid }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <ValidatedTextInput
             name="certificateName"
             placeholder="Certificate Name"
             label="Certificate Name"
+            errorElementName="Certificate Name"
           />
-          <ValidatedDatePicker name='dateAcquired' label='Date Acquired' />
+          <ValidatedDatePicker
+            name="dateAcquired"
+            label="Date Acquired"
+            errorElementName="Date Acquired"
+            maxDate={new Date()}
+          />
           <Button
             content="Add"
             size="big"
             style={{ fontSize: "1.35em" }}
             type="submit"
             className="positive--custom"
+            disabled={!isValid}
           />
           <Button
+            type="reset"
             content="Cancel"
             size="big"
             style={{ fontSize: "1.35em" }}
