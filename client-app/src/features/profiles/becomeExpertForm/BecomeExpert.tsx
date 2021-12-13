@@ -1,6 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Grid, GridColumn, Step, Transition } from "semantic-ui-react";
+import {
+  Button,
+  Grid,
+  GridColumn,
+  Segment,
+  Step,
+  Transition,
+} from "semantic-ui-react";
 import { history } from "../../..";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
@@ -137,48 +144,50 @@ export default observer(function BecomeExpert() {
         </Step.Group>
       </Grid.Column>
       <GridColumn width="1" />
-      <Grid.Column width="10">
-        <Transition.Group
-          as={Grid}
-          divided
-          size="huge"
-          verticalAlign="middle"
-          style={{ marginBottom: "2em" }}
-        >
-          {formRow.map((item, index) => (
-            <Grid.Row key={index}>
-              <div ref={refs[index]}>{item}</div>
-            </Grid.Row>
-          ))}
-        </Transition.Group>
-        <Button.Group style={{ float: "right" }}>
-          {forms.length > activeStep ? (
-            <Button
-              onClick={handleNext}
-              className="becomeExpert-progressButton"
-              content="Next Step"
-              size="large"
-              disabled={!buttonState}
-            />
-          ) : (
-            <div
-              className="becomeExpert-progressButton"
-              onClick={() => {
-                if (editedProfile?.skills.length === 0)
-                  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-              }}
-            >
+      <Grid.Column width="13">
+        <Segment>
+          <Transition.Group
+            as={Grid}
+            divided
+            size="huge"
+            verticalAlign="middle"
+            style={{ marginBottom: "2em", padding: '1em 2em' }}
+          >
+            {formRow.map((item, index) => (
+              <Grid.Row key={index}>
+                <div ref={refs[index]}>{item}</div>
+              </Grid.Row>
+            ))}
+          </Transition.Group>
+          <Button.Group style={{ position: 'absolute', bottom: '10px', right: '30px' }}>
+            {forms.length > activeStep ? (
               <Button
-                content="Save Changes"
-                className="positive--custom"
+                onClick={handleNext}
+                className="becomeExpert-progressButton"
+                content="Next Step"
                 size="large"
-                onClick={handleSaveChanges}
-                disabled={editedProfile?.skills.length === 0}
-                loading={loading || uploading || updatingProfile}
+                disabled={!buttonState}
               />
-            </div>
-          )}
-        </Button.Group>
+            ) : (
+              <div
+                className="becomeExpert-progressButton"
+                onClick={() => {
+                  if (editedProfile?.skills.length === 0)
+                    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+                }}
+              >
+                <Button
+                  content="Save Changes"
+                  className="positive--custom"
+                  size="large"
+                  onClick={handleSaveChanges}
+                  disabled={editedProfile?.skills.length === 0}
+                  loading={loading || uploading || updatingProfile}
+                />
+              </div>
+            )}
+          </Button.Group>
+        </Segment>
       </Grid.Column>
     </Grid>
   );

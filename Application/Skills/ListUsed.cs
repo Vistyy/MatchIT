@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
-using Application.Experts;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;

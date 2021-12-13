@@ -1,4 +1,3 @@
-using System.Linq;
 using Application.Experts;
 using Application.Jobs;
 using Application.Skills;

@@ -13,7 +13,7 @@ interface Props {
 
 export default observer(function FileAddWidget({ maxFiles = 5 }: Props) {
   const {
-    fileStore: { temporaryFiles, addFiles, deleteFiles, openFilePreviewModal },
+    fileStore: { temporaryFiles, addFiles, deleteFiles, openFilePreviewModal, resetState },
   } = useStore();
 
   const [deleteMode, setDeleteMode] = useState(0);
@@ -41,15 +41,14 @@ export default observer(function FileAddWidget({ maxFiles = 5 }: Props) {
 
   useEffect(() => {
     return () => {
-      Array.from(temporaryFiles.values()).forEach((file: any) =>
-        URL.revokeObjectURL(file.preview)
-      );
+      runInAction(() => {
+        Array.from(temporaryFiles.values()).forEach((file: any) =>
+          URL.revokeObjectURL(file.url)
+        );
+      });
+      resetState();
     };
-  }, [temporaryFiles]);
-
-  useEffect(() => {
-    runInAction(() => temporaryFiles.clear());
-  }, [temporaryFiles]);
+  }, [resetState, temporaryFiles]);
 
   return (
     <>

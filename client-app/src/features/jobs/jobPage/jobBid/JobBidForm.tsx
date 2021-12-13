@@ -17,16 +17,6 @@ export default observer(function JobBidForm({ setEditMode }: Props) {
     jobStore: { job, addJobBid },
     fileStore: { temporaryFiles, resetState },
   } = useStore();
-  // const [onlyOneFile, setOnlyOneFile] = useState(false);
-
-  // useEffect(() => {
-  //   if (temporaryFiles.size > 1) {
-  //     setOnlyOneFile(true);
-  //     resetState();
-  //   } else {
-  //     setOnlyOneFile(false);
-  //   }
-  // }, [resetState, temporaryFiles.size]);
 
   return (
     <>
