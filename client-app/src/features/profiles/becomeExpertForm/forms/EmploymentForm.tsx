@@ -4,7 +4,7 @@ import { FieldArray, Form, Formik } from "formik";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
 import ValidatedDatePicker from "../../../../app/common/form/ValidatedDatePicker";
 import * as Yup from "yup";
-import { Button, Icon, Label, List, Segment } from "semantic-ui-react";
+import { Button, Label, List, Segment } from "semantic-ui-react";
 import { useStore } from "../../../../app/stores/store";
 import { BulletPoint } from "../../../../app/models/profile";
 import { v4 as uuid } from "uuid";

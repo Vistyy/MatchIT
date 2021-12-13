@@ -29,6 +29,7 @@ export default observer(function UserJobsPage() {
   }
 
   useEffect(() => {
+    document.title = "My Jobs - MatchIT";
     resetState();
   }, [resetState]);
 

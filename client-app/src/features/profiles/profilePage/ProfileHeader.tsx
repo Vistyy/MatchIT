@@ -46,11 +46,12 @@ export default observer(function ProfileHeader() {
         <Grid>
           <Grid.Column width="10">
             <Item.Group>
-              <Item
-                onMouseEnter={() => setVisible(true)}
-                onMouseLeave={() => setVisible(false)}
-              >
-                <Item.Image size="small">
+              <Item>
+                <Item.Image
+                  size="small"
+                  onMouseEnter={() => setVisible(true)}
+                  onMouseLeave={() => setVisible(false)}
+                >
                   <Image
                     src={profile.photo?.url || "/assets/user.png"}
                     style={{

@@ -4,7 +4,7 @@ import React, { MouseEvent, useState } from "react";
 import { useStore } from "../../../../app/stores/store";
 import * as Yup from "yup";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
-import { Button, Icon, Label, List, Segment } from "semantic-ui-react";
+import { Button, Label, List, Segment } from "semantic-ui-react";
 import { BulletPoint } from "../../../../app/models/profile";
 import { v4 as uuid } from "uuid";
 

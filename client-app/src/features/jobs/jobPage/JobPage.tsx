@@ -20,6 +20,7 @@ export default observer(function JobPage() {
   const [addJobBidMode, setAddJobBidMode] = useState(false);
 
   useEffect(() => {
+    document.title = "Job Details - MatchIT";
     resetState();
     loadJob(id);
   }, [loadJob, id, resetState]);

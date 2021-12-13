@@ -1,4 +1,3 @@
-import { min } from "lodash";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -32,11 +31,12 @@ export default observer(function JobDashboard() {
   }
 
   useEffect(() => {
+    document.title = "Jobs - MatchIT";
     resetState();
   }, [resetState]);
 
   useEffect(() => {
-    if (jobArray.length === 0 && !loadingJobs && !loadingInitial) {
+    if (jobArray.length === 0 && !loadingJobs && (!loadingInitial || loadingSkills)) {
       loadJobs();
       setLoadingInitial(true);
     } else if (jobArray.length === 0 && !loadingJobs && loadingInitial) {
@@ -86,7 +86,7 @@ export default observer(function JobDashboard() {
           </InfiniteScroll>
         )}
       </Grid.Column>
-      <Grid.Column width="10">
+      <Grid.Column width="10" style={{minHeight: '300px'}}>
         <Loader active={loadingNext} />
       </Grid.Column>
     </Grid>

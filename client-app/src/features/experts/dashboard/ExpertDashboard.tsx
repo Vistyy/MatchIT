@@ -18,6 +18,7 @@ export default observer(function ExpertDashboard() {
     pagination,
     loadingExperts,
     resetState,
+    resetExpertArray,
     loadingSkills,
   } = expertStore;
   const [loadingNext, setLoadingNext] = useState(false);
@@ -31,13 +32,18 @@ export default observer(function ExpertDashboard() {
   }
 
   useEffect(() => {
+    document.title = "Experts - MatchIT";
     resetState();
-  }, [resetState]);
+    resetExpertArray();
+  }, [resetExpertArray, resetState]);
 
   useEffect(() => {
-    if (expertArray.length === 0 && !loadingExperts && !loadingInitial) {
-      loadExperts();
-      setLoadingInitial(true);
+    if (
+      expertArray.length === 0 &&
+      !loadingExperts &&
+      (!loadingInitial || loadingSkills)
+    ) {
+      loadExperts().then(() => setLoadingInitial(true));
     } else if (expertArray.length === 0 && !loadingExperts && loadingInitial) {
       timerRef.current = setTimeout(() => {
         loadExperts();

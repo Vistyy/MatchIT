@@ -17,9 +17,8 @@ namespace Application.Core
                 ;
 
             CreateMap<AppUser, ExpertListItemDto>()
-            // .ForMember(d => d.Rating, o => o.MapFrom(s => (s.ReviewsReceived.Sum(r => r.Rating) / s.ReviewsReceived.Count)));
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.RatingCount > 0 ? s.RatingSum / s.RatingCount : 0));
-            // TODO - figure out how to store the rating
+            // TODO - create a rating system
 
             CreateMap<Skill, ExpertSkillDto>()
             .ForMember(d => d.Count, o => o.MapFrom(s => s.Users.Count));

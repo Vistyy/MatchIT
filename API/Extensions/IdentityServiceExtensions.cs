@@ -17,7 +17,6 @@ namespace API.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            // TODO - confirm email
             services.AddIdentityCore<AppUser>(opt => 
             {
                 opt.Password.RequiredLength = 8;

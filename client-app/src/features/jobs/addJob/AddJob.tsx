@@ -25,8 +25,9 @@ export default observer(function AddJob() {
   const [disableButton, setDisableButton] = useState(false);
 
   useEffect(() => {
+    document.title = "Add New Job Offer - MatchIT";
     if (job !== null) resetJob();
-  });
+  }, [job, resetJob]);
 
   useEffect(() => {
     resetRequiredSkills();

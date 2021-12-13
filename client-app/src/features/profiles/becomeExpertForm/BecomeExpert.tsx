@@ -73,6 +73,7 @@ export default observer(function BecomeExpert() {
   }
 
   useEffect(() => {
+    document.title = "Become Expert - MatchIT";
     if (user) {
       loadProfile(user.userName).then(() => startProfileEditing());
     }

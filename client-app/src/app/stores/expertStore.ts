@@ -27,7 +27,7 @@ export default class ExpertStore {
       () => {
         this.filterDelay = setTimeout(() => {
           this.pagingParams = new PagingParams();
-          runInAction(() => (this.expertArray.length = 0));
+          this.resetExpertArray();
           this.loadUsedSkills();
         }, 500);
       }
@@ -46,14 +46,13 @@ export default class ExpertStore {
   resetState = () => {
     this.clearFilter();
     this.resetSkillNames();
-    this.resetExpertArray();
     this.resetSorting();
     this.resetPagination();
   };
 
   clearFilter = () => {
-    this.skillFilter.length = 0;
     this.skillPredicate.set("skill", "all");
+    this.skillFilter.length = 0;
   };
 
   resetSkillNames = () => {

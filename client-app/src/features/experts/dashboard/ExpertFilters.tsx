@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { Fragment, useEffect } from "react";
-import { Button, Header, Menu, PlaceholderHeader } from "semantic-ui-react";
+import { Button, Header, Menu } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 
@@ -68,7 +68,7 @@ export default observer(function ExpertFilters() {
           onClick={() => clearFilter()}
         />
         {loadingSkills ? (
-          <Menu.Item style={{minHeight: '15em'}}>
+          <Menu.Item style={{ minHeight: "15em" }}>
             <LoadingComponent content="Loading..." />
           </Menu.Item>
         ) : (
@@ -78,6 +78,19 @@ export default observer(function ExpertFilters() {
                 ([_, s1], [__, s2]) =>
                   s2.count - s1.count || s1.name.localeCompare(s2.name)
               )
+              .sort(([_, s1], [__, s2]) => {
+                if (
+                  Array.from(skillPredicate.values())[0].split(",").includes(s1.name)
+                )
+                  return -1;
+                else if (
+                  Array.from(skillPredicate.values())[0].split(",").includes(s1.name)
+                )
+                  return 1;
+                else {
+                  return 0;
+                }
+              })
               .map(([id, skill]) => (
                 <Menu.Item
                   key={id}

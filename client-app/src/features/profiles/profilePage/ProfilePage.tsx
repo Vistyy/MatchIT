@@ -18,6 +18,13 @@ export default observer(function ProfilePage() {
     loadProfile(userName);
   }, [loadProfile, resetState, userName]);
 
+  useEffect(() => {
+    document.title = "Profile - MatchIT";
+    if (profile?.displayName) {
+      document.title = `${profile?.displayName}'s Profile - MatchIT`;
+    }
+  }, [profile?.displayName]);
+
   if (loadingProfile) return <LoadingComponent content="Loading profile..." />;
 
   return (
