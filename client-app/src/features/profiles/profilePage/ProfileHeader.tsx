@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Grid,
@@ -8,29 +8,20 @@ import {
   Transition,
   Image,
   Label,
-  Card,
   Icon,
   Menu,
 } from "semantic-ui-react";
-import FileUploadWidget from "../../../app/common/fileUpload/upload/FileUploadWidget";
 import PhotoUploadWidget from "../../../app/common/imageUpload/PhotoUploadWidget";
+import ProfileCV from "./ProfileCV";
 import { useStore } from "../../../app/stores/store";
 
 export default observer(function ProfileHeader() {
   const {
     modalStore,
-    profileStore: { uploadProfilePhoto, isCurrentUser, profile, addCV },
+    profileStore: { uploadProfilePhoto, isCurrentUser, profile },
     userStore: { isLoggedIn },
-    fileStore: { openFilePreviewModal },
   } = useStore();
   const [visible, setVisible] = useState(false);
-  const [addCVMode, setAddCVMode] = useState(false);
-
-  useEffect(() => {
-    if (profile && profile.cv) {
-      setAddCVMode(false);
-    }
-  }, [profile, profile?.cv]);
 
   function handlePhotoChange(file: Blob) {
     if (isLoggedIn()) {
@@ -110,82 +101,7 @@ export default observer(function ProfileHeader() {
           </Grid.Column>
           <Grid.Column width="1" />
           <Grid.Column width="3">
-            {!profile.cv ? (
-              <>
-                {!addCVMode ? (
-                  <Button
-                    className="positive--custom--inverted"
-                    content="Add CV"
-                    onClick={() => setAddCVMode(true)}
-                    floated="right"
-                    style={{ marginBottom: "1.2em" }}
-                  />
-                ) : (
-                  <>
-                    <Button
-                      className="positive--custom--inverted"
-                      content="Cancel"
-                      onClick={() => setAddCVMode(false)}
-                      floated="right"
-                      style={{ marginBottom: "1.2em" }}
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "100%",
-                        maxWidth: "100%",
-                      }}
-                      // className="ui card"
-                    >
-                      <FileUploadWidget uploadFile={addCV} />
-                    </div>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <Button
-                  className="positive--custom--inverted"
-                  content="Change CV"
-                  onClick={() => setAddCVMode(true)}
-                  floated="right"
-                  style={{ marginBottom: "1.2em" }}
-                />
-                {addCVMode ? (
-                  <>
-                    <Button
-                      content="Cancel"
-                      onClick={() => setAddCVMode(false)}
-                    />
-                    <FileUploadWidget uploadFile={addCV} />
-                  </>
-                ) : (
-                  <div
-                    className="file-thumbnail-container"
-                    style={{ float: "right" }}
-                  >
-                    <Card className="file-thumbnail-card">
-                      <Image
-                        src={
-                          profile.cv.url.endsWith(".pdf")
-                            ? profile.cv.url
-                                .slice()
-                                .replace(new RegExp(".pdf$"), ".png")
-                            : profile.cv.url
-                        }
-                        size={"small"}
-                        style={{ display: "inline-block" }}
-                      />
-                      <div
-                        className="overlay asAButton"
-                        onClick={() => openFilePreviewModal(profile.cv)}
-                      ></div>
-                    </Card>
-                  </div>
-                )}
-              </>
-            )}
+            <ProfileCV  />
           </Grid.Column>
         </Grid>
       )}

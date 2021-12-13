@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="263" height="170" viewBox="0 0 263 170">
+  <defs>
+    <clipPath id="clip-Artboard_1">
+      <rect width="263" height="170"/>
+    </clipPath>
+  </defs>
+  <g id="Artboard_1" data-name="Artboard – 1" clip-path="url(#clip-Artboard_1)">
+    <path id="Polygon_3" data-name="Polygon 3" d="M18.5,0,37,45H0Z" transform="matrix(-0.788, -0.616, 0.616, -0.788, 57.023, 170.497)" fill="#fff"/>
+    <path id="Polygon_2" data-name="Polygon 2" d="M18.5,0,37,45H0Z" transform="matrix(-0.788, 0.616, -0.616, -0.788, 244.728, 144.717)" fill="#fff"/>
+    <ellipse id="Ellipse_4" data-name="Ellipse 4" cx="70.5" cy="65.5" rx="70.5" ry="65.5" transform="translate(28 11)" fill="#fff"/>
+    <ellipse id="Ellipse_3" data-name="Ellipse 3" cx="70.5" cy="65.5" rx="70.5" ry="65.5" transform="translate(105 12)" fill="#fff"/>
+    <g id="Group_1" data-name="Group 1" transform="translate(-67 -160)" style="isolation: isolate">
+      <g id="Layer_2" data-name="Layer 2" transform="translate(157.761 158.664)">
+        <g id="General" transform="translate(8 5)">
+          <g id="Chat_Bubble_2x.png" data-name="Chat Bubble@2x.png">
+            <path id="Path_1" data-name="Path 1" d="M75.989,0c41.967,0,75.989,32.683,75.989,72.989-.359,19.856-8.25,38.488-21.519,50.808l7.7,38.4L97.3,143.017a79.034,79.034,0,0,1-21.311,2.96C34.022,145.977,0,113.295,0,72.989S34.022,0,75.989,0Zm0,137.868a73.015,73.015,0,0,0,19.723-2.757,5.931,5.931,0,0,1,1.589-.2,6.018,6.018,0,0,1,2.556.568l28.53,13.381L123.758,125.7a8.974,8.974,0,0,1,2.28-8.11c11.7-10.786,18.68-27.146,19.032-44.6,0-35.764-31.086-64.879-69.081-64.879S6.908,37.224,6.908,72.989,37.994,137.868,75.989,137.868Z" fill="#202020"/>
+          </g>
+        </g>
+      </g>
+      <g id="Layer_2-2" data-name="Layer 2" transform="translate(89.761 163.664)">
+        <g id="General-2" data-name="General">
+          <g id="Chat_Bubble_2x.png-2" data-name="Chat Bubble@2x.png">
+            <path id="Path_1-2" data-name="Path 1" d="M75.989,0C34.022,0,0,32.683,0,72.989.359,92.845,8.25,111.476,21.519,123.8l-7.7,38.4,40.861-19.18a79.034,79.034,0,0,0,21.311,2.96c41.967,0,75.989-32.683,75.989-72.989S117.955,0,75.989,0Zm0,137.868a73.015,73.015,0,0,1-19.723-2.757,5.931,5.931,0,0,0-1.589-.2,6.018,6.018,0,0,0-2.556.568l-28.53,13.381L28.219,125.7a8.974,8.974,0,0,0-2.28-8.11c-11.7-10.786-18.68-27.146-19.032-44.6C6.908,37.224,37.994,8.11,75.989,8.11s69.081,29.114,69.081,64.879S113.983,137.868,75.989,137.868Z" fill="#202020"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="Group_2" data-name="Group 2" transform="translate(0 -52)">
+      <g id="Ellipse_1" data-name="Ellipse 1" transform="translate(63 56)" fill="#fff" stroke="#202020" stroke-width="8">
+        <circle cx="74" cy="74" r="74" stroke="none"/>
+        <circle cx="74" cy="74" r="70" fill="none"/>
+      </g>
+      <circle id="Ellipse_2" data-name="Ellipse 2" cx="61" cy="61" r="61" transform="translate(76 69)" fill="#8aaae5"/>
+      <text id="M" transform="translate(137 164)" fill="#202020" font-size="90" font-family="Tahoma-Bold, Tahoma" font-weight="700"><tspan x="-40.188" y="0">M</tspan></text>
+    </g>
+  </g>
+</svg>
