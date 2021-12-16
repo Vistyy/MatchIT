@@ -48,9 +48,12 @@ namespace Persistence
                 .WithOne(a => a.Job)
                 .HasForeignKey(a => a.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
-                b.HasOne(j => j.AcceptedJobBid).WithOne(jb => jb.AcceptedJob).HasForeignKey<JobBid>(jb => jb.AcceptedJobId);
+                b.HasOne(j => j.AcceptedJobBid)
+                .WithOne(jb => jb.AcceptedJob)
+                .HasForeignKey<Job>(j => j.AcceptedJobBidId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             builder.Entity<JobBid>(b =>
             {
                 b.HasOne(jb => jb.Bidder)
@@ -61,6 +64,9 @@ namespace Persistence
                 .WithMany(j => j.JobBids)
                 .HasForeignKey(jb => jb.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+                b.HasOne(jb => jb.AcceptedJob)
+                .WithOne(j => j.AcceptedJobBid)
+                .HasForeignKey<JobBid>(jb => jb.AcceptedJobId);
             });
 
             builder.Entity<AppUser>()

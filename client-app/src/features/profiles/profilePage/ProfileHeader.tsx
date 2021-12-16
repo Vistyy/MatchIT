@@ -25,7 +25,7 @@ export default observer(function ProfileHeader() {
 
   function handlePhotoChange(file: Blob) {
     if (isLoggedIn()) {
-      uploadProfilePhoto(file);
+      uploadProfilePhoto(file).then(modalStore.closeModal);
     } else {
       modalStore.closeModal();
     }
@@ -101,7 +101,7 @@ export default observer(function ProfileHeader() {
           </Grid.Column>
           <Grid.Column width="1" />
           <Grid.Column width="3">
-            <ProfileCV  />
+            <ProfileCV />
           </Grid.Column>
         </Grid>
       )}

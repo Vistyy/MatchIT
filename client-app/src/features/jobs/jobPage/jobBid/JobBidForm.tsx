@@ -1,9 +1,8 @@
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Button, Grid, Header } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import * as Yup from "yup";
-import FileAddWidget from "../../../../app/common/fileUpload/add/FileAddWidget";
 import ValidatedTextArea from "../../../../app/common/form/ValidatedTextArea";
 import ValidatedTextInput from "../../../../app/common/form/ValidatedTextInput";
 import { useStore } from "../../../../app/stores/store";
@@ -15,7 +14,6 @@ interface Props {
 export default observer(function JobBidForm({ setEditMode }: Props) {
   const {
     jobStore: { job, addJobBid },
-    fileStore: { temporaryFiles, resetState },
   } = useStore();
 
   return (
@@ -29,11 +27,7 @@ export default observer(function JobBidForm({ setEditMode }: Props) {
         onSubmit={(jobBidFormValues, { setErrors }) => {
           if (job) {
             try {
-              addJobBid(
-                jobBidFormValues,
-                Array.from(temporaryFiles.values())[0]
-              ).then(() => {
-                resetState();
+              addJobBid(jobBidFormValues).then(() => {
                 setEditMode(false);
               });
             } catch (error: any) {
@@ -63,21 +57,17 @@ export default observer(function JobBidForm({ setEditMode }: Props) {
               placeholder="Job Bid Fee"
               errorElementName="Job Bid Fee"
             />
-            <Grid>
-              <Header content="Add CV" />
-              <FileAddWidget maxFiles={1} />
-            </Grid>
             <Button
               content="Add"
               size="big"
-              style={{ fontSize: "1.35em", marginTop: "50px" }}
+              style={{ fontSize: "1.35em", marginTop: "1em" }}
               type="submit"
               className="positive--custom"
               disabled={!isValid}
             />
             <Button
-            type="reset"
-            content="Cancel"
+              type="reset"
+              content="Cancel"
               size="big"
               style={{ fontSize: "1.35em" }}
               onClick={() => setEditMode(false)}

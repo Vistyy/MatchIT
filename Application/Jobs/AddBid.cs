@@ -17,17 +17,14 @@ namespace Application.Jobs
             public Guid JobId { get; set; }
             public string Description { get; set; }
             public double Fee { get; set; }
-            public UserFile CV { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            private readonly IFileAccessor _fileAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor, IFileAccessor fileAccessor)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
-                _fileAccessor = fileAccessor;
                 _userAccessor = userAccessor;
                 _context = context;
             }
@@ -45,7 +42,6 @@ namespace Application.Jobs
 
                 if (job == null) return null;
 
-                Console.WriteLine(request.Description);
 
                 var jobBid = new JobBid
                 {

@@ -291,23 +291,17 @@ export default class JobStore {
     }
   };
 
-  addJobBid = async (
-    { jobBidDescription, jobBidFee }: JobBidFormValues,
-    cv: UserFile
-  ) => {
+  addJobBid = async ({ jobBidDescription, jobBidFee }: JobBidFormValues) => {
     this.loading = true;
     try {
-      const response = await store.fileStore.uploadFile(cv);
-      cv = response!;
       const jobBid: Partial<JobBid> = {
         description: jobBidDescription,
         fee: jobBidFee,
-        cv: cv,
       };
       await agent.Jobs.addBid(this.job!.id, jobBid);
       runInAction(() => {
         this.loading = false;
-        history.push(`/jobs/${this.job!.id}`);
+        // history.push(`/jobs/${this.job!.id}`);
       });
     } catch (error) {
       console.log(error);
@@ -335,7 +329,11 @@ export default class JobStore {
     this.loading = true;
     try {
       await agent.Jobs.acceptBid(this.job!.id, jobBidId);
-      runInAction(() => (this.loading = false));
+      runInAction(() => {
+        this.loading = false;
+        const bid = this.job!.jobBids.find((bid) => bid.id === jobBidId);
+        if (bid) this.job!.acceptedJobBid = bid;
+      });
     } catch (error) {
       console.log(error);
       runInAction(() => (this.loading = false));

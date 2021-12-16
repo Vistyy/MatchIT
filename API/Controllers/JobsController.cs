@@ -41,9 +41,9 @@ namespace API.Controllers
         }
 
         [HttpPost("{jobId}/bid")]
-        public async Task<IActionResult> AddBid(Guid id, AddBid.Command command)
+        public async Task<IActionResult> AddBid(Guid jobId, AddBid.Command command)
         {
-            command.JobId = id;
+            command.JobId = jobId;
             return HandleResult(await Mediator.Send(command));
         }
 

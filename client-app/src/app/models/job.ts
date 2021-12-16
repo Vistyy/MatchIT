@@ -23,7 +23,6 @@ export interface JobBid {
   description: string;
   fee: number;
   bidder: Profile;
-  cv: UserFile;
 }
 
 export interface JobBidFormValues {
