@@ -52,7 +52,7 @@ namespace API
             .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
             .FormActions(s => s.Self())
             .FrameAncestors(s => s.Self())
-            .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
+            .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "data:"))
             .ScriptSources(s => s.Self().CustomSources("sha256-niLAgwlo9PIAe/p8lcncIyfTEzcm8w6aD0d1OKCtm8M="))
             );
 
