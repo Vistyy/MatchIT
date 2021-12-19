@@ -25,8 +25,8 @@ export default function JobDetailsSegment({job}: Props) {
                     new Date(job.creationTime),
                     "dd-MM-yyyy"
                   )}`}</Item.Meta>
-                  <Item.Description>{job.description}</Item.Description>
-                  <Item.Extra>
+                  <Item.Description> {job.description}</Item.Description>
+                  <Item.Extra style={{paddingTop: '0.5em'}}>
                     {job.requiredSkills.map((skill) => (
                       <Label key={skill.id} content={skill.name} />
                     ))}

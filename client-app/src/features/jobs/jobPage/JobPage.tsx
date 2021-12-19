@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { Button, Grid, Header, Item, Segment } from "semantic-ui-react";
+import ProfilePopup from "../../../app/common/profile/ProfilePopup";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import DeleteJobButton from "../DeleteJobButton";
@@ -41,14 +42,21 @@ export default observer(function JobPage() {
                 {job.acceptedJobBid ? (
                   <Segment raised>
                     <Item>
+                      <Item.Header as='h2' content='Accepted Bid' style={{color: '#31b351'}}/>
                       <Item.Content>
-                        <Item.Description
-                          content={job.acceptedJobBid.description}
-                        />
-                        <Item.Meta content={job.acceptedJobBid.fee} />
-                        <Item.Header>
-                          {job.acceptedJobBid.bidder.userName}
-                        </Item.Header>
+                        <Grid>
+                          <Grid.Column width="11">
+                            <Item.Description
+                              content={job.acceptedJobBid.description}
+                            />
+                            <ProfilePopup profile={job.acceptedJobBid.bidder} />
+                          </Grid.Column>
+                          <Grid.Column width="2" verticalAlign="middle">
+                            <Item.Header as="h2">
+                              {job.acceptedJobBid.fee}$
+                            </Item.Header>
+                          </Grid.Column>
+                        </Grid>
                       </Item.Content>
                     </Item>
                   </Segment>

@@ -44,6 +44,7 @@ namespace Application.Jobs
                 var jobBid = job.JobBids.FirstOrDefault(jb => jb.Id == request.JobBidId);
 
                 job.AcceptedJobBid = jobBid;
+                job.IsActive = false;
 
                 _context.Entry(job).State = EntityState.Modified;
 
