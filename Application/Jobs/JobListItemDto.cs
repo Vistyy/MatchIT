@@ -12,6 +12,5 @@ namespace Application.Jobs
         public AppUser Employer { get; set; }
         public ICollection<Skill> RequiredSkills { get; set; }
         public DateTime CreationTime { get; set; }
-
     }
 }

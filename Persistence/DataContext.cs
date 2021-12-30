@@ -7,8 +7,7 @@ namespace Persistence
     public class DataContext : IdentityDbContext<AppUser>
     {
         public DataContext(DbContextOptions options) : base(options)
-        {
-        }
+        { }
 
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Certification> Certifications { get; set; }
@@ -80,7 +79,6 @@ namespace Persistence
             .WithOne(a => a.PortfolioItem)
             .HasForeignKey(a => a.PortfolioItemId)
             .OnDelete(DeleteBehavior.Cascade);
-
         }
 
     }
